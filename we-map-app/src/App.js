@@ -1,6 +1,7 @@
 import './App.css';
 import { createContext, useState } from 'react';
-import LoginCard from './components/LoginCard';
+import LoginCard from './components/accounts/LoginCard';
+import RegisterCard from './components/accounts/RegisterCard';
 const AuthContext = createContext();
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
-      <LoginCard />
+      <RegisterCard/>
     </AuthContext.Provider>
   );
 }

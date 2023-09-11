@@ -60,28 +60,30 @@ const logOut =  async() => {
     return 'logout 완료'
 }
 
-// const register = (email, pw) => {
-//     // axios를 이용하여 jwt 회원가입 요청을 보낸다.
-//     const apiURL = baseURL + '/user/register/'
-//     const requestData = {
-//         'email': email,
-//         'password': pw
-//     }
-//     const finaldata = JSON.stringify(requestData)
-//     console.log(finaldata)
-//     return instance2.post(apiURL, finaldata)
-//     .then((response) => {
-//         console.log(response.data);
-//         console.log('회원가입 성공')
-//         return true;
-//         // 벡엔드에서 httponly 쿠키로 토큰들이 전송되어 로그인됨
-//     }).catch((error) => {
-//         console.log(error)
-//         // 백엔드에서 자동으로 리프레시 해주므로 구현할 필요없음
-//         alert('회원가입 실패');
-//         return false;
-//     })
-// }
+const register = (email, pw) => {
+    // axios를 이용하여 jwt 회원가입 요청을 보낸다.
+    const apiURL = baseURL + '/user/register/'
+    const requestData = {
+        'email': email,
+        'password': pw
+    }
+    const finaldata = JSON.stringify(requestData)
+    return axios.post(apiURL, finaldata, {
+        headers: {
+          'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
+        },
+      })
+    .then(() => {
+        alert('회원가입 성공')
+        return true;
+        // 벡엔드에서 httponly 쿠키로 토큰들이 전송되어 로그인됨
+    }).catch((error) => {
+        console.log(error)
+        // 백엔드에서 자동으로 리프레시 해주므로 구현할 필요없음
+        alert('회원가입 실패');
+        return false;
+    })
+}
 
 const getUserAuth =  () =>{
     const apiURL = baseURL + "/user/auth/"
@@ -143,4 +145,4 @@ const refresh = async (refreshToken) => {
 //         }
 //       );
 // }
-export {login, refresh, getUserAuth, logOut};
+export {login, register, refresh, getUserAuth, logOut};

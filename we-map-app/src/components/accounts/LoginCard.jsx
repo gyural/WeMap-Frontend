@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import image1 from "../images/kakao_signup.png"
-import image2 from "../images/naver_signup.png"
-import { login } from "../APIs/Auth";
-import { AuthContext } from "../App";
-import colors from "../Common/Color";
+import image1 from "../../images/kakao_signup.png"
+import image2 from "../../images/naver_signup.png"
+import { login } from "../../APIs/Auth";
+import { AuthContext } from "../../App";
+import colors from "../../Common/Color";
 
 
 const Container = styled.div`
@@ -24,6 +24,15 @@ const TitleWrapper = styled.div`
   margin-bottom: 8%;
 `;
 
+const Form = styled.form`
+  width: 96%;
+  height: 33%;
+  display: block;
+  margin-bottom: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 const Input = styled.input`
     padding: 4px;
     font-size: 12px;
@@ -52,7 +61,24 @@ const ButtonWrapper = styled.div`
     font-size: 140%;
 `;
 
-
+const Button = styled.button`
+     display: 'block';
+      width: 47%;
+      height: 100%;
+      color: ${props => props.color};
+      font-size: 100%;
+      background-color: ${props => props.bgcolor};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      &:hover{
+        background-color: ${props => props.hoverColor}
+      }
+`;
 const DivideWrapper = styled.div`
   position: relative;
   height: 4px;
@@ -63,7 +89,7 @@ const DivideWrapper = styled.div`
 const Line = styled.div`
   width: 100%;
   height: 1px;
-  background-color: #ccc;
+  background-color: #000000;
   content: "1";
 `;
 
@@ -127,13 +153,8 @@ function LoginCard(props) {
             <TitleWrapper>
                 WeMap
             </TitleWrapper>
-            <form
-              style = {{
-                width: '100%',
-                height: '33%',
-                display: 'block',
-                marginBottom: '5%',
-              }}
+            <Form
+              
             >
                 <Input
                     type="text"
@@ -154,7 +175,7 @@ function LoginCard(props) {
                     className="login-state"
                     style={{
                         display: "flex",
-                        width: '100%',
+                        width: '90%',
                         height: '20%',
                         alignItems: 'center',
                     }}
@@ -167,48 +188,27 @@ function LoginCard(props) {
                     />
                     <p>로그인 상태 유지</p>
                 </div>
-            </form>
+            </Form>
 
             <ButtonWrapper
             >
-              <button
-                style = {{
-                  display: 'block',
-                  width: '44%',
-                  height: '100%',
-                  color: '#fff',
-                  fontSize: '100%',
-                  backgroundColor: colors.mainBlue,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontWeight: '700',
-
-                }}
+              <Button
+                color = '#fff'
+                bgcolor = {colors.mainBlue}
+                hoverColor = '#00476d'
+                onClick = {
+                  handleSubmit
+                }
               >
               로그인
-              </button>
-              <button
-                style = {{
-                  display: 'block',
-                  width: '44%',
-                  height: '100%',
-                  color: '#fff',
-                  fontSize: '100%',
-                  backgroundColor: '#D2D2D2',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontWeight: '700',
-
-                }}
+              </Button>
+              <Button
+                color = '#fff'
+                bgcolor = '#d2d2d2'
+                
               >
               취소
-              </button>  
+              </Button>  
             </ButtonWrapper>
 
             <DivideWrapper>
