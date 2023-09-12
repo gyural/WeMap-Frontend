@@ -62,7 +62,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const Button = styled.button`
-     display: 'block';
+      display: 'block';
       width: 47%;
       height: 100%;
       color: ${props => props.color};
@@ -89,13 +89,13 @@ const DivideWrapper = styled.div`
 const Line = styled.div`
   width: 100%;
   height: 1px;
-  background-color: #000000;
+  background-color: ${colors.black};
   content: "1";
 `;
 
 const TextBox = styled.div`
   width: 80px;
-  background-color: #fff;
+  background-color: ${colors.white};
   position: absolute;
   z-index: 1;
   text-align: center;
@@ -193,9 +193,9 @@ function LoginCard(props) {
             <ButtonWrapper
             >
               <Button
-                color = '#fff'
+                color = {colors.white}
                 bgcolor = {colors.mainBlue}
-                hoverColor = '#00476d'
+                hoverColor = {colors.hoverBlue}
                 onClick = {
                   handleSubmit
                 }
@@ -203,9 +203,9 @@ function LoginCard(props) {
               로그인
               </Button>
               <Button
-                color = '#fff'
-                bgcolor = '#d2d2d2'
-                
+                color = {colors.white}
+                bgcolor = {colors.gray}
+                hoverColor = {colors.hoverGray}
               >
               취소
               </Button>  
@@ -234,7 +234,7 @@ function LoginCard(props) {
                         color: colors.mainBlue,
                         cursor: 'pointer',
                         marginLeft: '4%',
-                           }}
+                          }}
                     // onClick = {handleMode}
                 >
                     회원가입하기

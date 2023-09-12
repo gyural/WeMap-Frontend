@@ -9,17 +9,17 @@ const Container = styled.div`
 `;
 
 const BigTitle = styled.h1`
-  color: black; 
+  color: ${colors.black}; 
   margin-top: 100px;
   & span1 {
-    color: #0081C9; 
+    color: ${colors.mainBlue}; 
   }
 `;
 
 const SmallTitle = styled.h3`
-  color: black; 
+  color: ${colors.black}; 
   & span2 {
-    color: #0081C9; 
+    color: ${colors.mainBlue}; 
   }
 `;
 const Image = styled.img`
@@ -34,8 +34,8 @@ const Buttons = styled.div`
   align-items: center;
 `;
 const Button1 = styled.button`
-  background-color: #0081C9; 
-  color: white;
+  background-color: ${colors.mainBlue}; 
+  color: ${colors.white};
   padding: 10px 20px;
   font-size: 25px;
   font-weight: bold;
@@ -46,13 +46,13 @@ const Button1 = styled.button`
   cursor: pointer;
   border-radius: 20px;
   &:hover {
-    background-color: #0056b3;
+    background-color: ${colors.hoverBlue};
   }
 `;
 
 const Button2 = styled.button`
-  background-color: #D5D5D5; 
-  color: white;
+  background-color: ${colors.gray}; 
+  color: ${colors.white};
   padding: 10px 20px;
   font-size: 25px;
   font-weight: bold;
@@ -62,7 +62,7 @@ const Button2 = styled.button`
   cursor: pointer;
   border-radius: 20px;
   &:hover {
-    background-color: #555; 
+    background-color: ${colors.hoverGray}; 
   }
 `;
 
