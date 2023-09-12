@@ -6,8 +6,9 @@ import { register } from '../../APIs/Auth'
 import colors from '../../Common/Color'
 
 const Container = styled.div`
-    width: 310px;
-    height: 500px;
+    padding-top: 80px;
+    width: 100%;
+    height: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
