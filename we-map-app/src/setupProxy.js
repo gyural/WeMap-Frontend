@@ -16,11 +16,11 @@ module.exports = function (app) {
       /**
        * 배포주소를 target
        */
-      target: 'https://server.ja-doctor.net',   
+      // target: 'https://server.ja-doctor.net',   
       // /**
       //  * 파이참 서버 주소로 target
       //  */
-      // target: 'http://127.0.0.1:8000',
+      target: 'http://127.0.0.1:8000',
       secure: false,
       changeOrigin: true,
     }),

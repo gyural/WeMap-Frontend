@@ -104,6 +104,7 @@ const TextBox = styled.div`
 
 
 function RegisterCard(props) {
+    const handleMode = props.handleMode
     const [formData, setFormData] = useState({
         id: "",
         password: "",
@@ -185,7 +186,9 @@ function RegisterCard(props) {
               <Button
                 color = '#fff'
                 bgcolor = '#d2d2d2'
-                
+                onClick = {
+                  handleMode
+                }
               >
               취소
               </Button>

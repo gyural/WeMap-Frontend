@@ -65,9 +65,12 @@ const register = (email, pw) => {
     const apiURL = baseURL + '/user/register/'
     const requestData = {
         'email': email,
-        'password': pw
+        'password': pw,
+        'nickname' : 'testName',
+        'dis_level' : 1
     }
     const finaldata = JSON.stringify(requestData)
+    console.log(finaldata)
     return axios.post(apiURL, finaldata, {
         headers: {
           'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시

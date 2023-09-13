@@ -105,7 +105,7 @@ const TextBox = styled.div`
 
 
 function LoginCard(props) {
-
+    const handleMode = props.handleMode;
     const {authState, setAuthState} = useContext(AuthContext);
     const [formData, setFormData] = useState({
         id: "",
@@ -235,7 +235,7 @@ function LoginCard(props) {
                         cursor: 'pointer',
                         marginLeft: '4%',
                            }}
-                    // onClick = {handleMode}
+                    onClick = {handleMode}
                 >
                     회원가입하기
                 </div>

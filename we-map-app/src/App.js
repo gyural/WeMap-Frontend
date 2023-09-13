@@ -7,6 +7,7 @@ import wifiIcon from './images/device_wifi.png'
 import signalIcon from './images/device_signal.png'
 import batteryIcon from './images/device_bettery.png'
 import Clock from './components/UI/Clock';
+import AccountHandler from './components/accounts/AccountHandler';
 const AuthContext = createContext();
 
 const MobileFrame = styled.div`
@@ -64,7 +65,7 @@ function App() {
         <img src={batteryIcon} alt="배터리 아이콘"/>
       </MobileHeader>
       <AuthContext.Provider value={{ authState, setAuthState }}>
-        <RegisterCard/>
+        <AccountHandler/>
       </AuthContext.Provider>
     </MobileFrame>
   );
