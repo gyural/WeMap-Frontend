@@ -106,6 +106,7 @@ const TextBox = styled.div`
 
 function LoginCard(props) {
     const handleMode = props.handleMode;
+    const moveHome = props.moveHome
     const {authState, setAuthState} = useContext(AuthContext);
     const [formData, setFormData] = useState({
         id: "",
@@ -206,6 +207,9 @@ function LoginCard(props) {
                 color = {colors.white}
                 bgcolor = {colors.gray}
                 hoverColor = {colors.hoverGray}
+                onClick = {
+                  moveHome
+                }
               >
               취소
               </Button>  
