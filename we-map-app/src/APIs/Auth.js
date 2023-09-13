@@ -66,7 +66,7 @@ const register = (email, pw) => {
     const requestData = {
         'email': email,
         'password': pw,
-        'nickname' : 'testName',
+        'nickname' : email,
         'dis_level' : 1
     }
     const finaldata = JSON.stringify(requestData)

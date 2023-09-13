@@ -2,8 +2,8 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import img1 from "../images/homemap.png";
-
+import img1 from "../../images/homemap.png";
+import colors from '../../Common/Color';
 const Container = styled.div`
   text-align: center;
 `;
@@ -66,7 +66,9 @@ const Button2 = styled.button`
   }
 `;
 
-function HomeScreen() {
+function HomeScreen(props) {
+
+  const moveAccounts = props.moveAccounts
   return (
     <Container>
       <BigTitle>Welcome to <span1>WeMap</span1> !</BigTitle>
@@ -74,7 +76,9 @@ function HomeScreen() {
       <Image src={img1} alt="WeMap 이미지" />
       <Buttons>
         <Button1>Get Started</Button1>
-        <Button2>Log In</Button2>
+        <Button2
+          onClick = {moveAccounts}
+        >Log In</Button2>
       </Buttons>
 
     </Container>
