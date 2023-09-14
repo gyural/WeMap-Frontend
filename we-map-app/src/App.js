@@ -72,7 +72,7 @@ function App() {
         <img src={batteryIcon} alt="배터리 아이콘"/>
       </MobileHeader>
       <AuthContext.Provider value={{ authState, setAuthState }}>
-        <SidebarCard></SidebarCard>
+        <MobileContent></MobileContent>
       </AuthContext.Provider>
     </MobileFrame>
   );
