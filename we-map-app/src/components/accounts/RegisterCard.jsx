@@ -14,6 +14,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
 `;
+
 const Input = styled.input`
     padding: 4px;
     font-size: 12px;
