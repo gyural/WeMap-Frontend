@@ -187,6 +187,9 @@ function RegisterCard(props) {
                 color = {colors.white}
                 bgcolor = {colors.gray}
                 hoverColor = {colors.hoverGray}
+                onClick = {
+                  handleMode
+                }
               >
               취소
               </Button>
