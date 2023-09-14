@@ -18,7 +18,7 @@ const Clock = (props) => {
     hour: '2-digit', 
     minute: '2-digit',
     hour12: false,
- });
+});
   
   return (
     <div

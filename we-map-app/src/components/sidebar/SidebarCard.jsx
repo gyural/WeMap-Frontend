@@ -1,8 +1,21 @@
+
+import React from 'react';
 import styled from "styled-components";
 import colors from "../../Common/Color";
+import backarrow from "../../images/left-arrow.png";
+import typhoon from "../../images/hurricane.png";
+import forestFire from "../../images/forest-fire.png";
+import landslide from "../../images/landslide.png";
+import flood from "../../images/flood.png";
+import heavyRain from "../../images/heavy-rain.png";
+import hot from "../../images/hot.png";
+import fog from "../../images/fog.png";
+import heavySnow from "../../images/heavy-snow.png";
+import earthquake from "../../images/earthquake.png";
+import missing from "../../images/missing.png";
 
 const Container = styled.div`
-    padding-top: 80px;
+    padding-top: 25px;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -11,22 +24,194 @@ const Container = styled.div`
     align-items: center;
 `;
 
-const TitleWrapper = styled.div`
-color: ${colors.mainBlue};
-font-size: 200%;
-font-weight: 700;
-margin-bottom: 8%;
+const Topbar = styled.div`
+    width: 280px;
+    display: flex;
+    align-items: center;
 `;
+
+const BackArrow = styled.button`
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+`;
+
+const LoginBtn = styled.button`
+    background-color: ${colors.mainBlue};
+    color: ${colors.white};
+    border: 1px solid ${colors.mainBlue};
+    border-radius: 10px;
+    width: 70px;
+    margin-left: 115px;
+    margin-right: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: ${colors.hoverBlue};
+    }
+`;
+
+const RegisterBtn = styled.button`
+    background-color: ${colors.white};
+    color: ${colors.black};
+    border: 1px solid ${colors.black};
+    border-radius: 10px;
+    width: 70px;
+    cursor: pointer;
+    &:hover {
+        background-color: ${colors.black};
+        color: ${colors.white};
+    }
+`;
+
+const Image = styled.img`
+    width: 20px;
+    height: 20px;
+`;
+
+const Buttons = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    cursor: pointer;
+    margin-top: 4%;
+    width: 90%;
+    height: 85%;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+    width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+    background: #F1F1F1;
+    }
+    &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+    }
+`;
+
+const CommunityBtn = styled.button`
+    background-color: ${colors.subBlue};
+    color: ${colors.white};
+    border: none;
+    border-radius: 10px;
+    width: 280px;
+    font-size: 20px;
+    margin-top: 5%;
+    cursor: pointer;
+    &:hover {
+        background-color: ${colors.hoverBlue};
+    }
+`;
+
+const Button = styled.button`
+    background-color: ${colors.white};
+    color: ${colors.black};
+    border: 3px solid ${colors.mainBlue};
+    border-radius: 20px;
+    width: 133px;
+    height: 133px;
+    margin: 2%;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+        background-color: ${colors.mainBlue};
+        color: ${colors.white};
+    }
+    img{
+        width: 65%;
+        height: 60%;
+    }
+`;
+
+const MissingBtn = styled.button`
+    background-color: ${colors.white};
+    color: ${colors.black};
+    border: 3px dashed ${colors.yellow};
+    border-radius: 20px;
+    width: 133px;
+    height: 133px;
+    margin: 2%;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+        background-color: ${colors.yellow};
+        color: ${colors.white};
+    }
+    img{
+        width: 65%;
+        height: 60%;
+    }
+`;
+
+
 
 function SidebarCard(props) {
 
     return (
         <Container>
-
-            <TitleWrapper>
-                WeMap
-            </TitleWrapper>
-
+            <Topbar>
+                <BackArrow>
+                    <Image src={backarrow} alt="뒤로가기 버튼"></Image>
+                </BackArrow>
+                <LoginBtn>로그인</LoginBtn>
+                <RegisterBtn>회원가입</RegisterBtn>
+            </Topbar>
+            <CommunityBtn>커뮤니티</CommunityBtn>
+            <Buttons>
+                <Button>
+                    <img src={typhoon} alt="태풍 이미지"></img>
+                    태풍
+                </Button>
+                <Button>
+                    <img src={forestFire} alt="산불 이미지"></img>
+                    산불
+                </Button>
+                <Button>
+                    <img src={landslide} alt="산사태 이미지"></img>
+                    산사태
+                </Button>
+                <Button>
+                    <img src={flood} alt="홍수 이미지"></img>
+                    홍수
+                </Button>
+                <Button>
+                    <img src={heavyRain} alt="호우 이미지"></img>
+                    호우
+                </Button>
+                <Button>
+                    <img src={hot} alt="폭염 이미지"></img>
+                    폭염
+                </Button>
+                <Button>
+                    <img src={fog} alt="안개 이미지"></img>
+                    안개
+                </Button>
+                <Button>
+                    <img src={heavySnow} alt="대설 이미지"></img>
+                    대설
+                </Button>
+                <Button>
+                    <img src={earthquake} alt="지진 이미지"></img>
+                    지진
+                </Button>
+                <MissingBtn>
+                    <img src={missing} alt="실종 이미지"></img>
+                    실종
+                </MissingBtn>
+            </Buttons>
         </Container>
     );        
 }

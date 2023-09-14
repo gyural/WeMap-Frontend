@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { createContext, useState } from 'react';
 import LoginCard from './components/accounts/LoginCard';
 import RegisterCard from './components/accounts/RegisterCard';
+import SidebarCard from './components/sidebar/SidebarCard';
 import wifiIcon from './images/device_wifi.png'
 import signalIcon from './images/device_signal.png'
 import batteryIcon from './images/device_bettery.png'
@@ -71,7 +72,7 @@ function App() {
         <img src={batteryIcon} alt="배터리 아이콘"/>
       </MobileHeader>
       <AuthContext.Provider value={{ authState, setAuthState }}>
-        <MobileContent></MobileContent>
+        <SidebarCard></SidebarCard>
       </AuthContext.Provider>
     </MobileFrame>
   );
