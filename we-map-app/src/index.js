@@ -6,11 +6,13 @@ import reportWebVitals from './reportWebVitals';
 import LoginCard from './components/accounts/LoginCard';
 import SidebarCard from './components/sidebar/SidebarCard';
 import Clock from './components/UI/Clock';
+import LandingPage from './components/views/Landing/LandingPage';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <LandingPage />
   </React.StrictMode>
 );
 
