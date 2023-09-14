@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import image1 from "../../images/kakao_signup.png"
 import image2 from "../../images/naver_signup.png"
-import { login } from "../../APIs/Auth";
+import { getUserAuth, login } from "../../APIs/Auth";
 import { AuthContext } from "../../App";
 import colors from "../../Common/Color";
 
@@ -107,6 +107,7 @@ const TextBox = styled.div`
 function LoginCard(props) {
     const handleMode = props.handleMode;
     const moveHome = props.moveHome
+    const moveUserInfo = props.moveUserInfo
     const {authState, setAuthState} = useContext(AuthContext);
     const [formData, setFormData] = useState({
         id: "",
@@ -115,11 +116,19 @@ function LoginCard(props) {
     });
     const handleSubmit = () => {
         login(formData.id, formData.password).then(
-            ()=>{
+            async ()=>{
+                const res = await getUserAuth()
+                const userInfo = res.data
+                console.log(userInfo)
                 setAuthState({
                   isLoggedIn: true,
                   userName: formData.id,
+                  dis_level: userInfo.dis_level,
+                  nickname: userInfo.nickname,
+                  password: userInfo.password,
+                  update_at: userInfo.updated_at,
                 })
+                moveUserInfo()
                 
             }
         ).catch(

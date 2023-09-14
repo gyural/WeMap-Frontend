@@ -1,6 +1,7 @@
 import axios from "axios"
 import instance from "./Instance";
-
+import { getCookieToken, getaccessToken, setRefreshToken, setaccessToken } from "../Common/Cookie";
+import { cookies } from "../Common/Cookie";
 /**
  * 로컬에서 사용하는 baseURL
  */
@@ -32,11 +33,18 @@ const login = async (email, pw) => {
         'Content-Type': 'application/json',
       }})
     .then((response) => {
+        console.log(response)
         const accessToken = response.data.token.access;
         const refreshToken = response.data.token.refresh;
+        console.log('쿠키 get')
+        
         instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         localStorage.setItem('access_token', accessToken);
         localStorage.setItem('refresh_token', refreshToken);
+        const currentTime = new Date();
+        const expireTime = new Date(currentTime.getTime() + (9 * 60 + 45) * 1000);
+        // expireTime 값을 ISO 문자열로 변환하여 localStorage에 저장
+        localStorage.setItem('expiresAt', expireTime.toISOString());
         alert('로그인 성공');
         // 벡엔드에서 httponly 쿠키로 토큰들이 전송되어 로그인됨
         // navigate('/')
@@ -49,15 +57,29 @@ const login = async (email, pw) => {
 
 /**
  * 
- * @returns 로그아웃 완료후 메시지를 리턴
+ * @param {*} dis_level 
+ * @param {*} email 
+ * @param {*} nickname 
+ * @param {*} password 
+ * @returns 로그아웃 후 헤더에서 acc토큰 제거
  */
 const logOut =  async() => {
-    // axios 헤더의 access 토큰 제거
-    instance.defaults.headers.common['Authorization'] = undefined;
+    const apiURL = baseURL + '/user/auth/'
+    
+    await instance.delete(apiURL)
+    .then(()=>{
+        console.log('로그아웃 정상 완료')
+        // axios 헤더의 access 토큰 제거
+        instance.defaults.headers.common['Authorization'] = undefined;
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        return 'logout 완료'
+    })
+    .catch(()=>{
+        console.log('로그아웃 실패!!!')
+        return 'logout 실패!!!'
+    })
     // 로컬스토리지에서 access 토큰 제거
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    return 'logout 완료'
 }
 
 const register = (email, pw) => {
@@ -87,11 +109,14 @@ const register = (email, pw) => {
         return false;
     })
 }
-
-const getUserAuth =  () =>{
+/**
+ * 
+ * @returns user정보를 가져오는 API
+ */
+const getUserAuth = async () =>{
     const apiURL = baseURL + "/user/auth/"
 
-    return instance.get(apiURL, {withCredentials:true})
+    return await instance.get(apiURL, {withCredentials:true})
     .then((response) =>{
         return(response)
     }).catch((error) => {
@@ -105,15 +130,19 @@ const getUserAuth =  () =>{
  * @param {*} refreshToken 
  */
 const refresh = async (refreshToken) => {
-    const apiURL = baseURL + "/user/auth/refresh"
+    const apiURL = baseURL + "/user/auth/refresh/"
     const requestData = {
-        refresh : refreshToken
+        'refresh' : localStorage.getItem('refresh_token'),
     }
     const finaldata = JSON.stringify(requestData)
-    console.log(finaldata)
-    instance.post(apiURL, 
-    finaldata,
-    {withCredentials:true})
+    instance.post(
+        apiURL,
+        finaldata,
+        {
+          withCredentials: true,
+          
+        }
+      )
     .then((response)=>{
         console.log('refresh동작후 data');
         console.log(response.data);

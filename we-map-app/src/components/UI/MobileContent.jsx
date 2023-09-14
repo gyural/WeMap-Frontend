@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import HomeScreen from '../accounts/HomeScreen'
 import styled from 'styled-components'
 import AccountHandler from '../accounts/AccountHandler'
+import UserInfo from '../accounts/UserInfo';
 
 
 const Container = styled.div`
@@ -19,6 +20,10 @@ export default function MobileContent() {
   const moveHome = () =>{
     setActivetab('home')
   }
+
+  const moveUserInfo = () =>{
+    setActivetab('userInfo')
+  }
   return (
     <Container>
     
@@ -31,8 +36,15 @@ export default function MobileContent() {
       activetab === 'accounts' ? (
         <AccountHandler
           moveHome = {moveHome}
+          moveUserInfo = {moveUserInfo}
         ></AccountHandler>
-      ) : null}
+      ) : 
+      activetab === 'userInfo' ? (
+        <UserInfo
+         moveHome = {moveHome}
+        ></UserInfo>
+      )
+      :null}
     </Container>
   )
 }

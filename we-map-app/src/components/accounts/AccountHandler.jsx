@@ -3,6 +3,7 @@ import LoginCard from './LoginCard'
 import RegisterCard from './RegisterCard'
 export default function AccountHandler(props) {
   const moveHome = props.moveHome
+  const moveUserInfo = props.moveUserInfo
   const [mode, setMode] = useState('login')
 
   const modeHandle = () =>{
@@ -18,6 +19,7 @@ export default function AccountHandler(props) {
       <LoginCard
         handleMode = {modeHandle}
         moveHome = {moveHome}
+        moveUserInfo = {moveUserInfo}
       ></LoginCard>
     ) : (
       <RegisterCard

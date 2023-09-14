@@ -11,20 +11,21 @@ import batteryIcon from './images/device_bettery.png'
 import Clock from './components/UI/Clock';
 import AccountHandler from './components/accounts/AccountHandler';
 import MobileContent from './components/UI/MobileContent';
+import { socket } from './APIs/Websocket';
 const AuthContext = createContext();
 
 const MobileFrame = styled.div`
   width: 100%;
   height: 595px;
   max-width: 330px; /* 모바일 화면의 최대 너비 */
-  max-height: 932px;
+  max-height: 1040px;
   margin: 0 auto; /* 가운데 정렬 */
   margin-top: 4%;
   border: 1px solid #ccc; /* 모바일 프레임 테두리 스타일 */
   border-radius: 10px; /* 모바일 프레임 테두리 둥글게 */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
   background-color: #fff; /* 배경색 */
-  padding: 20px; /* 내부 여백 */
+  padding: 8px; /* 내부 여백 */
   position: relative;
 `;
 
@@ -55,8 +56,12 @@ function App() {
   const [authState, setAuthState] = useState({
     isLoggedIn: false,
     userName: '',
+    dis_level : undefined,
+    nickname: undefined,
+    password : undefined,
+    updated_at: undefined, 
   });
-
+  console.log(socket)
   return (
     <MobileFrame>
       <MobileHeader>
@@ -68,7 +73,9 @@ function App() {
         <img src={batteryIcon} alt="배터리 아이콘"/>
       </MobileHeader>
       <AuthContext.Provider value={{ authState, setAuthState }}>
+
         <EmergencyStep></EmergencyStep>
+
       </AuthContext.Provider>
     </MobileFrame>
   );
