@@ -7,12 +7,12 @@ import LoginCard from './components/accounts/LoginCard';
 import SidebarCard from './components/sidebar/SidebarCard';
 import Clock from './components/UI/Clock';
 import LandingPage from './components/views/Landing/LandingPage';
-
+import TestMapContainer from './components/maps/testMapContainer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <LandingPage />
+    <TestMapContainer />
   </React.StrictMode>
 );
 
