@@ -20,7 +20,6 @@ proj4.defs([
 ])
 
 var result = proj4('EPSG:5179', 'EPSG:4326', [coord_X, coord_Y])
-console.log([result[1], result[0]])
 
 return([result[1], result[0]])
 }
@@ -30,7 +29,7 @@ return([result[1], result[0]])
  * @returns 해당 위경도 값 (카카오 지도 단위)의 다각형 꼭짓점 리스트
  */
 const getBoundaryPoints = async (locationCode) =>{
-  const vertex = await getGeoBoundary(11040)
+  const vertex = await getGeoBoundary(locationCode)
   const resultList = [];
 
   for (const v of vertex) {
