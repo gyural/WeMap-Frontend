@@ -12,7 +12,7 @@ import Clock from './components/UI/Clock';
 import AccountHandler from './components/accounts/AccountHandler';
 import MobileContent from './components/UI/MobileContent';
 import testMapContainer from './components/maps/testMapContainer';
-import { socket } from './APIs/Websocket';
+// import {socket} from './APIs/Websocket'
 const AuthContext = createContext();
 
 const MobileFrame = styled.div`
@@ -62,7 +62,6 @@ function App() {
     password : undefined,
     updated_at: undefined, 
   });
-  console.log(socket)
   
   return (
     <MobileFrame>

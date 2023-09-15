@@ -78,9 +78,25 @@ const getGeoBoundary = async (geoCode) =>{
         .then((res) => {
           console.log(res.data.result);
           const data = res.data
+          console.log(data)
+          if (data.features[0].geometry.type == "MultiPolygon"){
+            // multipoligon좌표임
+          const multibound =  data.features[0].geometry.coordinates
+          const result = []
+          multibound.forEach(element => {
+            // console.log('각자 ...element')
+            // console.log(...element.flat())
+            result.push(...element.flat())
+          });
+          // console.log(result)
+          return result
+            
+          }
           return data.features[0].geometry.coordinates[0]
         })
         .catch((error) => {
+          console.log('에러발생 행정코드')
+          console.log(requstData.adm_cd)
           console.error(error);
         });
 }
@@ -89,7 +105,7 @@ const convertUnits = (target) =>{
     const srcUnit = 5179
     const destUnit = 5181
     const apiURL = baseURL + "/transformation/transcoord.json"
-    
+
 
 }
 export {getAccess, getGeoBoundary}

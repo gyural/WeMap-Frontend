@@ -18,10 +18,21 @@ proj4.defs([
   ]
     
 ])
+try{
+  var result = proj4('EPSG:5179', 'EPSG:4326', [coord_X, coord_Y])
 
-var result = proj4('EPSG:5179', 'EPSG:4326', [coord_X, coord_Y])
+  return([result[1], result[0]])
 
-return([result[1], result[0]])
+}
+catch{
+  console.log('버그잡음!!')
+  console.log(coord_X[0], coord_X[1])
+  const result = proj4('EPSG:5179', 'EPSG:4326', [coord_X[0], coord_X[1]])
+  console.log([result[1], result[0]])
+  return([result[1], result[0]])
+
+  
+}
 }
 /**
  * 
