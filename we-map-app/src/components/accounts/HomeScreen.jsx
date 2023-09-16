@@ -76,19 +76,14 @@ const Button2 = styled.button`
 
 function HomeScreen(props) {
   const moveAccounts = props.moveAccounts;
-  const moveMap = props.moveMap
   return (
     <Container>
       <BigTitle>Welcome to <span1>WeMap</span1> !</BigTitle>
       <SmallTitle><span2>WeMap</span2>에 오신 것을 환영합니다.</SmallTitle>
       <Image src={img1} alt="WeMap 이미지" />
       <Buttons>
-        <Button1 onClick={() =>{
-          moveAccounts('signUp')
-          }}>Sign In</Button1>
-        <Button2 onClick={() =>{
-          moveAccounts('login')
-          }}>Log In</Button2>
+        <Button1>Sign In</Button1>
+        <Button2 onClick={moveAccounts}>Sign Up</Button2>
       </Buttons>
     </Container>
   );
