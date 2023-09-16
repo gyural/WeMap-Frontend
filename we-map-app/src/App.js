@@ -41,7 +41,7 @@ const MobileHeader = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 4;
   img{
     display: block;
     height: 15.6px;
