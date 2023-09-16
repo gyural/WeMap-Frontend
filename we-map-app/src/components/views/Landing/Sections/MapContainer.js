@@ -8,6 +8,7 @@ const Container = styled.div`
   height: 100%;
 `;
 const { kakao } = window
+
 const MapContainer = ({ searchPlace }) => {
   const [socketListenr, setSocketListenr] = useState(undefined)
   console.log(socketListenr)
@@ -33,8 +34,8 @@ const MapContainer = ({ searchPlace }) => {
     var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 })
     const container = document.getElementById('myMap')
     const options = {
-      center: new kakao.maps.LatLng(37.541,126.986),
-      level: 8,
+      center: new kakao.maps.LatLng(33.450701, 126.570667),
+      level: 3,
     }
     const map = new kakao.maps.Map(container, options)
     const ps = new kakao.maps.services.Places()
@@ -72,11 +73,18 @@ const MapContainer = ({ searchPlace }) => {
     <div
         id="myMap"
         style={{
-            width: '100%',
-            height: '100%',
-        }}>
-    </div>
+          position: 'absolute', 
+          top: '50%', 
+          left: '50%', 
+          transform: 'translate(-50%, -50%)', 
+          width: '100%', 
+          height: '100%', 
+      }}>
+  </div>
     </Container>
+        
+    
   )
 }
-export default MapContainer
+
+export default MapContainer;

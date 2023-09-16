@@ -9,8 +9,7 @@ const { kakao } = window
  * @return 폴리곤 path객체를
  */
 const getPolygonPath = async (sd_code) =>{
-    const boundaryList = await getGeoBoundary(sgd_code)
-    console.log('draw에서 받은 data~~~')
+    const boundaryList = await getGeoBoundary(sd_code)
     
     const result = []
     let resultC = []
