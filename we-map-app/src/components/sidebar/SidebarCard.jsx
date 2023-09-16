@@ -12,10 +12,14 @@ import hot from "../../images/hot.png";
 import fog from "../../images/fog.png";
 import heavySnow from "../../images/heavy-snow.png";
 import earthquake from "../../images/earthquake.png";
+import tsunami from "../../images/tsunami.png";
+import yellowDust from "../../images/yellow-dust.png";
+import fire from "../../images/fire.png";
+import carAccident from "../../images/accident.png";
 import missing from "../../images/missing.png";
 
 const Container = styled.div`
-    padding-top: 25px;
+    padding-top: 10%;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -25,8 +29,9 @@ const Container = styled.div`
 `;
 
 const Topbar = styled.div`
-    width: 280px;
+    width: 100%;
     display: flex;
+    justify-content: center;
     align-items: center;
 `;
 
@@ -44,24 +49,11 @@ const LoginBtn = styled.button`
     border: 1px solid ${colors.mainBlue};
     border-radius: 10px;
     width: 70px;
-    margin-left: 115px;
+    margin-left: 68%;
     margin-right: 5px;
     cursor: pointer;
     &:hover {
         background-color: ${colors.hoverBlue};
-    }
-`;
-
-const RegisterBtn = styled.button`
-    background-color: ${colors.white};
-    color: ${colors.black};
-    border: 1px solid ${colors.black};
-    border-radius: 10px;
-    width: 70px;
-    cursor: pointer;
-    &:hover {
-        background-color: ${colors.black};
-        color: ${colors.white};
     }
 `;
 
@@ -167,7 +159,6 @@ function SidebarCard(props) {
                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
                 </BackArrow>
                 <LoginBtn>로그인</LoginBtn>
-                <RegisterBtn>회원가입</RegisterBtn>
             </Topbar>
             <CommunityBtn>커뮤니티</CommunityBtn>
             <Buttons>
@@ -206,6 +197,22 @@ function SidebarCard(props) {
                 <Button>
                     <img src={earthquake} alt="지진 이미지"></img>
                     지진
+                </Button>
+                <Button>
+                    <img src={tsunami} alt="해일 이미지"></img>
+                    해일
+                </Button>
+                <Button>
+                    <img src={yellowDust} alt="황사 이미지"></img>
+                    황사
+                </Button>
+                <Button>
+                    <img src={fire} alt="화재 이미지"></img>
+                    화재
+                </Button>
+                <Button>
+                    <img src={carAccident} alt="교통사고 이미지"></img>
+                    교통사고
                 </Button>
                 <MissingBtn>
                     <img src={missing} alt="실종 이미지"></img>

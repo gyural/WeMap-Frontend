@@ -45,7 +45,7 @@ const MapContainer = ({ searchPlace }) => {
   }, [searchPlace])
 
   return (
-     <div
+    <div
         id="myMap"
         style={{
             position: 'absolute', 
@@ -55,7 +55,7 @@ const MapContainer = ({ searchPlace }) => {
             width: '40%', 
             height: '80%', 
         }}>
-     </div>
+    </div>
   )
 }
 
