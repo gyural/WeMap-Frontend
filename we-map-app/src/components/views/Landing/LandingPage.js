@@ -51,13 +51,13 @@ function LandingPage() {
       </div>
       <div className="buttonContainer">
         
+        <button className="Button1">실종</button>
         <button className="Button1">산사태</button>
-        <button className="Button1">호우</button>
         <button className="Button1">지진</button>
-        <button className="Button1">태풍</button>
-        <button className="Button1">태풍</button>
-        <button className="Button1">태풍</button>
-        <button className="Button1">태풍</button>
+        <button className="Button1">호우</button>
+        <button className="Button1">폭염</button>
+        <button className="Button1">폭설</button>
+        <button className="Button1">허리케인</button>
       </div>  
       
     <div className="mapContainer"style={{ width: '100%', height: '100%' }}>
