@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { createPolygon, getPolygonPath } from './createPolygon'
-import colors from '../../../../Common/Color'
-import { drawPolygon } from './createPolygon'
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { createPolygon, getPolygonPath } from './createPolygon';
+import colors from '../../../../Common/Color';
+import { drawPolygon } from './createPolygon';
+
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
