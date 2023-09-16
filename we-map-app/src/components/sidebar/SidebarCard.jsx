@@ -49,11 +49,25 @@ const LoginBtn = styled.button`
     border: 1px solid ${colors.mainBlue};
     border-radius: 10px;
     width: 70px;
-    margin-left: 68%;
+    margin-left: 43%;
     margin-right: 5px;
     cursor: pointer;
     &:hover {
         background-color: ${colors.hoverBlue};
+    }
+`;
+
+const InfoBtn = styled.button`
+    background-color: ${colors.white};
+    color: ${colors.black};
+    border: 1px solid ${colors.black};
+    border-radius: 10px;
+    width: 70px;
+    margin-right: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: ${colors.black};
+        color: ${colors.white};
     }
 `;
 
@@ -158,7 +172,8 @@ function SidebarCard(props) {
                 <BackArrow>
                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
                 </BackArrow>
-                <LoginBtn>로그인</LoginBtn>
+                <LoginBtn>로그아웃</LoginBtn>
+                <InfoBtn>내 정보</InfoBtn>
             </Topbar>
             <CommunityBtn>커뮤니티</CommunityBtn>
             <Buttons>

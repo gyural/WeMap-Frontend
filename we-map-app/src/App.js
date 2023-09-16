@@ -5,6 +5,7 @@ import LoginCard from './components/accounts/LoginCard';
 import RegisterCard from './components/accounts/RegisterCard';
 import SidebarCard from './components/sidebar/SidebarCard';
 import EmergencyStep from './components/step/EmergencyStep';
+import FindLoad from './components/findLoad/FindLoad';
 import wifiIcon from './images/device_wifi.png'
 import signalIcon from './images/device_signal.png'
 import batteryIcon from './images/device_bettery.png'
