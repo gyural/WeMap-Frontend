@@ -10,7 +10,6 @@ const { kakao } = window
  */
 const getPolygonPath = async (sd_code) =>{
     const boundaryList = await getGeoBoundary(sd_code)
-    console.log('draw에서 받은 data~~~')
     
     const result = []
     let resultC = []
@@ -53,13 +52,13 @@ const createPolygon = async (sd_code) =>{
     
     return polygon
     
-  }
+}
 
-  const drawPolygon = async(map, sdList) =>{
+const drawPolygon = async(map, sdList) =>{
     sdList.forEach(async (sdcode) =>{
         const polygon = await createPolygon(sdcode)
         polygon.setMap(map)
     })
-  }
+}
 
 export {getPolygonPath, createPolygon, drawPolygon}
