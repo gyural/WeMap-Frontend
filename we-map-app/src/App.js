@@ -11,7 +11,6 @@ import batteryIcon from './images/device_bettery.png'
 import Clock from './components/UI/Clock';
 import AccountHandler from './components/accounts/AccountHandler';
 import MobileContent from './components/UI/MobileContent';
-import testMapContainer from './components/maps/testMapContainer';
 // import {socket} from './APIs/Websocket'
 const AuthContext = createContext();
 
@@ -75,8 +74,7 @@ function App() {
       </MobileHeader>
       <AuthContext.Provider value={{ authState, setAuthState }}>
 
-        {/* <EmergencyStep></EmergencyStep> */}
-        <testMapContainer></testMapContainer>
+        <MobileContent></MobileContent>
       </AuthContext.Provider>
     </MobileFrame>
   );

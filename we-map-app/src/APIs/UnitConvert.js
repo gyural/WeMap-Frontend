@@ -46,4 +46,4 @@ const getBoundaryPoints = async (locationCode) =>{
   return resultList
 }
 
-export {getBoundaryPoints, utmToCentral}
+export {utmToCentral}

@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { createPolygon, getPolygonPath } from './createPolygon'
 import colors from '../../../../Common/Color'
 import { drawPolygon } from './createPolygon'
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
 
+`;
 const { kakao } = window
 const MapContainer = ({ searchPlace }) => {
   const [socketListenr, setSocketListenr] = useState(undefined)
@@ -74,23 +79,22 @@ const MapContainer = ({ searchPlace }) => {
     /**
      * 다각형지도 Drawing
      */
-    const sd_list = [11, 39, 38]
+    const sd_list = [11040, 39010, 38]
     drawPolygon(map, sd_list)
     
   }, [searchPlace, socketListenr])
 
   return (
+    <Container>
+
      <div
         id="myMap"
         style={{
-            position: 'absolute', 
-            top: '50%', 
-            left: '50%', 
-            transform: 'translate(-50%, -50%)', 
-            width: '40%', 
-            height: '80%', 
+            width: '100%', 
+            height: '100%', 
         }}>
      </div>
+    </Container>
   )
 }
 

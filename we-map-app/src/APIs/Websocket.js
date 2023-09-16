@@ -1,3 +1,6 @@
+/**
+ * export가 잘 되질않아 메인문에서 작동하기로함
+ */
 // let socketListenr = undefined
 
 // try {

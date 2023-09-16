@@ -122,11 +122,4 @@ const getGeoBoundary = async (geoCode) =>{
         });
 }
 
-const convertUnits = (target) =>{
-    const srcUnit = 5179
-    const destUnit = 5181
-    const apiURL = baseURL + "/transformation/transcoord.json"
-
-
-}
 export {getAccess, getGeoBoundary}
