@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import MapContainer from './Sections/MapContainer';
 import '../../views/styles.css';
-
+import APITestButton from '../../UI/APITestButton';
 function LandingPage() {
   const [InputText, setInputText] = useState('');
   const [Place, setPlace] = useState('');
@@ -28,6 +28,7 @@ function LandingPage() {
       </div>
       <div className="mapContainer" style={{ width: '100%', height: '80vh' }}> {}
         <MapContainer searchPlace={Place} />
+        <APITestButton></APITestButton>
       </div>
     </div>
   )

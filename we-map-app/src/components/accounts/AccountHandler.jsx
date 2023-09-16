@@ -4,7 +4,8 @@ import RegisterCard from './RegisterCard'
 export default function AccountHandler(props) {
   const moveHome = props.moveHome
   const moveUserInfo = props.moveUserInfo
-  const [mode, setMode] = useState('login')
+  const moveMap = props.moveMap
+  const [mode, setMode] = useState(props.accountMode)
 
   const modeHandle = () =>{
     if (mode === 'login'){
@@ -20,6 +21,7 @@ export default function AccountHandler(props) {
         handleMode = {modeHandle}
         moveHome = {moveHome}
         moveUserInfo = {moveUserInfo}
+        moveMap = {moveMap}
       ></LoginCard>
     ) : (
       <RegisterCard

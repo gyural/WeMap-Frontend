@@ -25,6 +25,20 @@ module.exports = function (app) {
       changeOrigin: true,
     }),
   );
-
+  
+  app.use(
+    createProxyMiddleware('/OpenAPI3', {
+      /**
+       * 배포주소를 target
+       */
+      // target: 'https://server.ja-doctor.net',   
+      // /**
+      //  * 파이참 서버 주소로 target
+      //  */
+      target: 'http://sgisapi.kostat.go.kr',
+      secure: false,
+      changeOrigin: true,
+    }),
+  );
 
 };

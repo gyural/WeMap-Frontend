@@ -1,14 +1,48 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { createPolygon, getPolygonPath } from './createPolygon'
+import colors from '../../../../Common/Color'
+import { drawPolygon } from './createPolygon'
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
 
+`;
 const { kakao } = window
-
 const MapContainer = ({ searchPlace }) => {
+  const [socketListenr, setSocketListenr] = useState(undefined)
+  console.log(socketListenr)
+
+  
   useEffect(() => {
+    try {
+      const socket = new WebSocket('wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken');
+
+      socket.onopen = (event) => {
+          console.log('Connected:', event);
+      };
+
+      socket.onmessage = (event) => {
+        setSocketListenr(JSON.parse(event.data))
+          // 웹 페이지에 데이터를 표시하는 로직을 추가합니다.
+      };
+
+      socket.onclose = (event) => {
+          console.log('Connection closed:', event);
+      };
+
+      socket.onerror = (error) => {
+          console.error('WebSocket Error:', error);
+      };
+
+  } catch (error) {
+      console.log(error);
+  }
     var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 })
     const container = document.getElementById('myMap')
     const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
-      level: 3,
+      center: new kakao.maps.LatLng(37.541,126.986),
+      level: 8,
     }
     const map = new kakao.maps.Map(container, options)
 
@@ -28,7 +62,7 @@ const MapContainer = ({ searchPlace }) => {
         map.setBounds(bounds)
       }
     }
-
+    
     function displayMarker(place) {
       let marker = new kakao.maps.Marker({
         map: map,
@@ -42,20 +76,25 @@ const MapContainer = ({ searchPlace }) => {
         infowindow.open(map, marker)
       })
     }
-  }, [searchPlace])
+    /**
+     * 다각형지도 Drawing
+     */
+    const sd_list = [11040, 39010, 38]
+    drawPolygon(map, sd_list)
+    
+  }, [searchPlace, socketListenr])
 
   return (
+    <Container>
+
     <div
         id="myMap"
         style={{
-            position: 'absolute', 
-            top: '50%', 
-            left: '50%', 
-            transform: 'translate(-50%, -50%)', 
-            width: '40%', 
-            height: '80%', 
+            width: '100%', 
+            height: '100%', 
         }}>
     </div>
+    </Container>
   )
 }
 

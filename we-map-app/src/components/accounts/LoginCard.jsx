@@ -107,6 +107,7 @@ const TextBox = styled.div`
 function LoginCard(props) {
     const handleMode = props.handleMode;
     const moveHome = props.moveHome
+    const moveMap = props.moveMap
     const moveUserInfo = props.moveUserInfo
     const {authState, setAuthState} = useContext(AuthContext);
     const [formData, setFormData] = useState({
@@ -128,7 +129,7 @@ function LoginCard(props) {
                   password: userInfo.password,
                   update_at: userInfo.updated_at,
                 })
-                moveUserInfo()
+                moveMap()
                 
             }
         ).catch(

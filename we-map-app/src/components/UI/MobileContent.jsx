@@ -3,7 +3,7 @@ import HomeScreen from '../accounts/HomeScreen'
 import styled from 'styled-components'
 import AccountHandler from '../accounts/AccountHandler'
 import UserInfo from '../accounts/UserInfo';
-
+import MapContainer from '../views/Landing/Sections/MapContainer';
 
 const Container = styled.div`
   width: 100%;
@@ -12,8 +12,13 @@ const Container = styled.div`
 `;
 export default function MobileContent() {
   const [activetab, setActivetab] = useState('home')
-
-  const moveAccounts = () =>{
+  const [accountMode, setAccountMode] = useState('login')
+  const moveAccounts = (mode) =>{
+    if (mode === 'signUp'){
+      setAccountMode('signUp')
+    }else{
+      setAccountMode('login')
+    }
     setActivetab('accounts')
   }
 
@@ -24,6 +29,9 @@ export default function MobileContent() {
   const moveUserInfo = () =>{
     setActivetab('userInfo')
   }
+  const moveMap = () =>{
+    setActivetab('map')
+  }
   return (
     <Container>
     
@@ -31,18 +39,27 @@ export default function MobileContent() {
       activetab === 'home' ? (
         <HomeScreen
           moveAccounts = {moveAccounts}
+          moveMap = {moveMap}
+
         ></HomeScreen>
       ): 
       activetab === 'accounts' ? (
         <AccountHandler
           moveHome = {moveHome}
           moveUserInfo = {moveUserInfo}
+          moveMap = {moveMap}
+          accountMode = {accountMode}
         ></AccountHandler>
       ) : 
       activetab === 'userInfo' ? (
         <UserInfo
          moveHome = {moveHome}
         ></UserInfo>
+      ) : 
+      activetab === 'map' ? (
+        <MapContainer
+         moveHome = {moveHome}
+        ></MapContainer>
       )
       :null}
     </Container>
