@@ -2,6 +2,7 @@
  * Map APIs
  */
 import axios from "axios"
+import { utmToCentral } from "./UnitConvert"
 let accessToken = undefined
 let accessExpire = undefined
 
@@ -26,8 +27,8 @@ const getAccess = async () => {
     try {
       const response = await MapAPI.get(apiURL, {
         params: {
-          consumer_key: "86516bd75bf444caaf92",
-          consumer_secret: "285b6a243e914068afb6"
+          consumer_key: process.env.REACT_APP_MAP_CLIENT_ID,
+          consumer_secret: process.env.REACT_APP_MAP_SECRET_ID
         }
       });
   
@@ -61,7 +62,11 @@ const mapRefresh = async () =>{
 
 // 프록시용 주소
 // const baseURL = "/OpenAPI3/boundary/hadmarea.geojson"
-
+/**
+ * 
+ * @param {*} geoCode 행정동 코드
+ * @returns SGIS단위 다각형 꼭짓점 좌표
+ */
 const getGeoBoundary = async (geoCode) =>{
     await mapRefresh()
     const apiURL = baseURL + "/boundary/hadmarea.geojson"
@@ -82,17 +87,33 @@ const getGeoBoundary = async (geoCode) =>{
           if (data.features[0].geometry.type == "MultiPolygon"){
             // multipoligon좌표임
           const multibound =  data.features[0].geometry.coordinates
+          /**
+           * 최종적으로 반환되는 PolygonPath 2차원 or 1차원
+           */
           const result = []
-          multibound.forEach(element => {
-            // console.log('각자 ...element')
-            // console.log(...element.flat())
-            result.push(...element.flat())
+          multibound.forEach((element) => {
+            const multiChild = element[0]
+            const resultChild = []
+            for (const v of multiChild) {
+              const converted =  utmToCentral(v[0], v[1]);
+              resultChild.push(converted);
+            }
+            result.push(resultChild)
           });
-          // console.log(result)
+          console.log('multi polygon일 때 리턴 좌표값')
+          console.log(result)
           return result
             
           }
-          return data.features[0].geometry.coordinates[0]
+          console.log('singl 좌표')
+          const vertex = data.features[0].geometry.coordinates[0]
+          const resultList = [[]]
+          for (const v of vertex) {
+            const converted =  utmToCentral(v[0], v[1]);
+            resultList[0].push(converted);
+          }
+          return resultList
+
         })
         .catch((error) => {
           console.log('에러발생 행정코드')

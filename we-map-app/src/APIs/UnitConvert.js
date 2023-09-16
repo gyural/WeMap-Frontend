@@ -18,21 +18,16 @@ proj4.defs([
   ]
     
 ])
-try{
-  var result = proj4('EPSG:5179', 'EPSG:4326', [coord_X, coord_Y])
+  try{
+    var result = proj4('EPSG:5179', 'EPSG:4326', [coord_X, coord_Y])
 
-  return([result[1], result[0]])
+    return([result[1], result[0]])
 
-}
-catch{
-  console.log('버그잡음!!')
-  console.log(coord_X[0], coord_X[1])
-  const result = proj4('EPSG:5179', 'EPSG:4326', [coord_X[0], coord_X[1]])
-  console.log([result[1], result[0]])
-  return([result[1], result[0]])
-
+  }
+  catch{
+    alert('단위변환 에러')
   
-}
+  }
 }
 /**
  * 
@@ -42,13 +37,13 @@ catch{
 const getBoundaryPoints = async (locationCode) =>{
   const vertex = await getGeoBoundary(locationCode)
   const resultList = [];
-
+  
   for (const v of vertex) {
-    const converted = await utmToCentral(v[0], v[1]);
+    const converted = utmToCentral(v[0], v[1]);
     resultList.push(converted);
   }
 
   return resultList
 }
 
-export {getBoundaryPoints}
+export {getBoundaryPoints, utmToCentral}
