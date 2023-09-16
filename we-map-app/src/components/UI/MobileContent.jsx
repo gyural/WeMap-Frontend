@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import AccountHandler from '../accounts/AccountHandler'
 import UserInfo from '../accounts/UserInfo';
 import MapContainer from '../views/Landing/Sections/MapContainer';
-
+import LandingPage from '../views/Landing/LandingPage';
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -57,9 +57,9 @@ export default function MobileContent() {
         ></UserInfo>
       ) : 
       activetab === 'map' ? (
-        <MapContainer
+        <LandingPage
          moveHome = {moveHome}
-        ></MapContainer>
+        ></LandingPage>
       )
       :null}
     </Container>

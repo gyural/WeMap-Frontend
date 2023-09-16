@@ -7,8 +7,8 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import menuIcon from '../../../images/line.png';
 
 const Container = styled.div`
-  width: 70vw;
-  height: 80vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction :column;
   align-items: center;
