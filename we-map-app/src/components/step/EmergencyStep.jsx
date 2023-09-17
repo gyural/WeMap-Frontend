@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Modal from 'react-modal';
 
 import styled from 'styled-components';
@@ -8,8 +8,9 @@ import backarrow from "../../images/left-arrow.png";
 import redWarning from "../../images/red-warning.png";
 import warning from "../../images/warning.png";
 import safe from "../../images/check.png";
-
+import { AuthContext } from '../../App';
 import '../../css/modal.css';
+import { updateUserAuth } from '../../APIs/Auth';
 
 const Container = styled.div`
     padding-top: 7%;
@@ -149,13 +150,41 @@ const NoButton = styled.button`
 Modal.defaultStyles = {};
 
 function EmergencyStep(props) {
+    const moveUserInfo = props.moveUserInfo
+    /** 유저 정보 */
+    const {authState, setAuthState} = useContext(AuthContext);
+
+    console.log(authState)
     const [modal1IsOpen, setModal1IsOpen] = useState(false);
     const [modal2IsOpen, setModal2IsOpen] = useState(false);
     const [modal3IsOpen, setModal3IsOpen] = useState(false);
+    /**
+     * 서버로 유저 재난 level를 Put 하는 명령어
+     * @param {*} level 현재 열려있는 popup 넘버
+     */
+    const handleSubmit = async (level) =>{
+        console.log('뭐지?')
+        //Update API 요청
+        await updateUserAuth({
+            'email': authState.userName,
+            'dis_level': level,
+            'password': authState.password,
+            'nickname' : authState.nickname
+        })
+        //Context에 반영
+        setAuthState({
+            isLoggedIn: true,
+            userName: authState.userName,
+            dis_level: level,
+            nickname: authState.nickname,
+            password: authState.password,
+          })
+        moveUserInfo()
+    }
     return (
         <Container>
             <Topbar>
-                <BackArrow>
+                <BackArrow onClick={moveUserInfo}>
                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
                 </BackArrow>
             </Topbar>
@@ -189,7 +218,11 @@ function EmergencyStep(props) {
                         <br />
                         <AlarmSpan>알림을 받으시겠습니까?</AlarmSpan>
                         <SelectButton>
-                            <YesButton>예</YesButton>
+                            <YesButton onClick={()=>{
+                                handleSubmit(3)
+                                }
+                            }>
+                                예</YesButton>
                             <NoButton>취소</NoButton>
                         </SelectButton>
                 </Modal>
@@ -216,7 +249,11 @@ function EmergencyStep(props) {
                     <br />
                     <AlarmSpan>알림을 받으시겠습니까?</AlarmSpan>
                     <SelectButton>
-                        <YesButton>예</YesButton>
+                        <YesButton onClick={()=>{
+                                handleSubmit(2)
+                                }
+                            }
+                        >예</YesButton>
                         <NoButton>취소</NoButton>
                     </SelectButton>
                 </Modal>
@@ -242,7 +279,10 @@ function EmergencyStep(props) {
                     <br />
                     <AlarmSpan>알림을 받으시겠습니까?</AlarmSpan>
                     <SelectButton>
-                        <YesButton>예</YesButton>
+                        <YesButton onClick={()=>{
+                                handleSubmit(1)
+                                }
+                            }>예</YesButton>
                         <NoButton>취소</NoButton>
                     </SelectButton>
                 </Modal>

@@ -5,6 +5,7 @@ import '../../views/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import menuIcon from '../../../images/line.png';
+import backIMG from '../../../images/left-arrow.png'
 
 const Container = styled.div`
   width: 100%;
@@ -14,7 +15,8 @@ const Container = styled.div`
   align-items: center;
 `;
 
-function LandingPage() {
+function LandingPage(props) {
+  const moveSideMenu = props.moveSideMenu
   const [InputText, setInputText] = useState('');
   const [Place, setPlace] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,8 +40,8 @@ function LandingPage() {
     <Container>
       <div className="landingPageContainer">
       <div className="searchContainer">
-        <button className="menuButton" onClick={openMenuWindow}style={{ height: '80%', width: '10%' }}>
-          <img src={menuIcon} alt="메뉴 아이콘" style={{ height: '100%', width: '100%' }} />
+        <button className="menuButton" onClick={moveSideMenu} style={{ height: '80%', width: '10%' }}>
+          <img  src={menuIcon} alt="메뉴 아이콘" style={{ height: '100%', width: '100%' }} />
         </button>
 
       </div>

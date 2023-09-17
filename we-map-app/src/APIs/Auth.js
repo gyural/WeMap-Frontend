@@ -115,7 +115,7 @@ const register = (email, pw) => {
  */
 const getUserAuth = async () =>{
     const apiURL = baseURL + "/user/auth/"
-
+    
     return await instance.get(apiURL, {withCredentials:true})
     .then((response) =>{
         return(response)
@@ -124,7 +124,32 @@ const getUserAuth = async () =>{
         console.log('Get User Auch 실패!!')
     })
 }
+const updateUserAuth = async (auth) =>{
+    const apiURL = baseURL + "/user/auth/update/"
 
+    const requestData = {
+        'email': auth.email,
+        'dis_level': auth.dis_level,
+        'password': auth.password,
+        'nickname' : auth.nickname
+    }
+
+    const finaldata = JSON.stringify(requestData)
+    console.log(finaldata)
+    return await instance.put(
+        apiURL,
+        finaldata,
+        {
+          withCredentials: true,
+          
+        }
+      ).then((response) =>{
+            return(response)}
+      ).catch((error) => {
+        console.log(error)  
+      }
+      )
+}
 /**
  * refresh토큰을 가지고 새로운 access token을 요청 헤더에 달아주기
  * @param {*} refreshToken 
@@ -177,4 +202,4 @@ const refresh = async (refreshToken) => {
 //         }
 //       );
 // }
-export {login, register, refresh, getUserAuth, logOut};
+export {login, register, refresh, getUserAuth, updateUserAuth, logOut};
