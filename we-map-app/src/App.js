@@ -5,9 +5,9 @@ import LoginCard from './components/accounts/LoginCard';
 import RegisterCard from './components/accounts/RegisterCard';
 import SidebarCard from './components/sidebar/SidebarCard';
 import EmergencyStep from './components/step/EmergencyStep';
-import wifiIcon from './images/device_wifi.png'
-import signalIcon from './images/device_signal.png'
-import batteryIcon from './images/device_bettery.png'
+import wifiIcon from './images/device_wifi.png';
+import signalIcon from './images/device_signal.png';
+import batteryIcon from './images/device_bettery.png';
 import Clock from './components/UI/Clock';
 import AccountHandler from './components/accounts/AccountHandler';
 import MobileContent from './components/UI/MobileContent';

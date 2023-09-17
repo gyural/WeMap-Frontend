@@ -7,7 +7,7 @@ let accessToken = undefined
 let accessExpire = undefined
 
 const MapAPI = axios.create(
-   { headers: {
+  { headers: {
         'Content-Type': 'application/json',
       },}
       )
@@ -77,7 +77,7 @@ const getGeoBoundary = async (geoCode) =>{
         low_search :  0,
     }
 
-     return await MapAPI.get(apiURL, {
+    return await MapAPI.get(apiURL, {
         params: requstData
       })
         .then((res) => {
