@@ -13,7 +13,7 @@ import MapContainer from './components/views/Landing/Sections/MapContainer';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <MapContainer />
+    <App />
   </React.StrictMode>
 );
 

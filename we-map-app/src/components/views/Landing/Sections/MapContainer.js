@@ -25,7 +25,7 @@ const dummyLocations = [
 const { kakao } = window;
 
 const MapContainer = ({ searchPlace }) => {
-
+    console.log('first')
     const [locations, setLocations] = useState([]);
     const [socketListenr, setSocketListenr] = useState([])
   
@@ -116,11 +116,12 @@ const MapContainer = ({ searchPlace }) => {
       socketListenr.forEach(element => {
         sd_list.push(Number(element.location_id))
       });
+      console.log(sd_list)
       drawPolygon(map, sd_list)
 
     }
   
-  }, [searchPlace, locations]);
+  }, [searchPlace, locations, socketListenr]);
   
   
 
