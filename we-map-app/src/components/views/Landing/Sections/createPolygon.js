@@ -37,7 +37,6 @@ const createPolygon = async (sd_code) =>{
         polygonPath.push(singlePath)
         
     });
-    console.log(polygonPath)
     // 지도에 표시할 다각형을 생성합니다
     var polygon = new kakao.maps.Polygon({
         path:polygonPath, // 그려질 다각형의 좌표 배열입니다

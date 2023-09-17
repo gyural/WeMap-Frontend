@@ -106,6 +106,7 @@ const TextBox = styled.div`
 
 function RegisterCard(props) {
     const handleMode = props.handleMode
+    const moveHome = props.moveHome
     const [formData, setFormData] = useState({
         id: "",
         password: "",
@@ -189,7 +190,7 @@ function RegisterCard(props) {
                 bgcolor = {colors.gray}
                 hoverColor = {colors.hoverGray}
                 onClick = {
-                  handleMode
+                  moveHome
                 }
               >
               취소

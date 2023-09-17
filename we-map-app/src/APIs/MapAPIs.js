@@ -81,9 +81,7 @@ const getGeoBoundary = async (geoCode) =>{
         params: requstData
       })
         .then((res) => {
-          console.log(res.data.result);
           const data = res.data
-          console.log(data)
           if (data.features[0].geometry.type == "MultiPolygon"){
             // multipoligon좌표임
           const multibound =  data.features[0].geometry.coordinates

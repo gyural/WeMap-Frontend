@@ -17,7 +17,8 @@ import yellowDust from "../../images/yellow-dust.png";
 import fire from "../../images/fire.png";
 import carAccident from "../../images/accident.png";
 import missing from "../../images/missing.png";
-
+import { useContext } from 'react';
+import { AuthContext } from '../../App';
 const Container = styled.div`
     padding-top: 10%;
     width: 100%;
@@ -151,11 +152,16 @@ const MissingBtn = styled.button`
 
 
 function SidebarCard(props) {
-
+    /**
+     * 유저정보입니다
+     */
+    const {authState, setAuthState} = useContext(AuthContext);
+    const isLogin = authState.isLoggedIn;
+    const moveMap = props.moveMap
     return (
         <Container>
             <Topbar>
-                <BackArrow>
+                <BackArrow onClick={moveMap}>
                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
                 </BackArrow>
                 <LoginBtn>로그인</LoginBtn>

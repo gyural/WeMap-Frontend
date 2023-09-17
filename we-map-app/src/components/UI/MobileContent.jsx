@@ -5,6 +5,7 @@ import AccountHandler from '../accounts/AccountHandler'
 import UserInfo from '../accounts/UserInfo';
 import MapContainer from '../views/Landing/Sections/MapContainer';
 import LandingPage from '../views/Landing/LandingPage';
+import SidebarCard from '../sidebar/SidebarCard';
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -60,6 +61,11 @@ export default function MobileContent() {
         <LandingPage
          moveHome = {moveHome}
         ></LandingPage>
+      ) : 
+      activetab === 'sideMenu' ? (
+        <SidebarCard
+         moveMap = {moveMap}
+        ></SidebarCard>
       )
       :null}
     </Container>

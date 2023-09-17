@@ -82,8 +82,14 @@ function HomeScreen(props) {
       <SmallTitle><span2>WeMap</span2>에 오신 것을 환영합니다.</SmallTitle>
       <Image src={img1} alt="WeMap 이미지" />
       <Buttons>
-        <Button1>Sign In</Button1>
-        <Button2 onClick={moveAccounts}>Sign Up</Button2>
+        <Button2 onClick={()=>{
+          moveAccounts('signUp')
+        }
+        }>Sign Up</Button2>
+        <Button1 onClick={() =>{
+            moveAccounts('login')
+          }
+          }>Sign In</Button1>
       </Buttons>
     </Container>
   );

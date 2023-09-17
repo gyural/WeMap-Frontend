@@ -26,6 +26,8 @@ export default function AccountHandler(props) {
     ) : (
       <RegisterCard
       handleMode = {modeHandle}
+      moveHome = {moveHome}
+
       ></RegisterCard>
     )
   )

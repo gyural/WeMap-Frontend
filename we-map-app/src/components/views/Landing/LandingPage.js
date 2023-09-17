@@ -5,6 +5,7 @@ import '../../views/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import menuIcon from '../../../images/line.png';
+import backIMG from '../../../images/left-arrow.png'
 
 const Container = styled.div`
   width: 100%;
@@ -12,6 +13,10 @@ const Container = styled.div`
   display: flex;
   flex-direction :column;
   align-items: center;
+`
+
+const Exit = styled.div`
+  width: 20
 `
 function LandingPage() {
   const [InputText, setInputText] = useState('');

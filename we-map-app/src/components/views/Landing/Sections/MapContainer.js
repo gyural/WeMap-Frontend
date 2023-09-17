@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { createPolygon, getPolygonPath } from './createPolygon'
-import colors from '../../../../Common/Color'
+// import { disasterSocket } from '../../../../App';
 import { drawPolygon } from './createPolygon'
 const Container = styled.div`
   width: 100%;
@@ -10,32 +9,44 @@ const Container = styled.div`
 const { kakao } = window
 
 const MapContainer = ({ searchPlace }) => {
-  const [socketListenr, setSocketListenr] = useState(undefined)
-  console.log(socketListenr)
+  const [socketListenr, setSocketListenr] = useState([])
+  
   useEffect(() => {
-    try {
-      const socket = new WebSocket('wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken');
-      socket.onopen = (event) => {
-          console.log('Connected:', event);
-      };
-      socket.onmessage = (event) => {
-        setSocketListenr(JSON.parse(event.data))
-          // 웹 페이지에 데이터를 표시하는 로직을 추가합니다.
-      };
-      socket.onclose = (event) => {
-          console.log('Connection closed:', event);
-      };
-      socket.onerror = (error) => {
-          console.error('WebSocket Error:', error);
-      };
-  } catch (error) {
-      console.log(error);
-  }
+    // WebSocket 연결 생성
+    const websocket = new WebSocket("wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken");
+    websocket.onopen = () => {
+      console.log("Connected to the WebSocket");
+      // 연결이 수립되면 메시지 전송
+      websocket.send(JSON.stringify({ action: "onData" }));
+    };
+    websocket.onmessage = (event) => {
+      console.log("Received message:", event.data);
+      // 수신한 데이터를 state에 저장
+      setSocketListenr(JSON.parse((event.data)));
+    };
+    websocket.onerror = (error) => {
+      console.error("WebSocket Error:", error);
+    };
+    websocket.onclose = (event) => {
+      if (event.wasClean) {
+        console.log(`Closed cleanly, code=${event.code}, reason=${event.reason}`);
+      } else {
+        console.error("Connection died");
+      }
+    };
+    // 컴포넌트 언마운트 시 연결 종료
+    return () => {
+      websocket.close();
+    };
+  }, []);
+  
+  useEffect(() => {
+    
     var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 })
     const container = document.getElementById('myMap')
     const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
-      level: 3,
+      center: new kakao.maps.LatLng(37.541, 126.986),
+      level: 10,
     }
     const map = new kakao.maps.Map(container, options)
     const ps = new kakao.maps.services.Places()
@@ -65,8 +76,15 @@ const MapContainer = ({ searchPlace }) => {
     /**
      * 다각형지도 Drawing
      */
-    const sd_list = [11040, 39010, 38]
-    drawPolygon(map, sd_list)
+    console.log(socketListenr)
+    if(socketListenr){
+      const sd_list = []
+      socketListenr.forEach(element => {
+        sd_list.push(Number(element.location_id))
+      });
+      drawPolygon(map, sd_list)
+
+    }
   }, [searchPlace, socketListenr])
   return (
     <Container>
