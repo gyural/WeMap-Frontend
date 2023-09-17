@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { createPolygon, getPolygonPath } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
+import FindLoad from './findLoad';
+
 
 
 const Container = styled.div`
@@ -33,13 +35,15 @@ const MapContainer = ({ searchPlace }) => {
   } catch (error) {
       console.log(error);
   }
+
     var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 })
     const container = document.getElementById('myMap')
     const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
-      level: 3,
+      center: new kakao.maps.LatLng(36.610261563595, 127.29307759409),
+      level: 5,
     }
     const map = new kakao.maps.Map(container, options)
+
     const ps = new kakao.maps.services.Places()
     ps.keywordSearch(searchPlace, placesSearchCB)
     function placesSearchCB(data, status, pagination) {

@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from "styled-components";
 import colors from "../../Common/Color";
+
 import backarrow from "../../images/left-arrow.png";
 import typhoon from "../../images/hurricane.png";
 import forestFire from "../../images/forest-fire.png";

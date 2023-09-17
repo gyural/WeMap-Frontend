@@ -12,7 +12,8 @@ const Container = styled.div`
   display: flex;
   flex-direction :column;
   align-items: center;
-`
+`;
+
 function LandingPage() {
   const [InputText, setInputText] = useState('');
   const [Place, setPlace] = useState('');
