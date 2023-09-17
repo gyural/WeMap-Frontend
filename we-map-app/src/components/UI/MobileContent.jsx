@@ -6,13 +6,14 @@ import UserInfo from '../accounts/UserInfo';
 import MapContainer from '../views/Landing/Sections/MapContainer';
 import LandingPage from '../views/Landing/LandingPage';
 import SidebarCard from '../sidebar/SidebarCard';
+import EmergencyStep from '../step/EmergencyStep';
 const Container = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
 `;
 export default function MobileContent() {
-  const [activetab, setActivetab] = useState('accounts')
+  const [activetab, setActivetab] = useState('home')
   const [accountMode, setAccountMode] = useState('login')
   const moveAccounts = (mode) =>{
     if (mode === 'signUp'){
@@ -36,6 +37,9 @@ export default function MobileContent() {
   const moveSideMenu = () =>{
     setActivetab('sideMenu')
   }
+  const moveEmergencyStep = () =>{
+    setActivetab('emergencyStep')
+  }
   return (
     <Container>
     
@@ -58,6 +62,8 @@ export default function MobileContent() {
       activetab === 'userInfo' ? (
         <UserInfo
          moveHome = {moveHome}
+         moveSideMenu = {moveSideMenu}
+         moveEmergencyStep = {moveEmergencyStep}
         ></UserInfo>
       ) : 
       activetab === 'map' ? (
@@ -68,8 +74,16 @@ export default function MobileContent() {
       ) : 
       activetab === 'sideMenu' ? (
         <SidebarCard
+         moveHome = {moveHome}
          moveMap = {moveMap}
+         moveUserInfo = {moveUserInfo}
         ></SidebarCard>
+      ) : 
+      activetab === 'emergencyStep' ? (
+        <EmergencyStep
+         moveMap = {moveMap}
+         moveUserInfo = {moveUserInfo}
+        ></EmergencyStep>
       )
       :null}
     </Container>

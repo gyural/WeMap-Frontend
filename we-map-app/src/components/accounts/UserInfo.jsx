@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import colors from '../../Common/Color';
 import profileIMG from '../../images/user_profile.png'
 import { AuthContext } from '../../App';
+import backarrow from "../../images/left-arrow.png";
+
 import { getUserAuth, logOut, refresh } from '../../APIs/Auth';
 const Container = styled.div`
     width: 100%;
@@ -54,15 +56,43 @@ const InfoBox = styled.div`
     border-radius: 12px;
     margin-bottom: 2%;
 `;
+
+const Topbar = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const BackArrow = styled.button`
+    background-color: transparent;
+    position: absolute;
+    left: 3%;
+    border: none;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+`;
+
+const Image = styled.img`
+    width: 20px;
+    height: 20px;
+`;
 export default function UserInfo(props) {
   const moveHome = props.moveHome
+  const moveSideMenu = props.moveSideMenu
+  const moveEmergencyStep = props.moveEmergencyStep
   const {authState, setAuthState} = useContext(AuthContext);
+  const disasterLevel = ['안전안내문자', '긴급 재난 문자', '위급 재난 문자']
   const handleLogout = async () =>{
     await logOut()
     moveHome()
   }
   return (
     <Container>
+      <BackArrow onClick={moveSideMenu}>
+          <Image src={backarrow} alt="뒤로가기 버튼"></Image>
+      </BackArrow>
         <Title>
             <div
                 style ={{
@@ -89,7 +119,10 @@ export default function UserInfo(props) {
         <InfoBox>ID(이메일) : {authState.userName}</InfoBox>
         <InfoBox>이름 : {authState.userName}</InfoBox>
         <InfoBox>비밀번호 수정</InfoBox>
-        <InfoBox>재난 알림 설정 : </InfoBox>
+        <InfoBox 
+          onClick={moveEmergencyStep}
+          style = {{cursor: 'pointer'}}
+          >재난 알림 설정 : {disasterLevel[authState.dis_level - 1]}</InfoBox>
 
         <div
             className='logoutWrapper'

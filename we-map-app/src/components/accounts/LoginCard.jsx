@@ -117,7 +117,7 @@ function LoginCard(props) {
     });
     const handleSubmit = () => {
         login(formData.id, formData.password).then(
-            async ()=>{
+              async ()=>{
                 const res = await getUserAuth()
                 const userInfo = res.data
                 console.log(userInfo)

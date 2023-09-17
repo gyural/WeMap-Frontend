@@ -117,6 +117,7 @@ const getGeoBoundary = async (geoCode) =>{
           console.log('에러발생 행정코드')
           console.log(requstData.adm_cd)
           console.error(error);
+          return []
         });
 }
 

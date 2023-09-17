@@ -20,6 +20,7 @@ import carAccident from "../../images/accident.png";
 import missing from "../../images/missing.png";
 import { useContext } from 'react';
 import { AuthContext } from '../../App';
+import { logOut } from '../../APIs/Auth';
 const Container = styled.div`
     padding-top: 10%;
     width: 100%;
@@ -173,14 +174,23 @@ function SidebarCard(props) {
     const {authState, setAuthState} = useContext(AuthContext);
     const isLogin = authState.isLoggedIn;
     const moveMap = props.moveMap
+    const moveHome = props.moveHome
+    const moveUserInfo = props.moveUserInfo
+    /**
+     * logout후 home화면으로 이동시키는 함수
+     */
+    const handleLogout = async () =>{
+        await logOut()
+        moveHome()
+      }
     return (
         <Container>
             <Topbar>
                 <BackArrow onClick={moveMap}>
                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
                 </BackArrow>
-                <LoginBtn>로그아웃</LoginBtn>
-                <InfoBtn>내 정보</InfoBtn>
+                <LoginBtn onClick={handleLogout}>로그아웃</LoginBtn>
+                <InfoBtn onClick={moveUserInfo}>내 정보</InfoBtn>
             </Topbar>
             <CommunityBtn>커뮤니티</CommunityBtn>
             <Buttons>
