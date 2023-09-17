@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { createPolygon, getPolygonPath } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
-import FindLoad from './FindLoad';
+// import FindLoad from './FindLoad';
 
 
 const Container = styled.div`
