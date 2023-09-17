@@ -38,29 +38,12 @@ function LandingPage() {
     <Container>
       <div className="landingPageContainer">
       <div className="searchContainer">
-        <button className="menuButton" onClick={openMenuWindow}style={{ height: '80%', width: '5%' }}>
+        <button className="menuButton" onClick={openMenuWindow}style={{ height: '80%', width: '10%' }}>
           <img src={menuIcon} alt="메뉴 아이콘" style={{ height: '100%', width: '100%' }} />
         </button>
-        <form styled={{
-          
-        }}className="inputForm" onSubmit={handleSubmit}>
-          <input className="searchInput" placeholder="" onChange={onChange} value={InputText} />
-          <button className="searchButton" type="submit">
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-        </form>
+
       </div>
-      <div className="buttonContainer">
-        
-        <button className="Button1">실종</button>
-        <button className="Button1">산사태</button>
-        <button className="Button1">지진</button>
-        <button className="Button1">호우</button>
-        <button className="Button1">폭염</button>
-        <button className="Button1">폭설</button>
-        <button className="Button1">허리케인</button>
-      </div>  
-      
+
     <div className="mapContainer"style={{ width: '100%', height: '100%' }}>
           <MapContainer searchPlace={Place} />
     </div>
