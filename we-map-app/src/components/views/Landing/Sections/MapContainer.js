@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { createPolygon, getPolygonPath } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
-import FindLoad from './FindLoad';
-
+import { FindLoad } from './FindLoad';
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
 `;
+
 const { kakao } = window
 
 const MapContainer = ({ searchPlace }) => {
@@ -74,11 +74,13 @@ const MapContainer = ({ searchPlace }) => {
     drawPolygon(map, sd_list)
   }, [searchPlace, socketListenr])
 
-  /**
-   * 길찾기 Drawing
-   */
-
-  
+    /**
+     * 길찾기 Drawing
+     */
+    useState(() => {
+      FindLoad();
+    });
+    
 
 
   return (
