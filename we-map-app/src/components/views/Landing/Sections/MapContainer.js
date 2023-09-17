@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { createPolygon, getPolygonPath } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
-import FindLoad from './findLoad';
-
+import FindLoad from './FindLoad';
 
 
 const Container = styled.div`
@@ -74,6 +73,14 @@ const MapContainer = ({ searchPlace }) => {
     const sd_list = [11040, 39010, 38]
     drawPolygon(map, sd_list)
   }, [searchPlace, socketListenr])
+
+  /**
+   * 길찾기 Drawing
+   */
+
+  
+
+
   return (
     <Container>
     <div

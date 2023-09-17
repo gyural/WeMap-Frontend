@@ -1,42 +1,49 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+// import React, { useState } from 'react';
+// import styled from 'styled-components';
 
-import backarrow from "../../../../images/left-arrow.png";
+// import backarrow from "../../../../images/left-arrow.png";
 
-import MapContainer from './MapContainer';
-import '../../styles.css';
+// import MapContainer from './MapContainer';
+// import '../../styles.css';
+// const { kakao } = window
+// const container = document.getElementById('myMap')
+//     const options = {
+//         center: new kakao.maps.LatLng(36.610261563595, 127.29307759409),
+//         level: 5,
+//     }
+// const map = new kakao.maps.Map(container, options)
 
-const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction :column;
-    align-items: center;
-`;
+// const Container = styled.div`
+//     width: 100%;
+//     height: 100%;
+//     display: flex;
+//     flex-direction :column;
+//     align-items: center;
+// `;
 
-const Topbar = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
+// const Topbar = styled.div`
+//     width: 100%;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+// `;
 
-const Image = styled.img`
-    width: 20px;
-    height: 20px;
-`;
+// const Image = styled.img`
+//     width: 20px;
+//     height: 20px;
+// `;
 
-const BackArrow = styled.button`
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-`;
+// const BackArrow = styled.button`
+//     background-color: transparent;
+//     border: none;
+//     cursor: pointer;
+//     width: 20px;
+//     height: 20px;
+// `;
 
-function FindLoad(){
+// function FindLoad() {
 
-    const [Place, setPlace] = useState('');
+//     const [Place, setPlace] = useState('');
 
 //     // 출발지와 도착지 좌표를 설정합니다.
 //     const startLatLng = new kakao.maps.LatLng(36.610261563595, 127.29307759409);
@@ -77,19 +84,19 @@ function FindLoad(){
 //         }
 //     });
 
-    return (
-        <Container>
-            <Topbar>
-                <BackArrow>
-                    <Image src={backarrow} alt="뒤로가기 버튼"></Image>
-                </BackArrow>
-            </Topbar>
-            <div className="mapContainer"style={{ width: '100%', height: '100%' }}>
-                <MapContainer searchPlace={Place} />
-            </div>
-        </Container>
-    )
+//     return (
+//         <Container>
+//             <Topbar>
+//                 <BackArrow>
+//                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
+//                 </BackArrow>
+//             </Topbar>
+//             <div className="mapContainer" style={{ width: '100%', height: '100%' }}>
+//                 <MapContainer searchPlace={Place} />
+//             </div>
+//         </Container>
+//     )
 
-}
+// }
 
-export default FindLoad;
+// export default FindLoad;
