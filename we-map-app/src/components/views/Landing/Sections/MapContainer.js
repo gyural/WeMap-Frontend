@@ -4,6 +4,7 @@ import { createPolygon, getPolygonPath } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { FindLoad } from './FindLoad';
+import pinicon from '../../../../images/pin.png';
 
 const Container = styled.div`
     width: 100%;
@@ -57,8 +58,6 @@ const MapContainer = ({ searchPlace }) => {
     }, []);
 
     useEffect(() => {
-      
-    
       const mapContainer = document.getElementById('map');
       const mapOption = {
           center: new kakao.maps.LatLng(36.498649, 127.268141),
@@ -99,7 +98,6 @@ const MapContainer = ({ searchPlace }) => {
   
           isOverlayShown = !isOverlayShown;  // 상태 토글
       });
-  
     
         // 기본적으로 커스텀 오버레이는 숨김 상태
         customOverlay.setMap(null);
@@ -120,6 +118,13 @@ const MapContainer = ({ searchPlace }) => {
     }
   
   }, [searchPlace, locations, socketListenr]);
+
+  /**
+   * 길찾기 Drawing
+   * */ 
+  useEffect(() => {
+    console.log(FindLoad);
+  }, []);
 
     return (
         <Container>

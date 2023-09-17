@@ -31,7 +31,7 @@ const login = async (email, pw) => {
     // console.log(finaldata)
     return await axios.post(apiURL, finaldata, {headers: {
         'Content-Type': 'application/json',
-      }})
+    }})
     .then((response) => {
         console.log(response)
         const accessToken = response.data.token.access;
@@ -97,7 +97,7 @@ const register = (email, pw) => {
         headers: {
           'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
         },
-      })
+    })
     .then(() => {
         alert('회원가입 성공')
         return true;
