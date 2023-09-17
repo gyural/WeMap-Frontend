@@ -12,7 +12,7 @@ const Container = styled.div`
   box-sizing: border-box;
 `;
 export default function MobileContent() {
-  const [activetab, setActivetab] = useState('home')
+  const [activetab, setActivetab] = useState('accounts')
   const [accountMode, setAccountMode] = useState('login')
   const moveAccounts = (mode) =>{
     if (mode === 'signUp'){
@@ -32,6 +32,9 @@ export default function MobileContent() {
   }
   const moveMap = () =>{
     setActivetab('map')
+  }
+  const moveSideMenu = () =>{
+    setActivetab('sideMenu')
   }
   return (
     <Container>
@@ -60,6 +63,7 @@ export default function MobileContent() {
       activetab === 'map' ? (
         <LandingPage
          moveHome = {moveHome}
+         moveSideMenu = {moveSideMenu}
         ></LandingPage>
       ) : 
       activetab === 'sideMenu' ? (

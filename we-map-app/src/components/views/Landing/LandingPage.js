@@ -13,12 +13,10 @@ const Container = styled.div`
   display: flex;
   flex-direction :column;
   align-items: center;
-`
+`;
 
-const Exit = styled.div`
-  width: 20
-`
-function LandingPage() {
+function LandingPage(props) {
+  const moveSideMenu = props.moveSideMenu
   const [InputText, setInputText] = useState('');
   const [Place, setPlace] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,8 +40,8 @@ function LandingPage() {
     <Container>
       <div className="landingPageContainer">
       <div className="searchContainer">
-        <button className="menuButton" onClick={openMenuWindow}style={{ height: '80%', width: '10%' }}>
-          <img src={menuIcon} alt="메뉴 아이콘" style={{ height: '100%', width: '100%' }} />
+        <button className="menuButton" onClick={moveSideMenu} style={{ height: '80%', width: '10%' }}>
+          <img  src={menuIcon} alt="메뉴 아이콘" style={{ height: '100%', width: '100%' }} />
         </button>
 
       </div>
