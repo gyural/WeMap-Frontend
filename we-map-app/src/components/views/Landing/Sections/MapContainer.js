@@ -3,24 +3,34 @@ import styled from 'styled-components'
 import { createPolygon, getPolygonPath } from './createPolygon'
 import colors from '../../../../Common/Color'
 import { drawPolygon } from './createPolygon'
+import pinicon from '../../../../images/pin.png';
+
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 `;
-const { kakao } = window
+/**
+ * 일단 더미데이터. title이름 지울까 말까..
+ */
+const dummyLocations = [
+  { title: "학교", lat: 36.611044, lng: 127.286428 },
+  { title: "Location 2", lat: 36.611291, lng: 127.357820 },
+  { title: "Location 3", lat: 37.289198, lng: 127.012131 },
+  { title: "이재모피자", lat: 35.102102, lng: 129.030605 },
+];
+
+
+const { kakao } = window;
 
 const MapContainer = ({ searchPlace }) => {
-  const [socketListenr, setSocketListenr] = useState(undefined)
-  console.log(socketListenr)
-  useEffect(() => {
-    try {
+    const [locations, setLocations] = useState([]);
+
+    useEffect(() => {
       const socket = new WebSocket('wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken');
       socket.onopen = (event) => {
           console.log('Connected:', event);
       };
       socket.onmessage = (event) => {
-        setSocketListenr(JSON.parse(event.data))
-          // 웹 페이지에 데이터를 표시하는 로직을 추가합니다.
       };
       socket.onclose = (event) => {
           console.log('Connection closed:', event);
@@ -28,63 +38,73 @@ const MapContainer = ({ searchPlace }) => {
       socket.onerror = (error) => {
           console.error('WebSocket Error:', error);
       };
-  } catch (error) {
-      console.log(error);
-  }
-    var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 })
-    const container = document.getElementById('myMap')
-    const options = {
-      center: new kakao.maps.LatLng(33.450701, 126.570667),
-      level: 3,
-    }
-    const map = new kakao.maps.Map(container, options)
-    const ps = new kakao.maps.services.Places()
-    ps.keywordSearch(searchPlace, placesSearchCB)
-    function placesSearchCB(data, status, pagination) {
-      if (status === kakao.maps.services.Status.OK) {
-        let bounds = new kakao.maps.LatLngBounds()
-        for (let i = 0; i < data.length; i++) {
-          displayMarker(data[i])
-          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x))
-        }
-        map.setBounds(bounds)
-      }
-    }
-    function displayMarker(place) {
-      let marker = new kakao.maps.Marker({
-        map: map,
-        position: new kakao.maps.LatLng(place.y, place.x),
-      })
-      // 마커에 클릭이벤트 등록
-      kakao.maps.event.addListener(marker, 'click', function () {
-        // 마커를 클릭 시 장소명이 인포윈도우 표출
-        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>')
-        infowindow.open(map, marker)
-      })
-    }
-    /**
-     * 다각형지도 Drawing
-     */
-    const sd_list = [11040, 39010, 38]
-    drawPolygon(map, sd_list)
-  }, [searchPlace, socketListenr])
-  return (
-    <Container>
-    <div
-        id="myMap"
-        style={{
-          position: 'absolute', 
-          top: '50%', 
-          left: '50%', 
-          transform: 'translate(-50%, -50%)', 
-          width: '100%', 
-          height: '100%', 
-      }}>
-  </div>
-    </Container>
+  
+      const mapContainer = document.getElementById('map');
+      const mapOption = {
+          center: new kakao.maps.LatLng(36.498649, 127.268141),
+          level: 7
+      };
+  
+      const map = new kakao.maps.Map(mapContainer, mapOption);
+  
+      const imageSrc =pinicon;
+      const imageSize = new kakao.maps.Size(50, 50);
+      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+  
+      dummyLocations.forEach(location => {
+        const markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
         
+        const marker = new kakao.maps.Marker({
+            map: map,
+            position: markerPosition,
+            image: markerImage
+        });
+        
+        const overlayPosition = new kakao.maps.LatLng(location.lat, location.lng);
+        
+        const customOverlay = new kakao.maps.CustomOverlay({
+            position: overlayPosition,
+            content: `<div>${location.title}</div>`,
+            yAnchor: 1.5  
+        });
+        
+        let isOverlayShown = false;  
+        // 마커에 클릭 이벤트 설정
+        kakao.maps.event.addListener(marker, 'click', function() {
+          if (isOverlayShown) {
+              customOverlay.setMap(null);  // 오버레이 숨기기
+          } else {
+              customOverlay.setMap(map);   // 오버레이 보여주기
+          }
+  
+          isOverlayShown = !isOverlayShown;  // 상태 토글
+      });
+  
     
-  )
+        // 기본적으로 커스텀 오버레이는 숨김 상태
+        customOverlay.setMap(null);
+    });
+  
+      const sd_list = [11040, 39010, 38];
+      drawPolygon(map, sd_list);
+  
+  }, [searchPlace, locations]);
+  
+  
+
+    return (
+        <Container>
+            <div id="map" style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '100%',
+                height: '100%',
+            }}>
+            </div>
+        </Container>
+    );
 }
 
 export default MapContainer;
