@@ -5,7 +5,7 @@ import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { insertManualCard } from './manualCard';
 import pinicon from '../../../../images/pin.png';
-
+import { getDisasterList } from './DisasterList';
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
@@ -25,20 +25,29 @@ const dummyLocations = [
 const { kakao } = window;
 
 const MapContainer = ({ searchPlace }) => {
-    console.log('first')
-    const [locations, setLocations] = useState([]);
 
+    const [map, setMap] = useState(undefined)
+    const [locations, setLocations] = useState([]);
+    //현재 지도에 나와있는 재난 리스트 (pk값으로만 저장)
+    const [viewList, setViewList] = useState([]);
     //socket에 대이터가 바뀔때마다 socketListener가 바뀜
     const [socketListenr, setSocketListenr] = useState([])
-    
+    //현재 나타내야할 재난 정보
+    const [disasteList , setDisasterList] = useState([])
     //zoom이 바뀔때마다 리랜더링을 통해서 보이게할 지도 컨텐츠를 조절하기 위함
     const [zoom, setZoom] = useState(undefined)
-    
     /**
      * MapCotainer가 마운트 / 언마운트 될때만 작동한는 Hook
      * 1) 웹소캣의 함수들의 정의 2) 웹소캣 connect / disconnect를 다룸
      */
     useEffect(() => {
+      const mapContainer = document.getElementById('map');
+      const mapOption = {
+        center: new kakao.maps.LatLng(37.541, 126.986),
+        level: 7
+      };
+      const map = new kakao.maps.Map(mapContainer, mapOption);
+      setMap(map)
       // WebSocket 연결 생성
       const websocket = new WebSocket("wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken");
       websocket.onopen = () => {
@@ -47,9 +56,10 @@ const MapContainer = ({ searchPlace }) => {
         websocket.send(JSON.stringify({ action: "onData" }));
       };
       websocket.onmessage = (event) => {
-        console.log("Received message:", event.data);
+        console.log("Received message:", JSON.parse(event.data));
         // 수신한 데이터를 state에 저장
-        setSocketListenr(JSON.parse((event.data)));
+       
+        setDisasterList(getDisasterList(JSON.parse((event.data))))
       };
       websocket.onerror = (error) => {
         console.error("WebSocket Error:", error);
@@ -66,24 +76,13 @@ const MapContainer = ({ searchPlace }) => {
         console.log('언마운트 후 disconnected')
         websocket.close();
       };
-    }, []);
-
-
-    useEffect(() => {
-
-      //카카오 맵 객체 만들어 주기
-      const mapContainer = document.getElementById('map');
-      const mapOption = {
-          center: new kakao.maps.LatLng(37.541, 126.986),
-          level: 7
-      };
-      const map = new kakao.maps.Map(mapContainer, mapOption);
-      
-      //소캣으로 들어온 데이터로 map 객체에 다각형지도 Drawing
-      console.log(socketListenr)
-      if(socketListenr){
+  }, []);
+  useEffect(() => {
+    if (map){
+      if(disasteList){
         const sd_list = []
-        socketListenr.forEach(element => {
+        disasteList.forEach(element => {
+          console.log(element)
           sd_list.push(Number(element.location_code))
         });
         drawPolygon(map, sd_list)
@@ -99,45 +98,51 @@ const MapContainer = ({ searchPlace }) => {
         }
         setZoom(level)
       })
-      
+    
       const imageSrc =pinicon;
       const imageSize = new kakao.maps.Size(50, 50);
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-  
-      dummyLocations.forEach(location => {
-        const markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
-        
-        const marker = new kakao.maps.Marker({
-            map: map,
-            position: markerPosition,
-            image: markerImage
-        });
-        
-        const overlayPosition = new kakao.maps.LatLng(location.lat, location.lng);
-        
-        const customOverlay = new kakao.maps.CustomOverlay({
-            position: overlayPosition,
-            content: `<div>${location.title}</div>`,
-            yAnchor: 1.5  
-        });
-        
-        let isOverlayShown = false;  
-        // 마커에 클릭 이벤트 설정
-        kakao.maps.event.addListener(marker, 'click', function() {
-          if (isOverlayShown) {
-              customOverlay.setMap(null);  // 오버레이 숨기기
-          } else {
-              customOverlay.setMap(map);   // 오버레이 보여주기
-          }
-  
-          isOverlayShown = !isOverlayShown;  // 상태 토글
+      
+    /**
+     * dummy데이터를 읽고 지도 객체에 마커 표시
+     */
+    dummyLocations.forEach(location => {
+      const markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
+      
+      const marker = new kakao.maps.Marker({
+          map: map,
+          position: markerPosition,
+          image: markerImage
       });
-    
-        // 기본적으로 커스텀 오버레이는 숨김 상태
-        customOverlay.setMap(null);
-    });
+      
+      const overlayPosition = new kakao.maps.LatLng(location.lat, location.lng);
+      
+      const customOverlay = new kakao.maps.CustomOverlay({
+          position: overlayPosition,
+          content: `<div>${location.title}</div>`,
+          yAnchor: 1.5  
+      });
+      
+      let isOverlayShown = false;  
+      // 마커에 클릭 이벤트 설정
+      kakao.maps.event.addListener(marker, 'click', function() {
+        if (isOverlayShown) {
+            customOverlay.setMap(null);  // 오버레이 숨기기
+        } else {
+            customOverlay.setMap(map);   // 오버레이 보여주기
+        }
+
+        isOverlayShown = !isOverlayShown;  // 상태 토글
+      });
   
-  }, [searchPlace, locations, socketListenr]);
+      // 기본적으로 커스텀 오버레이는 숨김 상태
+      customOverlay.setMap(null);
+      });
+    }
+    
+
+  }, [searchPlace, locations, disasteList]);
+    
 
   /**
    * 길찾기 Drawing
