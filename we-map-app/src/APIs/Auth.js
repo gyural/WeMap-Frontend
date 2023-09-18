@@ -31,7 +31,7 @@ const login = async (email, pw) => {
     // console.log(finaldata)
     return await axios.post(apiURL, finaldata, {headers: {
         'Content-Type': 'application/json',
-      }})
+    }})
     .then((response) => {
         console.log(response)
         const accessToken = response.data.token.access;
@@ -97,7 +97,7 @@ const register = (email, pw) => {
         headers: {
           'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
         },
-      })
+    })
     .then(() => {
         alert('회원가입 성공')
         return true;
@@ -140,15 +140,14 @@ const updateUserAuth = async (auth) =>{
         apiURL,
         finaldata,
         {
-          withCredentials: true,
-          
+            withCredentials: true,
         }
-      ).then((response) =>{
+    ).then((response) =>{
             return(response)}
-      ).catch((error) => {
+    ).catch((error) => {
         console.log(error)  
-      }
-      )
+    }
+    )
 }
 /**
  * refresh토큰을 가지고 새로운 access token을 요청 헤더에 달아주기
@@ -164,10 +163,9 @@ const refresh = async (refreshToken) => {
         apiURL,
         finaldata,
         {
-          withCredentials: true,
-          
+            withCredentials: true,
         }
-      )
+    )
     .then((response)=>{
         console.log('refresh동작후 data');
         console.log(response.data);
@@ -184,10 +182,10 @@ const refresh = async (refreshToken) => {
 //         (response) => response,
 //         async (error) => {
 //           const originalRequest = error.config;
-      
+
 //           if (error.response.status === 401 && !originalRequest._retry) {
 //             originalRequest._retry = true;
-      
+
 //             try {
 //               const response = await instance.post('/api/user/token/refresh/');
 
@@ -197,7 +195,7 @@ const refresh = async (refreshToken) => {
 //               return Promise.reject(error);
 //             }
 //           }
-      
+
 //           return Promise.reject(error);
 //         }
 //       );

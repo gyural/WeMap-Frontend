@@ -5,7 +5,6 @@ import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { insertManualCard } from './manualCard';
 import pinicon from '../../../../images/pin.png';
-// import FindLoad from './FindLoad';
 
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
@@ -13,6 +12,7 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
 `;
+
 /**
  * 일단 더미데이터. title이름 지울까 말까..
  */
@@ -132,14 +132,88 @@ const MapContainer = ({ searchPlace }) => {
   
           isOverlayShown = !isOverlayShown;  // 상태 토글
       });
-  
     
         // 기본적으로 커스텀 오버레이는 숨김 상태
         customOverlay.setMap(null);
     });
   
   }, [searchPlace, locations, socketListenr]);
-  
+
+  /**
+   * 길찾기 Drawing
+   * */ 
+
+  // useEffect(() => {
+    
+  //   // 카카오맵 API 스크립트 로드
+  //   const script = document.createElement('script');
+  //   script.async = true;
+  //   script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=c8ba7cea409e1f8394813ce600152839&libraries=services,drawing`;
+  //   script.onload = () => {
+  //     // API 스크립트가 로드된 후에 실행될 콜백 함수
+  //     kakao.maps.load(() => {
+  //       // 카카오맵 API 초기화
+  //       const mapContainer = document.getElementById('map');
+  //       const mapOption = {
+  //           center: new kakao.maps.LatLng(36.498649, 127.268141),
+  //           level: 5
+  //       };
+  //       const map = new kakao.maps.Map(mapContainer, mapOption);
+  //     });
+  //   };
+  //   document.head.appendChild(script);
+
+  //   return () => {
+  //     // 컴포넌트 언마운트 시 스크립트 제거
+  //     document.head.removeChild(script);
+  //   };
+  // }, []);
+
+  // // 출발지와 도착지 좌표 설정
+  // const startLatLng = new kakao.maps.LatLng(36.610261563595, 127.29307759409);
+  // const endLatLng = new kakao.maps.LatLng(36.601107352826, 127.29651502894);
+
+  // useEffect(() => {
+
+  //   if(Container) {
+  //     kakao.maps.load(() => {
+  //       // 출발지에서 도착지까지 길찾기 서비스 생성
+  //       const drawingManager = new kakao.maps.services.Drawing({
+  //       map : Container,
+  //       path : [startLatLng, endLatLng],  // 출발지와 도착지 설정
+  //       strokeWeight : 3,  // 선의 두께 설정
+  //       strokeColor : 'red', // 선의 색상 설정
+  //       strokeOpacity : 0.6, // 선의 투명도 설정
+  //       fillColor : 'red',  // 채우기 색상 설정
+  //       fillOpacity : 0.4,  // 채우기 투명도 설정
+  //       });
+
+  //       drawingManager.route({
+  //         start : startLatLng,
+  //         end : endLatLng,
+  //         searchOptions : ['tmc', 'traopt', 'spas']
+  //     }, function (result, status) {
+  //         if (status === kakao.maps.services.Status.OK) {
+  //             var path = result.path;
+  //             var distance = result.distance;
+  //             console.log('총 거리 : ' + distance + 'm' );
+  //             var polyline = new kakao.maps.Polyline({
+  //                 path : path,
+  //                 strokeWeight : 3,  
+  //                 strokeColor : 'red', 
+  //                 strokeOpacity : 0.6,
+  //                 fillColor : 'red', 
+  //                 fillOpacity : 0.4,
+  //             });
+  //             polyline.setMap(Container);
+  //         } else {
+  //             console.log('길찾기 오류 발생 : ' + status);
+  //         }
+  //     });
+
+  //     })
+  //   }
+  // }, [Container]);
 
     return (
         <Container>
@@ -154,6 +228,6 @@ const MapContainer = ({ searchPlace }) => {
             </div>
         </Container>
     );
-}
+};
 
 export default MapContainer;
