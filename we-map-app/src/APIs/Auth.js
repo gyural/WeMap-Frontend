@@ -140,15 +140,14 @@ const updateUserAuth = async (auth) =>{
         apiURL,
         finaldata,
         {
-          withCredentials: true,
-          
+            withCredentials: true,
         }
-      ).then((response) =>{
+    ).then((response) =>{
             return(response)}
-      ).catch((error) => {
+    ).catch((error) => {
         console.log(error)  
-      }
-      )
+    }
+    )
 }
 /**
  * refresh토큰을 가지고 새로운 access token을 요청 헤더에 달아주기
@@ -164,10 +163,9 @@ const refresh = async (refreshToken) => {
         apiURL,
         finaldata,
         {
-          withCredentials: true,
-          
+            withCredentials: true,
         }
-      )
+    )
     .then((response)=>{
         console.log('refresh동작후 data');
         console.log(response.data);
@@ -184,10 +182,10 @@ const refresh = async (refreshToken) => {
 //         (response) => response,
 //         async (error) => {
 //           const originalRequest = error.config;
-      
+
 //           if (error.response.status === 401 && !originalRequest._retry) {
 //             originalRequest._retry = true;
-      
+
 //             try {
 //               const response = await instance.post('/api/user/token/refresh/');
 
@@ -197,7 +195,7 @@ const refresh = async (refreshToken) => {
 //               return Promise.reject(error);
 //             }
 //           }
-      
+
 //           return Promise.reject(error);
 //         }
 //       );
