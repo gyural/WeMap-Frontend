@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { createPolygon, erasePolygon, getPolygonPath, makePolygon } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
-import { insertManualCard } from './manualCard';
 import { getDisasterList } from './DisasterList';
 import { findPath } from './findLoad';
 import pinicon from '../../../../images/pin.png';
@@ -23,6 +22,7 @@ import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from "../../../../images/missing.png";
 import user from "../../../../images/user.png";
+import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
@@ -51,8 +51,8 @@ const disasterTypeToImage = {
  * 일단 더미데이터. title이름 지울까 말까..
  */
 const dummyLocations = [
-    { disasterTypeToImage: "폭염", lat: 36.611044, lng: 127.286428, title: "Location 1" },
-    { disasterTypeToImage: "태풍", lat: 36.611291, lng: 127.357820, title: "Location 2" },
+    { disasterTypeToImage: "폭염", lat: 37.54691607089423, lng: 126.97587727253645, title: "Location 1" },
+    { disasterTypeToImage: "태풍", lat: 35.14668684882411, lng: 129.01750627649565, title: "Location 2" },
     { disasterTypeToImage: "산불", lat: 37.289198, lng: 127.012131, title: "Location 3" },
     { disasterTypeToImage: "화재", lat: 35.102102, lng: 129.030605, title: "이재모피자" },
   ];
@@ -60,21 +60,12 @@ const dummyLocations = [
 
 const { kakao } = window;
 
-/**
- * 비동기 처리로 polygonList를 받아주는 함수
- */
-const getPolygonlist = async (sd_list) =>{
-  const resultList = await makePolygon(sd_list)
-  console.log('in func')
-  console.log(resultList)
-  return resultList
-}
-
-
 const MapContainer = ({ searchPlace }) => {
     const [map, setMap] = useState(undefined);
     //현재 화면에 있는 다각형 객체 리스트 
     const [polygonList, setPolygonList] = useState([])
+    //현재 화면에 있는 마커 객체 리스트
+    const [markerList, setMarkerList] = useState([])
     const [locations, setLocations] = useState([]);
     //현재 재난 정보 소캣 데이터 받을 시에 바뀜
     const [disasteList , setDisasterList] = useState([])
@@ -90,6 +81,28 @@ const MapContainer = ({ searchPlace }) => {
       drawPolygon(newPolygonList, map)
       setPolygonList(newPolygonList)
     }
+
+    const insertMarkerList = (disasteList) => {
+      if (map) {
+        const markerList = getMarkerList(disasteList, map);
+        console.log('반환된 마커 리스트');
+        console.log(markerList);
+        if (markerList) {
+          markerList.forEach(marker => {
+            marker.setMap(null)
+          });
+          return markerList
+        }
+        else{
+          return []
+        }
+          
+        }
+      else {
+        return [];
+      }
+    };
+    
     /**
      * MapCotainer가 마운트 / 언마운트 될때만 작동한는 Hook
      * 1) 웹소캣의 함수들의 정의 2) 웹소캣 connect / disconnect를 다룸
@@ -98,7 +111,7 @@ const MapContainer = ({ searchPlace }) => {
       const mapContainer = document.getElementById('map');
       const mapOption = {
           center: new kakao.maps.LatLng(37.541, 126.986),
-          level: 4
+          level: 14
       };
       const map = new kakao.maps.Map(mapContainer, mapOption);
   
@@ -184,10 +197,7 @@ const MapContainer = ({ searchPlace }) => {
         var level = map.getLevel();
         console.log('zoom Changed')
         console.log(level)
-        if (level < 9){
-          insertManualCard(map)
-        }
-        setZoom(level)
+        
       })
     
       const imageSrc =pinicon;
@@ -205,9 +215,7 @@ const MapContainer = ({ searchPlace }) => {
   
       const map = new kakao.maps.Map(mapContainer, mapOption);
       setMap(map);
-  
-     
-  
+
       dummyLocations.forEach(loc => {
         const markerPosition = new kakao.maps.LatLng(loc.lat, loc.lng);
         const imageSrc = disasterTypeToImage[loc.disasterTypeToImage];   // 매핑된 이미지 가져오기
@@ -244,57 +252,84 @@ const MapContainer = ({ searchPlace }) => {
         // 기본적으로 커스텀 오버레이는 숨김 상태
         customOverlay.setMap(null);
     });
-  
-    
-      /**
-     * 다각형지도 Drawing
      */
-    dummyLocations.forEach(location => {
-      const markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
+    // dummyLocations.forEach(location => {
+    //   const markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
       
-      const marker = new kakao.maps.Marker({
-          map: map,
-          position: markerPosition,
-          image: markerImage
-      });
+    //   const marker = new kakao.maps.Marker({
+    //       map: map,
+    //       position: markerPosition,
+    //       image: markerImage
+    //   });
       
-      const overlayPosition = new kakao.maps.LatLng(location.lat, location.lng);
+    //   const overlayPosition = new kakao.maps.LatLng(location.lat, location.lng);
       
-      const customOverlay = new kakao.maps.CustomOverlay({
-          position: overlayPosition,
-          content: `<div>${location.title}</div>`,
-          yAnchor: 1.5  
-      });
+    //   const customOverlay = new kakao.maps.CustomOverlay({
+    //       position: overlayPosition,
+    //       content: `<div class="manualContainer" style="background-color: #fff; width: 150%; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
+    //       <div class="title" style="color: red; font-weight: 700; font-size: 14px;">산사태 경보 메뉴얼</div>
+    //       <div class="manual-content" style="width: 100%; height: 65%; box-sizing: border-box; overflow-y: scroll;">
+    //           <style>
+    //               .manual-content::-webkit-scrollbar {
+    //                   width: 6px; /* 스크롤바 너비 조정 */
+    //               }
       
-      let isOverlayShown = false;  
-      // 마커에 클릭 이벤트 설정
-      kakao.maps.event.addListener(marker, 'click', function() {
-        if (isOverlayShown) {
-            customOverlay.setMap(null);  // 오버레이 숨기기
-        } else {
-            customOverlay.setMap(map);   // 오버레이 보여주기
-        }
+    //               .manual-content::-webkit-scrollbar-thumb {
+    //                   background-color: #ccc; /* 스크롤바 색상 지정 */
+    //               }
+    //           </style>
+    //           <p style="display: block; width: 100%; height: 100%; white-space: pre-line;">
+    //               산사태 경보 메뉴얼입니다........
+    //               산사태 경보 메뉴얼입니다........
+    //               산사태 경보 메뉴얼입니다........
+    //               산사태 경보 메뉴얼입니다.......산사태 경보 메뉴얼입니다.......v
+    //           </p>
+    //       </div>
+    //       <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
+    //           <button onclick="alert('haha')" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%;
+    //           font-weight: 700;">대피소 찾기</button>
+    //       </div>
+    //   </div>`,
+    //       yAnchor: 1.3
+    //   });
+      
+    //   let isOverlayShown = false;  
+    //   // 마커에 클릭 이벤트 설정
+    //   kakao.maps.event.addListener(marker, 'click', function() {
+    //     if (isOverlayShown) {
+    //         customOverlay.setMap(null);  // 오버레이 숨기기
+    //     } else {
+    //         customOverlay.setMap(map);   // 오버레이 보여주기
+    //     }
 
-        isOverlayShown = !isOverlayShown;  // 상태 토글
-      });
+    //     isOverlayShown = !isOverlayShown;  // 상태 토글
+    //   });
   
-      // 기본적으로 커스텀 오버레이는 숨김 상태
-      customOverlay.setMap(null);
-      });
+    //   // 기본적으로 커스텀 오버레이는 숨김 상태
+    //   customOverlay.setMap(null);
+    //   });
     }
-    
+    const newMarkerList = insertMarkerList(disasteList);
 
-  }, [searchPlace, locations, disasteList]);
+    // 이전 마커 리스트를 지우는 함수
+    eraseMarkerList(markerList, map);
+
+    // 1초 뒤에 새로운 마커 리스트를 지도에 그리는 함수를 실행하고, 그 결과를 마커 리스트로 설정
     
+    // 이전 마커 리스트를 지우는 함수
+    drawMarkerList(newMarkerList, map);
+    setMarkerList(newMarkerList);
+    
+  }, [searchPlace, locations, disasteList]);
 
   /**
    * 길찾기 Drawing
    * */ 
 
-  useEffect(() => {
-    // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
-    findPath(map, 36.610261563595, 127.29307759409, 36.601107352826, 127.29651502894);
-  }, [map]);
+  // useEffect(() => {
+  //   // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
+  //   findPath(map, 36.610261563595, 127.29307759409, 36.601107352826, 127.29651502894);
+  // }, [map]);
 
     return (
         <Container>

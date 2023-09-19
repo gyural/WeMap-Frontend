@@ -47,7 +47,6 @@ const insertManualCard = (map) =>{
     })
 
     // 커스텀 오버레이를 지도에 표시합니다
-    customOverlay.setMap(map);
 }
 
 export {insertManualCard}
