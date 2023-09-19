@@ -150,7 +150,6 @@ const MapContainer = ({ searchPlace }) => {
       const map = new kakao.maps.Map(mapContainer, mapOption);
       setMap(map);
   
-     
   
       dummyLocations.forEach(loc => {
         const markerPosition = new kakao.maps.LatLng(loc.lat, loc.lng);
