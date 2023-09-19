@@ -22,6 +22,7 @@ import yellowDust from "../../../../images/yellow-dust.png";
 import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from "../../../../images/missing.png";
+import user from "../../../../images/user.png";
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
@@ -78,11 +79,41 @@ const MapContainer = ({ searchPlace }) => {
     useEffect(() => {
       const mapContainer = document.getElementById('map');
       const mapOption = {
-        center: new kakao.maps.LatLng(37.541, 126.986),
-        level: 7
+          center: new kakao.maps.LatLng(37.541, 126.986),
+          level: 4
       };
       const map = new kakao.maps.Map(mapContainer, mapOption);
-      setMap(map)
+  
+      // 지도 객체를 상태에 저장
+      setMap(map);
+      
+      // 사용자 위치에 따른 지도 중심 설정
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+              function (position) {
+                  var lat = position.coords.latitude,
+                      lon = position.coords.longitude;
+                  var locPosition = new kakao.maps.LatLng(lat, lon);
+                  map.setCenter(locPosition); // 지도의 중심을 현재 위치로 설정
+
+                  // 현재 위치에 마커 찍기
+                  const userMarkerImage = new kakao.maps.MarkerImage(user, new kakao.maps.Size(50, 50));
+                  const userMarker = new kakao.maps.Marker({
+                      map: map,
+                      position: locPosition,
+                      image: userMarkerImage
+                  });
+              },
+              function (error) { // 위치 정보를 얻어오기 실패했을 때의 처리
+                  alert("위치 파악을 실패하였습니다");
+                  var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+                  map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
+              }
+          );
+      } else {
+          var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+          map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
+      }
       // WebSocket 연결 생성
       const websocket = new WebSocket("wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken");
       websocket.onopen = () => {
@@ -112,6 +143,7 @@ const MapContainer = ({ searchPlace }) => {
         websocket.close();
       };
   }, []);
+  
   useEffect(() => {
     if (map){
       if(disasteList){
@@ -189,6 +221,7 @@ const MapContainer = ({ searchPlace }) => {
         customOverlay.setMap(null);
     });
   
+    
       /**
      * 다각형지도 Drawing
      */
