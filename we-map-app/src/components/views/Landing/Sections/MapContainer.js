@@ -23,6 +23,7 @@ import carAccident from "../../../../images/accident.png";
 import missing from "../../../../images/missing.png";
 import user from "../../../../images/user.png";
 import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
+import LocationSelector from "../Sections/LocationSelector";
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
@@ -107,6 +108,23 @@ const MapContainer = ({ searchPlace }) => {
      * MapCotainer가 마운트 / 언마운트 될때만 작동한는 Hook
      * 1) 웹소캣의 함수들의 정의 2) 웹소캣 connect / disconnect를 다룸
      */
+    const handleLocationSelect = (location) => {
+      // 예제 좌표 데이터 (실제로는 total_code_revised.xlsx에서 가져오기.)
+      const coordinates = {
+        "서울특별서 서대문구 천연동": { lat: 37.57246803097317, lon:126.95456868160035 },
+        "서울특별시 서대문구 홍제1동": { lat: 37.58663517380208, lon: 126.94075008836593 },
+        "부산광역시 기장군 장안읍": {lat: 35.341538209873704, lon: 129.25924414776276},
+        "부산광역시 기장군 철마면": {lat: 35.28979586486741, lon: 129.14602983502212},
+        "부산광역시 부산진구 연지동": {lat: 35.174402409097375, lon: 129.05393899065228}
+        // ... 기타 도시 좌표 ...
+      };
+  
+      const loc = coordinates[location];
+      if (loc && map) {
+        const locPosition = new kakao.maps.LatLng(loc.lat, loc.lon);
+        map.setCenter(locPosition);
+      }
+    };
     useEffect(() => {
       const mapContainer = document.getElementById('map');
       const mapOption = {
@@ -117,6 +135,7 @@ const MapContainer = ({ searchPlace }) => {
   
       // 지도 객체를 상태에 저장
       setMap(map);
+      
       
       // 사용자 위치에 따른 지도 중심 설정
       if (navigator.geolocation) {
@@ -333,6 +352,7 @@ const MapContainer = ({ searchPlace }) => {
 
     return (
         <Container>
+          <LocationSelector onLocationSelect={handleLocationSelect} />
             <div id="map" style={{
                 position: 'absolute',
                 top: '50%',
