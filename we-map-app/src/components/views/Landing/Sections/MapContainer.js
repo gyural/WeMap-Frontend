@@ -93,7 +93,7 @@ const MapContainer = ({ searchPlace }) => {
       websocket.onmessage = (event) => {
         console.log("Received message:", JSON.parse(event.data));
         // 수신한 데이터를 state에 저장
-       
+      
         setDisasterList(getDisasterList(JSON.parse((event.data))))
       };
       websocket.onerror = (error) => {
@@ -150,7 +150,6 @@ const MapContainer = ({ searchPlace }) => {
       const map = new kakao.maps.Map(mapContainer, mapOption);
       setMap(map);
   
-     
   
       dummyLocations.forEach(loc => {
         const markerPosition = new kakao.maps.LatLng(loc.lat, loc.lng);
