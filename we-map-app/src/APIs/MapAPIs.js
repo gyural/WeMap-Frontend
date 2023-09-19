@@ -98,8 +98,6 @@ const getGeoBoundary = async (geoCode) =>{
             }
             result.push(resultChild)
           });
-          console.log('multi polygon일 때 리턴 좌표값')
-          console.log(result)
           return result
             
           }
@@ -114,7 +112,7 @@ const getGeoBoundary = async (geoCode) =>{
 
         })
         .catch((error) => {
-          console.log('에러발생 행정코드')
+          console.log('등록되지 않은 행정코드')
           console.log(requstData.adm_cd)
           console.error(error);
           return []

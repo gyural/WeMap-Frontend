@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { createPolygon, getPolygonPath } from './createPolygon';
+import { createPolygon, erasePolygon, getPolygonPath, makePolygon } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { insertManualCard } from './manualCard';
@@ -59,18 +59,36 @@ const dummyLocations = [
 
 const { kakao } = window;
 
+/**
+ * 비동기 처리로 polygonList를 받아주는 함수
+ */
+const getPolygonlist = async (sd_list) =>{
+  const resultList = await makePolygon(sd_list)
+  console.log('in func')
+  console.log(resultList)
+  return resultList
+}
+
+
 const MapContainer = ({ searchPlace }) => {
     const [map, setMap] = useState(undefined);
-
+    //현재 화면에 있는 다각형 객체 리스트 
+    const [polygonList, setPolygonList] = useState([])
     const [locations, setLocations] = useState([]);
-    //현재 지도에 나와있는 재난 리스트 (pk값으로만 저장)
-    const [viewList, setViewList] = useState([]);
-    //socket에 대이터가 바뀔때마다 socketListener가 바뀜
-    const [socketListenr, setSocketListenr] = useState([])
-    //현재 나타내야할 재난 정보
+    //현재 재난 정보 소캣 데이터 받을 시에 바뀜
     const [disasteList , setDisasterList] = useState([])
     //zoom이 바뀔때마다 리랜더링을 통해서 보이게할 지도 컨텐츠를 조절하기 위함
     const [zoom, setZoom] = useState(undefined)
+    /**
+     * 기존의 폴리곤을 지우고 새로운폴리곤을 그리는 함수
+     */
+    const renewPolygon = async (sd_list) =>{
+      //기존 polygon지우기
+      erasePolygon(polygonList, map)
+      const newPolygonList = await makePolygon(sd_list)
+      drawPolygon(newPolygonList, map)
+      setPolygonList(newPolygonList)
+    }
     /**
      * MapCotainer가 마운트 / 언마운트 될때만 작동한는 Hook
      * 1) 웹소캣의 함수들의 정의 2) 웹소캣 connect / disconnect를 다룸
@@ -116,11 +134,17 @@ const MapContainer = ({ searchPlace }) => {
     if (map){
       if(disasteList){
         const sd_list = []
-        disasteList.forEach(element => {
-          console.log(element)
-          sd_list.push(Number(element.location_code))
+        disasteList.forEach(disaster => {
+          const location_list = disaster.location_code
+        
+          location_list.forEach(location_code => {
+            sd_list.push(Number(location_code))
+          });
         });
-        drawPolygon(map, sd_list)
+
+        //폴리곤을 갱신해주기
+        renewPolygon(sd_list)
+        
       }
 
       //zomm이 바뀔때 마다 메뉴얼카드 추가 / 삭제
