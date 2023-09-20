@@ -124,7 +124,7 @@ const LocationSelector = ({ onLocationSelect }) => {
               {location}
             </StyledButton>
           ))}
-     
+    
         </ModalContainer>
       </ModalOverlay>
     </>

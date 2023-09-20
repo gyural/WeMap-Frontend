@@ -1,16 +1,17 @@
 import axios from "axios"
 import instance from "./Instance";
+import Cookies from 'js-cookie'; // js-cookie 라이브러리를 가져옴
 import { getCookieToken, getaccessToken, setRefreshToken, setaccessToken } from "../Common/Cookie";
 import { cookies } from "../Common/Cookie";
 /**
  * 로컬에서 사용하는 baseURL
  */
-const baseURL = '/api'
+// const baseURL = '/api'
 
 // /**
 //  * 배포버전에서 사용하는 baseURL
 //  */
-// const baseURL = 'https://server.ja-doctor.net/api'
+const baseURL = 'http://127.0.0.1:8000/api'
 
 
 /**
@@ -20,40 +21,48 @@ const baseURL = '/api'
  * @returns 로그인 성공/실패 여부로 비동기 적으로 true/false 반환
  *  
  */
+
 const login = async (email, pw) => {
-    // axios를 이용하여 jwt 로그인 요청을 보낸다.
-    const apiURL = baseURL + '/user/auth/'
-    const requestData = {
-        'email': email,
-        'password': pw
-    }
-    const finaldata = JSON.stringify(requestData)
-    // console.log(finaldata)
-    return await axios.post(apiURL, finaldata, {headers: {
+  const apiURL = baseURL + '/user/auth/';
+  const requestData = {
+    'email': email,
+    'password': pw
+  };
+  const finaldata = JSON.stringify(requestData);
+
+  try {
+    const response = await axios.post(apiURL, finaldata, {
+      headers: {
         'Content-Type': 'application/json',
-    }})
-    .then((response) => {
-        console.log(response)
-        const accessToken = response.data.token.access;
-        const refreshToken = response.data.token.refresh;
-        console.log('쿠키 get')
-        
-        instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        localStorage.setItem('access_token', accessToken);
-        localStorage.setItem('refresh_token', refreshToken);
-        const currentTime = new Date();
-        const expireTime = new Date(currentTime.getTime() + (9 * 60 + 45) * 1000);
-        // expireTime 값을 ISO 문자열로 변환하여 localStorage에 저장
-        localStorage.setItem('expiresAt', expireTime.toISOString());
-        alert('로그인 성공');
-        // 벡엔드에서 httponly 쿠키로 토큰들이 전송되어 로그인됨
-        // navigate('/')
-    }).catch((error) => {
-        console.log(error);
-        alert('로그인 실패');
-        throw error;
-    })
-}
+      },
+      withCredentials: true,
+    });
+
+    console.log(response);
+    const accessToken = response.data.token.access;
+    const refreshToken = response.data.token.refresh;
+
+    // js-cookie를 사용하여 쿠키에 토큰 저장
+    Cookies.set('access_token', accessToken);
+    Cookies.set('refresh_token', refreshToken);
+
+    instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('refresh_token', refreshToken);
+
+    const currentTime = new Date();
+    const expireTime = new Date(currentTime.getTime() + (9 * 60 + 45) * 1000);
+    localStorage.setItem('expiresAt', expireTime.toISOString());
+    alert('로그인 성공');
+    // navigate('/')
+  } catch (error) {
+    console.log(error);
+    alert('로그인 실패');
+    throw error;
+  }
+};
+
+  
 
 /**
  * 

@@ -5,6 +5,9 @@ import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { getDisasterList } from './DisasterList';
 import { findPath } from './findLoad';
+import LocationSelector from "../Sections/LocationSelector";
+
+// 이미지 import
 import pinicon from '../../../../images/pin.png';
 import backarrow from "../../../../images/left-arrow.png";
 import typhoon from "../../../../images/hurricane.png";
@@ -174,7 +177,7 @@ const MapContainer = ({ searchPlace }) => {
       websocket.onmessage = (event) => {
         console.log("Received message:", JSON.parse(event.data));
         // 수신한 데이터를 state에 저장
-       
+      
         setDisasterList(getDisasterList(JSON.parse((event.data))))
       };
       websocket.onerror = (error) => {
@@ -211,7 +214,7 @@ const MapContainer = ({ searchPlace }) => {
         
       }
 
-      //zomm이 바뀔때 마다 메뉴얼카드 추가 / 삭제
+      //zoom이 바뀔때 마다 메뉴얼카드 추가 / 삭제
       kakao.maps.event.addListener(map, 'zoom_changed', function() {
         var level = map.getLevel();
         console.log('zoom Changed')
@@ -234,7 +237,6 @@ const MapContainer = ({ searchPlace }) => {
   
       const map = new kakao.maps.Map(mapContainer, mapOption);
       setMap(map);
-
       dummyLocations.forEach(loc => {
         const markerPosition = new kakao.maps.LatLng(loc.lat, loc.lng);
         const imageSrc = disasterTypeToImage[loc.disasterTypeToImage];   // 매핑된 이미지 가져오기
@@ -348,6 +350,10 @@ const MapContainer = ({ searchPlace }) => {
   // useEffect(() => {
   //   // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
   //   findPath(map, 36.610261563595, 127.29307759409, 36.601107352826, 127.29651502894);
+  // }, [map]);
+  // useEffect(() => {
+  //   // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
+  //   findPath(map, 36.601107352826, 127.29651502894, 36.610261563595, 127.29307759409);
   // }, [map]);
 
     return (
