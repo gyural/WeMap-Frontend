@@ -5,7 +5,7 @@ import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { getDisasterList } from './DisasterList';
 import { findPath } from './findLoad';
-import LocationSelector from "../Sections/LocationSelector";
+// import LocationSelector from "../Sections/LocationSelector";
 
 // 이미지 import
 import pinicon from '../../../../images/pin.png';

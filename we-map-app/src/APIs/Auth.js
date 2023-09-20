@@ -6,12 +6,12 @@ import { cookies } from "../Common/Cookie";
 /**
  * 로컬에서 사용하는 baseURL
  */
-// const baseURL = '/api'
+const baseURL = '/api'
 
 // /**
 //  * 배포버전에서 사용하는 baseURL
 //  */
-const baseURL = 'http://127.0.0.1:8000/api'
+// const baseURL = 'http://127.0.0.1:8000/api'
 
 
 /**

@@ -45,14 +45,16 @@ const getMarkerList = (disasteList, map) =>{
     if(disasteList){
         for (const disaster of disasteList){
             if (disaster){
-                const img = disasterTypeToImage[disaster.disaster_type]
+                let img = disasterTypeToImage[disaster.disaster_type]
                 const msg = disaster.manual
-                console.log(img)
+                
+                if(img === undefined){
+                  img = disasterTypeToImage["기타"]
+                }
                 const locationList = disaster.coordinate
                 locationList.forEach(location => {
                     resultList.push(makeMarker(img.toString(), map, [location[0], location[1]], msg))
                 });
-
             }
             
         }
