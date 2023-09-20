@@ -12,7 +12,7 @@ import yellowDust from "../../../../images/yellow-dust.png";
 import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from"../../../../images/missing.png"; // 실종 및 기타 이미지 경로 추가
-
+import { getPath } from "./navigation";
 const { kakao } = window;
 
 const disasterTypeToImage = {
@@ -61,6 +61,10 @@ const getMarkerList = (disasteList, map) =>{
     }
     return resultList
 }
+
+window.handleClick = () =>{
+    getPath()
+}
 /**
  * 
  * @param {*} image 
@@ -68,6 +72,7 @@ const getMarkerList = (disasteList, map) =>{
  * @param {*} location 
  * @returns 
  */
+
 const makeMarker = (image, targetmap, location, msg) => {
     console.log(image)
     const markerPosition = new kakao.maps.LatLng(location[0], location[1])
@@ -100,11 +105,13 @@ const makeMarker = (image, targetmap, location, msg) => {
               </p>
           </div>
           <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
-              <button onclick="alert('haha')" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%;
+              <button onclick=handleClick() style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
               font-weight: 700;">대피소 찾기</button>
           </div>
       </div>`,
           yAnchor: 1.3
+
+          
       });
       
       let isOverlayShown = false;  

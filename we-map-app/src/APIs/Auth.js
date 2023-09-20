@@ -1,18 +1,22 @@
 import axios from "axios"
 import instance from "./Instance";
-import Cookies from 'js-cookie'; // js-cookie 라이브러리를 가져옴
+// import Cookies from 'js-cookie'; // js-cookie 라이브러리를 가져옴
 import { getCookieToken, getaccessToken, setRefreshToken, setaccessToken } from "../Common/Cookie";
 import { cookies } from "../Common/Cookie";
 /**
  * 로컬에서 사용하는 baseURL
  */
-const baseURL = '/api'
+// const baseURL = '/api'
 
 // /**
 //  * 배포버전에서 사용하는 baseURL
 //  */
 // const baseURL = 'http://127.0.0.1:8000/api'
 
+/**
+ * AWS 인증 요청 주소
+ */
+const baseURL = 'https://7wkx0w4ygg.execute-api.ap-northeast-2.amazonaws.com/release/'
 
 /**
  * 로그인 성공시 로컬 스토리지에 acc/rfc 토큰 담아주기
@@ -23,43 +27,42 @@ const baseURL = '/api'
  */
 
 const login = async (email, pw) => {
-  const apiURL = baseURL + '/user/auth/';
+  const apiURL = baseURL + 'login/';
   const requestData = {
     'email': email,
     'password': pw
   };
   const finaldata = JSON.stringify(requestData);
 
-  try {
-    const response = await axios.post(apiURL, finaldata, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    });
+  return await axios.post(apiURL, finaldata, {
+    headers: {
+      'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
+    },
+  })
+  .then(res =>{
+      return res.data
+  })
+  .catch(error =>{
+      console.log(error)
+      return undefined
+  })
 
-    console.log(response);
-    const accessToken = response.data.token.access;
-    const refreshToken = response.data.token.refresh;
-
+    
     // js-cookie를 사용하여 쿠키에 토큰 저장
-    Cookies.set('access_token', accessToken);
-    Cookies.set('refresh_token', refreshToken);
+    // Cookies.set('access_token', accessToken);
+    // Cookies.set('refresh_token', refreshToken);
+    
+    // const accessToken = response.data.token.access;
+    // const refreshToken = response.data.token.refresh;
+    // instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // localStorage.setItem('access_token', accessToken);
+    // localStorage.setItem('refresh_token', refreshToken);
+    // const currentTime = new Date();
+    // const expireTime = new Date(currentTime.getTime() + (9 * 60 + 45) * 1000);
+    // localStorage.setItem('expiresAt', expireTime.toISOString());
 
-    instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('refresh_token', refreshToken);
-
-    const currentTime = new Date();
-    const expireTime = new Date(currentTime.getTime() + (9 * 60 + 45) * 1000);
-    localStorage.setItem('expiresAt', expireTime.toISOString());
-    alert('로그인 성공');
+    // alert('로그인 성공');
     // navigate('/')
-  } catch (error) {
-    console.log(error);
-    alert('로그인 실패');
-    throw error;
-  }
 };
 
   
@@ -72,37 +75,35 @@ const login = async (email, pw) => {
  * @param {*} password 
  * @returns 로그아웃 후 헤더에서 acc토큰 제거
  */
-const logOut =  async() => {
-    const apiURL = baseURL + '/user/auth/'
-    
-    await instance.delete(apiURL)
-    .then(()=>{
-        console.log('로그아웃 정상 완료')
+const logOut =  async() => {    
+    // await instance.delete(apiURL)
+    // .then(()=>{
+    console.log('로그아웃 정상 완료')
         // axios 헤더의 access 토큰 제거
-        instance.defaults.headers.common['Authorization'] = undefined;
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        return 'logout 완료'
-    })
-    .catch(()=>{
-        console.log('로그아웃 실패!!!')
-        return 'logout 실패!!!'
-    })
+        // instance.defaults.headers.common['Authorization'] = undefined;
+        // localStorage.removeItem('access_token');
+        // localStorage.removeItem('refresh_token');
+    return 'logout 완료'
+    // })
+    // .catch(()=>{
+    //     console.log('로그아웃 실패!!!')
+    //     return 'logout 실패!!!'
+    // })
     // 로컬스토리지에서 access 토큰 제거
 }
 
-const register = (email, pw) => {
+const register = async (email, pw) => {
     // axios를 이용하여 jwt 회원가입 요청을 보낸다.
-    const apiURL = baseURL + '/user/register/'
+    const apiURL = baseURL + 'signup/'
     const requestData = {
         'email': email,
         'password': pw,
         'nickname' : email,
-        'dis_level' : 1
+        'dis_level' : "1"
     }
     const finaldata = JSON.stringify(requestData)
     console.log(finaldata)
-    return axios.post(apiURL, finaldata, {
+    return await axios.post(apiURL, finaldata, {
         headers: {
           'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
         },
@@ -123,7 +124,7 @@ const register = (email, pw) => {
  * @returns user정보를 가져오는 API
  */
 const getUserAuth = async () =>{
-    const apiURL = baseURL + "/user/auth/"
+    const apiURL = baseURL + "getDisLevel/"
     
     return await instance.get(apiURL, {withCredentials:true})
     .then((response) =>{
@@ -145,7 +146,7 @@ const updateUserAuth = async (auth) =>{
 
     const finaldata = JSON.stringify(requestData)
     console.log(finaldata)
-    return await instance.put(
+    return await instance.post(
         apiURL,
         finaldata,
         {
