@@ -5,7 +5,10 @@ import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { insertManualCard } from './manualCard';
 import { getDisasterList } from './DisasterList';
-import { findPath } from './findLoad';
+import { initializeMap, findPath } from './findLoad';
+import LocationSelector from "../Sections/LocationSelector";
+
+// 이미지 import
 import pinicon from '../../../../images/pin.png';
 import backarrow from "../../../../images/left-arrow.png";
 import typhoon from "../../../../images/hurricane.png";
@@ -23,7 +26,6 @@ import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from "../../../../images/missing.png";
 import user from "../../../../images/user.png";
-import LocationSelector from "../Sections/LocationSelector";
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
@@ -198,7 +200,7 @@ const MapContainer = ({ searchPlace }) => {
         
       }
 
-      //zomm이 바뀔때 마다 메뉴얼카드 추가 / 삭제
+      //zoom이 바뀔때 마다 메뉴얼카드 추가 / 삭제
       kakao.maps.event.addListener(map, 'zoom_changed', function() {
         var level = map.getLevel();
         console.log('zoom Changed')
@@ -310,8 +312,9 @@ const MapContainer = ({ searchPlace }) => {
    * */ 
 
   useEffect(() => {
+    initializeMap();
     // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
-    findPath(map, 36.610261563595, 127.29307759409, 36.601107352826, 127.29651502894);
+    findPath(map, 37.5642135, 127.0016985, 35.1379222, 129.05562775);
   }, [map]);
 
     return (
