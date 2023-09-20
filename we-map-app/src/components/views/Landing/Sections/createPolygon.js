@@ -52,12 +52,47 @@ const createPolygon = async (sd_code) =>{
     return polygon
     
 }
-
-const drawPolygon = async(map, sdList) =>{
-    sdList.forEach(async (sdcode) =>{
-        const polygon = await createPolygon(sdcode)
-        polygon.setMap(map)
-    })
+/**
+ * @param {*} sdList 
+ * @returns 매개변수로 받은 행정코드에 폴리곤 객체 리스트를 반환
+ */
+const makePolygon = async(sdList) =>{
+    const polygonList = []
+    for (const sdcode of sdList) {
+        const polygon = await createPolygon(sdcode);
+        polygonList.push(polygon);
+    }
+    return polygonList
 }
 
-export {getPolygonPath, createPolygon, drawPolygon}
+/**
+ * @param {*} polygonList 폴리곤 객체 리스트
+ * @param {*} map 카카오 맵 객체
+ * @retrunt None
+ * 매개변수로 받은 맵 객체에 폴리곤 객체를 그려주는 함수
+ */
+const drawPolygon = (polygonList, map) =>{
+    console.log('in draw')
+    console.log(polygonList)
+    if(polygonList.length > 0){
+        for (const polygon of polygonList){
+            polygon.setMap(map)
+        }
+    }
+}
+
+/**
+ * @param {*} polygonList 폴리곤 객체 리스트
+ * @param {*} map 카카오 맵 객체
+ * 매개변수로 받은 맵 객체에 폴리곤 객체를 지워주는 함수
+*/
+const erasePolygon = (polygonList, map) =>{
+    console.log('in erase')
+    console.log(polygonList)
+    if(polygonList.length > 0){
+        for (const polygon of polygonList){
+            polygon.setMap(null)
+        }
+    }
+}
+export {getPolygonPath, makePolygon, erasePolygon, createPolygon, drawPolygon}

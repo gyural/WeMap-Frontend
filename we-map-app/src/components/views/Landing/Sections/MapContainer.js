@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { createPolygon, getPolygonPath } from './createPolygon';
+import { createPolygon, erasePolygon, getPolygonPath, makePolygon } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { insertManualCard } from './manualCard';
 import { getDisasterList } from './DisasterList';
-import { findPath } from './findLoad';
+import { initializeMap, findPath } from './findLoad';
+import LocationSelector from "../Sections/LocationSelector";
+
+// 이미지 import
 import pinicon from '../../../../images/pin.png';
 import backarrow from "../../../../images/left-arrow.png";
 import typhoon from "../../../../images/hurricane.png";
@@ -22,6 +25,7 @@ import yellowDust from "../../../../images/yellow-dust.png";
 import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from "../../../../images/missing.png";
+import user from "../../../../images/user.png";
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
@@ -59,30 +63,96 @@ const dummyLocations = [
 
 const { kakao } = window;
 
+/**
+ * 비동기 처리로 polygonList를 받아주는 함수
+ */
+const getPolygonlist = async (sd_list) =>{
+  const resultList = await makePolygon(sd_list)
+  console.log('in func')
+  console.log(resultList)
+  return resultList
+}
+
+
 const MapContainer = ({ searchPlace }) => {
     const [map, setMap] = useState(undefined);
-
+    //현재 화면에 있는 다각형 객체 리스트 
+    const [polygonList, setPolygonList] = useState([])
     const [locations, setLocations] = useState([]);
-    //현재 지도에 나와있는 재난 리스트 (pk값으로만 저장)
-    const [viewList, setViewList] = useState([]);
-    //socket에 대이터가 바뀔때마다 socketListener가 바뀜
-    const [socketListenr, setSocketListenr] = useState([])
-    //현재 나타내야할 재난 정보
+    //현재 재난 정보 소캣 데이터 받을 시에 바뀜
     const [disasteList , setDisasterList] = useState([])
     //zoom이 바뀔때마다 리랜더링을 통해서 보이게할 지도 컨텐츠를 조절하기 위함
     const [zoom, setZoom] = useState(undefined)
     /**
+     * 기존의 폴리곤을 지우고 새로운폴리곤을 그리는 함수
+     */
+    const renewPolygon = async (sd_list) =>{
+      //기존 polygon지우기
+      erasePolygon(polygonList, map)
+      const newPolygonList = await makePolygon(sd_list)
+      drawPolygon(newPolygonList, map)
+      setPolygonList(newPolygonList)
+    }
+    /**
      * MapCotainer가 마운트 / 언마운트 될때만 작동한는 Hook
      * 1) 웹소캣의 함수들의 정의 2) 웹소캣 connect / disconnect를 다룸
      */
+    const handleLocationSelect = (location) => {
+      // 예제 좌표 데이터 (실제로는 total_code_revised.xlsx에서 가져오기.)
+      const coordinates = {
+        "서울특별서 서대문구 천연동": { lat: 37.57246803097317, lon:126.95456868160035 },
+        "서울특별시 서대문구 홍제1동": { lat: 37.58663517380208, lon: 126.94075008836593 },
+        "부산광역시 기장군 장안읍": {lat: 35.341538209873704, lon: 129.25924414776276},
+        "부산광역시 기장군 철마면": {lat: 35.28979586486741, lon: 129.14602983502212},
+        "부산광역시 부산진구 연지동": {lat: 35.174402409097375, lon: 129.05393899065228}
+        // ... 기타 도시 좌표 ...
+      };
+  
+      const loc = coordinates[location];
+      if (loc && map) {
+        const locPosition = new kakao.maps.LatLng(loc.lat, loc.lon);
+        map.setCenter(locPosition);
+      }
+    };
     useEffect(() => {
       const mapContainer = document.getElementById('map');
       const mapOption = {
-        center: new kakao.maps.LatLng(37.541, 126.986),
-        level: 7
+          center: new kakao.maps.LatLng(37.541, 126.986),
+          level: 4
       };
       const map = new kakao.maps.Map(mapContainer, mapOption);
-      setMap(map)
+  
+      // 지도 객체를 상태에 저장
+      setMap(map);
+      
+      
+      // 사용자 위치에 따른 지도 중심 설정
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+              function (position) {
+                  var lat = position.coords.latitude,
+                      lon = position.coords.longitude;
+                  var locPosition = new kakao.maps.LatLng(lat, lon);
+                  map.setCenter(locPosition); // 지도의 중심을 현재 위치로 설정
+
+                  // 현재 위치에 마커 찍기
+                  const userMarkerImage = new kakao.maps.MarkerImage(user, new kakao.maps.Size(50, 50));
+                  const userMarker = new kakao.maps.Marker({
+                      map: map,
+                      position: locPosition,
+                      image: userMarkerImage
+                  });
+              },
+              function (error) { // 위치 정보를 얻어오기 실패했을 때의 처리
+                  alert("위치 파악을 실패하였습니다");
+                  var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+                  map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
+              }
+          );
+      } else {
+          var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+          map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
+      }
       // WebSocket 연결 생성
       const websocket = new WebSocket("wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken");
       websocket.onopen = () => {
@@ -93,7 +163,7 @@ const MapContainer = ({ searchPlace }) => {
       websocket.onmessage = (event) => {
         console.log("Received message:", JSON.parse(event.data));
         // 수신한 데이터를 state에 저장
-       
+      
         setDisasterList(getDisasterList(JSON.parse((event.data))))
       };
       websocket.onerror = (error) => {
@@ -112,18 +182,25 @@ const MapContainer = ({ searchPlace }) => {
         websocket.close();
       };
   }, []);
+  
   useEffect(() => {
     if (map){
       if(disasteList){
         const sd_list = []
-        disasteList.forEach(element => {
-          console.log(element)
-          sd_list.push(Number(element.location_code))
+        disasteList.forEach(disaster => {
+          const location_list = disaster.location_code
+        
+          location_list.forEach(location_code => {
+            sd_list.push(Number(location_code))
+          });
         });
-        drawPolygon(map, sd_list)
+
+        //폴리곤을 갱신해주기
+        renewPolygon(sd_list)
+        
       }
 
-      //zomm이 바뀔때 마다 메뉴얼카드 추가 / 삭제
+      //zoom이 바뀔때 마다 메뉴얼카드 추가 / 삭제
       kakao.maps.event.addListener(map, 'zoom_changed', function() {
         var level = map.getLevel();
         console.log('zoom Changed')
@@ -188,6 +265,7 @@ const MapContainer = ({ searchPlace }) => {
         customOverlay.setMap(null);
     });
   
+    
       /**
      * 다각형지도 Drawing
      */
@@ -234,12 +312,14 @@ const MapContainer = ({ searchPlace }) => {
    * */ 
 
   useEffect(() => {
+    initializeMap();
     // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
-    findPath(map, 36.610261563595, 127.29307759409, 36.601107352826, 127.29651502894);
+    findPath(map, 37.5642135, 127.0016985, 35.1379222, 129.05562775);
   }, [map]);
 
     return (
         <Container>
+          <LocationSelector onLocationSelect={handleLocationSelect} />
             <div id="map" style={{
                 position: 'absolute',
                 top: '50%',

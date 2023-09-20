@@ -23,7 +23,7 @@ const BigTitle = styled.h1`
 
 const SmallTitle = styled.h3`
   color: ${colors.black}; 
-  font-size: 140%; 
+  font-size: 120%; 
   & span2 {
     color: ${colors.mainBlue}; 
   }
