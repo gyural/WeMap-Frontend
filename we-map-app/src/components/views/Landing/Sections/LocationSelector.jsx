@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import locationData from '../../../../locationData.json';
 
 const Button = styled.button`
   position: absolute;
-  font-weight: bold;
   top: 10px;
   right: 10px;
   z-index: 10;
   padding: 10px 20px;
   background-color: #fff;
   border: none;
-  margin-top: 8%;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
 `;
 
@@ -52,21 +51,6 @@ const ModalContainer = styled.div`
   z-index: 1000;
 `;
 
-const data = {
-  "부산광역시": {
-    "기장군": ["장안읍", "철마면"],
-    "부산진구": ["연지동"]
-    //... 다른 구/군 및 읍/면/동 데이터 추가
-  },
-  "서울특별시": {
-    "서대문구": ["천연동", "홍제1동"]
-  },
-  "대구광역시": {
-    "북구": ["국우동"]
-  }
-  //... 다른 시/도 데이터 추가
-};
-
 const LocationSelector = ({ onLocationSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSido, setSelectedSido] = useState(null);
@@ -78,6 +62,7 @@ const LocationSelector = ({ onLocationSelect }) => {
 
   const handleSidoSelect = (sido) => {
     setSelectedSido(sido);
+    setSelectedGugun(null);
   };
 
   const handleGugunSelect = (gugun) => {
@@ -95,40 +80,50 @@ const LocationSelector = ({ onLocationSelect }) => {
         
       <ModalOverlay open={isOpen}>
         <ModalContainer>
-          
-          {selectedSido && (
-            <StyledButton onClick={() => {
-              if (selectedGugun) {
-                setSelectedGugun(null);
-              } else {
-                setSelectedSido(null);
-              }
-            }}>이전</StyledButton>
-          )}
+          {locationData.map(entry => {
+            const 병합_코드 = String(entry.병합_코드);
+            const locationName = entry.locationName;
 
-  
-          {!selectedSido && Object.keys(data).map(sido => (
-            <StyledButton key={sido} onClick={() => handleSidoSelect(sido)}>
-              {sido}
-            </StyledButton>
-          ))}
-  
-          {selectedSido && !selectedGugun && Object.keys(data[selectedSido]).map(gugun => (
-            <StyledButton key={gugun} onClick={() => handleGugunSelect(gugun)}>
-              {gugun}
-            </StyledButton>
-          ))}
-  
-          {selectedSido && selectedGugun && data[selectedSido][selectedGugun].map(location => (
-            <StyledButton key={location} onClick={() => handleLocationFinalSelect(location)}>
-              {location}
-            </StyledButton>
-          ))}
-    
+            if (!selectedSido) {
+              if (병합_코드.length === 2) {
+                return (
+                  <StyledButton key={locationName} onClick={() => handleSidoSelect(locationName)}>
+                    {locationName}
+                  </StyledButton>
+                );
+              }
+            } else if (selectedSido && !selectedGugun) {
+              if (병합_코드.length === 5) {
+                return (
+                  <StyledButton key={locationName} onClick={() => handleGugunSelect(locationName)}>
+                    {locationName}
+                  </StyledButton>
+                );
+              }
+            } else if (selectedSido && selectedGugun) {
+                return (
+                  <StyledButton key={locationName} onClick={() => handleLocationFinalSelect(locationName)}>
+                    {locationName}
+                  </StyledButton>
+                );
+            }
+            return null;
+          })}
+
+          <StyledButton onClick={() => {
+            if (selectedGugun) {
+              setSelectedGugun(null);
+            } else if (selectedSido) {
+              setSelectedSido(null);
+            } else {
+              setIsOpen(false);
+            }
+          }}>이전</StyledButton>
+
         </ModalContainer>
       </ModalOverlay>
     </>
   );
-}  
+}
 
 export default LocationSelector;
