@@ -17,6 +17,8 @@ const Button = styled.button`
 const StyledButton = styled.button`
   margin: 5px;
   padding: 8px 15px;
+  column-gap: 20px;
+
   border: none;
   border-radius: 5px;
   background-color: #f5f5f5;
@@ -27,7 +29,6 @@ const StyledButton = styled.button`
     background-color: #e0e0e0;
   }
 `;
-
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -39,16 +40,27 @@ const ModalOverlay = styled.div`
   display: ${props => props.open ? 'block' : 'none'};
 `;
 
+
 const ModalContainer = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  min-height: 2dvh;
   transform: translate(-50%, -50%);
   padding: 20px;
-  width: 300px;
+  width: 20%; 
+  height: 50%; 
+  border-radius: 12px;
   background-color: #fff;
   border: 1px solid #ddd;
   z-index: 1000;
+  overflow-y: auto; 
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
 `;
 
 const LocationSelector = ({ onLocationSelect }) => {
@@ -82,7 +94,7 @@ const LocationSelector = ({ onLocationSelect }) => {
         <ModalContainer>
           {locationData.map(entry => {
             const 병합_코드 = String(entry.병합_코드);
-            const locationName = entry.locationName;
+            const locationName = entry.병합_명칭;
 
             if (!selectedSido) {
               if (병합_코드.length === 2) {
@@ -93,37 +105,41 @@ const LocationSelector = ({ onLocationSelect }) => {
                 );
               }
             } else if (selectedSido && !selectedGugun) {
-              if (병합_코드.length === 5) {
+              if (locationName.startsWith(selectedSido) && 병합_코드.length === 5) {
+                const gugunName = locationName.split(" ")[1];
                 return (
-                  <StyledButton key={locationName} onClick={() => handleGugunSelect(locationName)}>
-                    {locationName}
+                  <StyledButton key={gugunName} onClick={() => handleGugunSelect(gugunName)}>
+                    {gugunName}
                   </StyledButton>
                 );
               }
             } else if (selectedSido && selectedGugun) {
-                return (
-                  <StyledButton key={locationName} onClick={() => handleLocationFinalSelect(locationName)}>
-                    {locationName}
-                  </StyledButton>
-                );
+                if (locationName.startsWith(`${selectedSido} ${selectedGugun}`) && 병합_코드.length > 5) {
+                  const dongName = locationName.split(" ").pop();
+                  return (
+                    <StyledButton key={dongName} onClick={() => handleLocationFinalSelect(dongName)}>
+                      {dongName}
+                    </StyledButton>
+                  );
+                }
             }
             return null;
           })}
 
-          <StyledButton onClick={() => {
-            if (selectedGugun) {
-              setSelectedGugun(null);
-            } else if (selectedSido) {
-              setSelectedSido(null);
-            } else {
-              setIsOpen(false);
-            }
-          }}>이전</StyledButton>
-
+          {selectedSido && (
+            <StyledButton onClick={() => {
+              if (selectedGugun) {
+                setSelectedGugun(null);
+              } else if (selectedSido) {
+                setSelectedSido(null);
+              } else {
+                setIsOpen(false);
+              }
+            }}>이전</StyledButton>
+          )}
         </ModalContainer>
       </ModalOverlay>
     </>
   );
 }
-
 export default LocationSelector;
