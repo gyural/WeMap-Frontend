@@ -37,6 +37,8 @@ const login = async (email, pw) => {
   return await axios.post(apiURL, finaldata, {
     headers: {
       'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
+        withCredentials : 'true'
+
     },
   })
   .then(res =>{
@@ -94,7 +96,7 @@ const logOut =  async() => {
 
 const register = async (email, pw) => {
     // axios를 이용하여 jwt 회원가입 요청을 보낸다.
-    const apiURL = baseURL + 'signup/'
+    const apiURL = "https://b6saprgg73.execute-api.ap-northeast-2.amazonaws.com/plz/signup/"
     const requestData = {
         'email': email,
         'password': pw,
@@ -107,6 +109,8 @@ const register = async (email, pw) => {
         headers: {
           'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
         },
+        withCredentials : true
+
     })
     .then(() => {
         alert('회원가입 성공')
@@ -119,6 +123,22 @@ const register = async (email, pw) => {
         return false;
     })
 }
+
+/**
+ * 테스트용 register
+ */
+// const register = async (email, pw) =>{
+//   const apiURL = "https://ha053hz7ib.execute-api.ap-northeast-2.amazonaws.com/test/test-resource/t"
+
+//   const requestData = {
+//             'email': email,
+//             'password': pw,
+//             'nickname' : email,
+//             'dis_level' : "1"
+//         }
+//         const finaldata = JSON.stringify(requestData)
+//   axios.post(apiURL, requestData)
+// }
 /**
  * 
  * @returns user정보를 가져오는 API
