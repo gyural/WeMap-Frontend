@@ -27,27 +27,27 @@ const baseURL = 'https://7wkx0w4ygg.execute-api.ap-northeast-2.amazonaws.com/rel
  */
 
 const login = async (email, pw) => {
-  const apiURL = baseURL + 'login/';
-  const requestData = {
-    'email': email,
-    'password': pw
-  };
-  const finaldata = JSON.stringify(requestData);
+    const apiURL = baseURL + 'login/';
+    const requestData = {
+        'email': email,
+        'password': pw
+    };
+    const finaldata = JSON.stringify(requestData);
 
-  return await axios.post(apiURL, finaldata, {
-    headers: {
-      'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
-        withCredentials : 'true'
+    return await axios.post(apiURL, finaldata, {
+        headers: {
+        'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
+            withCredentials : 'true'
 
-    },
-  })
-  .then(res =>{
-      return res.data
-  })
-  .catch(error =>{
-      console.log(error)
-      return undefined
-  })
+        },
+    })
+    .then(res =>{
+        return res.data
+    })
+    .catch(error =>{
+        console.log(error)
+        return undefined
+    })
 
     
     // js-cookie를 사용하여 쿠키에 토큰 저장

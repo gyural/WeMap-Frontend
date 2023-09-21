@@ -3,6 +3,22 @@ import colors from "../../../../Common/Color";
 
 const { kakao } = window;
 
+const getShelter = async () => {
+  const apiURL = "https://q59cs7kvf3.execute-api.ap-northeast-2.amazonaws.com/plz/get-shelter"
+  const requestData = {
+    'current_location' : [37.57246803097317, 126.95456868160035]
+  }
+  return await axios.post(apiURL, requestData)
+  .then ((res) => {
+    console.log(res)
+    console.log("정상출력")
+    return true;
+  }) .catch((error) => {
+    console.log(error)
+    return false;
+  })
+}
+
 /**
  * 
  * @param {*} origin 
@@ -82,4 +98,4 @@ async function getPath(origin, destination) {
   }
 }
 
-export { getPath, testCoordinate };
+export { getShelter, getPath, testCoordinate };

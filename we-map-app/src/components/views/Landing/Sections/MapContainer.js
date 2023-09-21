@@ -10,6 +10,7 @@ import { findPath } from './findLoad';
 import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
 import LocationSelector from "../Sections/LocationSelector";
 import FindShelter from './FindShelter';
+import { getShelter } from './navigation';
 // import LocationSelector from "../Sections/LocationSelector";
 
 // 이미지 import
@@ -280,7 +281,7 @@ const MapContainer = ({ searchPlace }) => {
                 position: "absolute",
                 bottom: "0"
               }}
-              onClick={getPath}>테스팅 버튼</button>
+              onClick={getShelter}>테스팅 버튼</button>
         </Container>
     );
   };
