@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import locationData from '../../../../locationData.json';
-
+import { getPath } from './navigation';
 const Button = styled.button`
   position: absolute;
   top: 10px;
@@ -85,7 +85,6 @@ const LocationSelector = ({ onLocationSelect }) => {
     onLocationSelect(`${selectedSido} ${selectedGugun} ${location}`);
     setIsOpen(false);
   };
-
   return (
     <>
       <Button onClick={handleClick}>지역 선택</Button>
@@ -95,7 +94,6 @@ const LocationSelector = ({ onLocationSelect }) => {
           {locationData.map(entry => {
             const 병합_코드 = String(entry.병합_코드);
             const locationName = entry.병합_명칭;
-
             if (!selectedSido) {
               if (병합_코드.length === 2) {
                 return (

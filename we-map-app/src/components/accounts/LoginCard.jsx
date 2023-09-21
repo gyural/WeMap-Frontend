@@ -118,16 +118,15 @@ function LoginCard(props) {
     const handleSubmit = () => {
         login(formData.id, formData.password).then(
               async ()=>{
-                const res = await getUserAuth()
-                const userInfo = res.data
-                console.log(userInfo)
+                // const res = await getUserAuth()
+                // const userInfo = res.data
                 setAuthState({
                   isLoggedIn: true,
                   userName: formData.id,
-                  dis_level: userInfo.dis_level,
-                  nickname: userInfo.nickname,
-                  password: userInfo.password,
-                  update_at: userInfo.updated_at,
+                  dis_level: 1,
+                  nickname: formData.id,
+                  password: 'test',
+                  update_at: 'test',
                 })
                 moveMap()
                 

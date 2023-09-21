@@ -14,12 +14,12 @@ const MapAPI = axios.create(
 /**
  * 배포용 주소
  */
-// const baseURL = "https://sgisapi.kostat.go.kr/OpenAPI3/"
+const baseURL = "https://sgisapi.kostat.go.kr/OpenAPI3/"
 
 /**
  * 개발용 프록시 주소
  */
-const baseURL = "/OpenAPI3"
+// const baseURL = "/OpenAPI3"
 
 const getAccess = async () => {
     const apiURL = baseURL + "/auth/authentication.json";

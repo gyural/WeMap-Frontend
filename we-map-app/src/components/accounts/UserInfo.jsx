@@ -146,10 +146,10 @@ export default function UserInfo(props) {
                     cursor: 'pointer',
                 }}
 
-                onClick={() =>{
-                    refresh()
-                  }
-                }
+                // onClick={() =>{
+                //     refresh()
+                //   }
+                // }
             >수정하기</button>
         </div>
 

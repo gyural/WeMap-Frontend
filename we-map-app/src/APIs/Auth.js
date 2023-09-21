@@ -1,17 +1,22 @@
 import axios from "axios"
 import instance from "./Instance";
+// import Cookies from 'js-cookie'; // js-cookie 라이브러리를 가져옴
 import { getCookieToken, getaccessToken, setRefreshToken, setaccessToken } from "../Common/Cookie";
 import { cookies } from "../Common/Cookie";
 /**
  * 로컬에서 사용하는 baseURL
  */
-const baseURL = '/api'
+// const baseURL = '/api'
 
 // /**
 //  * 배포버전에서 사용하는 baseURL
 //  */
-// const baseURL = 'https://server.ja-doctor.net/api'
+// const baseURL = 'http://127.0.0.1:8000/api'
 
+/**
+ * AWS 인증 요청 주소
+ */
+const baseURL = 'https://7wkx0w4ygg.execute-api.ap-northeast-2.amazonaws.com/release/'
 
 /**
  * 로그인 성공시 로컬 스토리지에 acc/rfc 토큰 담아주기
@@ -20,40 +25,49 @@ const baseURL = '/api'
  * @returns 로그인 성공/실패 여부로 비동기 적으로 true/false 반환
  *  
  */
+
 const login = async (email, pw) => {
-    // axios를 이용하여 jwt 로그인 요청을 보낸다.
-    const apiURL = baseURL + '/user/auth/'
-    const requestData = {
-        'email': email,
-        'password': pw
-    }
-    const finaldata = JSON.stringify(requestData)
-    // console.log(finaldata)
-    return await axios.post(apiURL, finaldata, {headers: {
-        'Content-Type': 'application/json',
-    }})
-    .then((response) => {
-        console.log(response)
-        const accessToken = response.data.token.access;
-        const refreshToken = response.data.token.refresh;
-        console.log('쿠키 get')
-        
-        instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        localStorage.setItem('access_token', accessToken);
-        localStorage.setItem('refresh_token', refreshToken);
-        const currentTime = new Date();
-        const expireTime = new Date(currentTime.getTime() + (9 * 60 + 45) * 1000);
-        // expireTime 값을 ISO 문자열로 변환하여 localStorage에 저장
-        localStorage.setItem('expiresAt', expireTime.toISOString());
-        alert('로그인 성공');
-        // 벡엔드에서 httponly 쿠키로 토큰들이 전송되어 로그인됨
-        // navigate('/')
-    }).catch((error) => {
-        console.log(error);
-        alert('로그인 실패');
-        throw error;
-    })
-}
+  const apiURL = baseURL + 'login/';
+  const requestData = {
+    'email': email,
+    'password': pw
+  };
+  const finaldata = JSON.stringify(requestData);
+
+  return await axios.post(apiURL, finaldata, {
+    headers: {
+      'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
+        withCredentials : 'true'
+
+    },
+  })
+  .then(res =>{
+      return res.data
+  })
+  .catch(error =>{
+      console.log(error)
+      return undefined
+  })
+
+    
+    // js-cookie를 사용하여 쿠키에 토큰 저장
+    // Cookies.set('access_token', accessToken);
+    // Cookies.set('refresh_token', refreshToken);
+    
+    // const accessToken = response.data.token.access;
+    // const refreshToken = response.data.token.refresh;
+    // instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    // localStorage.setItem('access_token', accessToken);
+    // localStorage.setItem('refresh_token', refreshToken);
+    // const currentTime = new Date();
+    // const expireTime = new Date(currentTime.getTime() + (9 * 60 + 45) * 1000);
+    // localStorage.setItem('expiresAt', expireTime.toISOString());
+
+    // alert('로그인 성공');
+    // navigate('/')
+};
+
+  
 
 /**
  * 
@@ -63,40 +77,40 @@ const login = async (email, pw) => {
  * @param {*} password 
  * @returns 로그아웃 후 헤더에서 acc토큰 제거
  */
-const logOut =  async() => {
-    const apiURL = baseURL + '/user/auth/'
-    
-    await instance.delete(apiURL)
-    .then(()=>{
-        console.log('로그아웃 정상 완료')
+const logOut =  async() => {    
+    // await instance.delete(apiURL)
+    // .then(()=>{
+    console.log('로그아웃 정상 완료')
         // axios 헤더의 access 토큰 제거
-        instance.defaults.headers.common['Authorization'] = undefined;
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        return 'logout 완료'
-    })
-    .catch(()=>{
-        console.log('로그아웃 실패!!!')
-        return 'logout 실패!!!'
-    })
+        // instance.defaults.headers.common['Authorization'] = undefined;
+        // localStorage.removeItem('access_token');
+        // localStorage.removeItem('refresh_token');
+    return 'logout 완료'
+    // })
+    // .catch(()=>{
+    //     console.log('로그아웃 실패!!!')
+    //     return 'logout 실패!!!'
+    // })
     // 로컬스토리지에서 access 토큰 제거
 }
 
-const register = (email, pw) => {
+const register = async (email, pw) => {
     // axios를 이용하여 jwt 회원가입 요청을 보낸다.
-    const apiURL = baseURL + '/user/register/'
+    const apiURL = "https://b6saprgg73.execute-api.ap-northeast-2.amazonaws.com/plz/signup/"
     const requestData = {
         'email': email,
         'password': pw,
         'nickname' : email,
-        'dis_level' : 1
+        'dis_level' : "1"
     }
     const finaldata = JSON.stringify(requestData)
     console.log(finaldata)
-    return axios.post(apiURL, finaldata, {
+    return await axios.post(apiURL, finaldata, {
         headers: {
           'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
         },
+        withCredentials : true
+
     })
     .then(() => {
         alert('회원가입 성공')
@@ -109,12 +123,28 @@ const register = (email, pw) => {
         return false;
     })
 }
+
+/**
+ * 테스트용 register
+ */
+// const register = async (email, pw) =>{
+//   const apiURL = "https://ha053hz7ib.execute-api.ap-northeast-2.amazonaws.com/test/test-resource/t"
+
+//   const requestData = {
+//             'email': email,
+//             'password': pw,
+//             'nickname' : email,
+//             'dis_level' : "1"
+//         }
+//         const finaldata = JSON.stringify(requestData)
+//   axios.post(apiURL, requestData)
+// }
 /**
  * 
  * @returns user정보를 가져오는 API
  */
 const getUserAuth = async () =>{
-    const apiURL = baseURL + "/user/auth/"
+    const apiURL = baseURL + "getDisLevel/"
     
     return await instance.get(apiURL, {withCredentials:true})
     .then((response) =>{
@@ -136,7 +166,7 @@ const updateUserAuth = async (auth) =>{
 
     const finaldata = JSON.stringify(requestData)
     console.log(finaldata)
-    return await instance.put(
+    return await instance.post(
         apiURL,
         finaldata,
         {
