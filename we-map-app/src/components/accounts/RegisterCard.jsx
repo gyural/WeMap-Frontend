@@ -117,10 +117,9 @@ function RegisterCard(props) {
     
     const handleSubmit = () => {
         if (formData.check_password === formData.password) {
-            console.log(formData);
             if (register(formData.id, formData.password)) {
-                // navigate("/signin");
-                // alert('회원가입 성공!!!')
+              alert("회원가입 완료!!")
+              moveHome()
             }
         } else {
             alert("비밀번호가 일치하지 않습니다.");

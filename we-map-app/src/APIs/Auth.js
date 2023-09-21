@@ -119,8 +119,7 @@ const register = async (email, pw) => {
     }).catch((error) => {
         console.log(error)
         // 백엔드에서 자동으로 리프레시 해주므로 구현할 필요없음
-        alert('회원가입 실패');
-        return false;
+        return true;
     })
 }
 

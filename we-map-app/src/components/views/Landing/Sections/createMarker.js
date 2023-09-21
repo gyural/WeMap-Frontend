@@ -29,6 +29,7 @@ const disasterTypeToImage = {
     "황사": yellowDust,
     "화재": fire,
     "교통사고": carAccident,
+    "교통통제": carAccident,
     "실종": missing, // 실종 이미지 경로로 변경
     "기타": missing, // 기타 이미지 경로로 변경
 };
@@ -46,14 +47,16 @@ const getMarkerList = (disasteList, map) =>{
         for (const disaster of disasteList){
             if (disaster){
                 let img = disasterTypeToImage[disaster.disaster_type]
-                const msg = disaster.manual
-                
+                const menual = disaster.manual
+                const msg = disaster.msg
+                const disasterType = disaster.disaster_type
+                const color = (disasterType === "실종" || disasterType === "기타") ? "orange": "red"
                 if(img === undefined){
                     img = disasterTypeToImage["기타"]
                 }
                 const locationList = disaster.coordinate
                 locationList.forEach(location => {
-                    resultList.push(makeMarker(img.toString(), map, [location[0], location[1]], msg))
+                    resultList.push(makeMarker(img.toString(), map, [location[0], location[1]], menual, msg,  disasterType, color))
                 });
             }
             
@@ -63,7 +66,7 @@ const getMarkerList = (disasteList, map) =>{
 }
 
 window.handleClick = () =>{
-    getPath()
+    alert("해당 재난 메뉴얼 팝업 띄어야함!!!")
 }
 /**
  * 
@@ -73,7 +76,8 @@ window.handleClick = () =>{
  * @returns 
  */
 
-const makeMarker = (image, targetmap, location, msg) => {
+
+const makeMarker = (image, targetmap, location, menual, msg, disasterType, color) => {
     console.log(image)
     const markerPosition = new kakao.maps.LatLng(location[0], location[1])
     const imageSize = new kakao.maps.Size(40, 40);
@@ -89,30 +93,38 @@ const makeMarker = (image, targetmap, location, msg) => {
     const customOverlay = new kakao.maps.CustomOverlay({
         position: markerPosition,
         content: `<div class="manualContainer" style="background-color: #fff; width: 190px; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
-        <div class="title" style="color: red; font-weight: 700; font-size: 14px;">산사태 경보 메뉴얼</div>
-        <div class="manual-content" style="width: 100%; height: 65%; box-sizing: border-box; overflow-y: scroll;">
+        <div class="title" style="color: ${color}; font-weight: 700; font-size: 14px;">${disasterType} 재난 문자</div>
+        <div class="manual-content" style="width: 100%; height: 70%; box-sizing: border-box; overflow-y: scroll;">
             <style>
                 .manual-content::-webkit-scrollbar {
-                    width: 6px; /* 스크롤바 너비 조정 */
+                      width: 6px; /* 스크롤바 너비 조정 */
                 }
-    
+
                 .manual-content::-webkit-scrollbar-thumb {
-                    background-color: #ccc; /* 스크롤바 색상 지정 */
+                      background-color: #ccc; /* 스크롤바 색상 지정 */
+                }
+
+                p {
+                    display: block;
+                    margin-block-start: 0.1em;
+                    margin-block-end: 1em;
+                    margin-inline-start: 0px;
+                    margin-inline-end: 0px;
                 }
             </style>
-            <p style="display: block; width: 100%; height: 100%; white-space: pre-line;">
+            <p style=" width: 100%; height: 100%; white-space: pre-line; margin-top: 0" >
                 ${msg}
             </p>
         </div>
         <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
             <button onclick=handleClick() style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
-            font-weight: 700;">대피소 찾기</button>
+            font-weight: 700;">메뉴얼 보기</button>
         </div>
     </div>`,
         yAnchor: 1.3
+            });
 
-        
-    });
+
     
     let isOverlayShown = false;  
     // 마커에 클릭 이벤트 설정
