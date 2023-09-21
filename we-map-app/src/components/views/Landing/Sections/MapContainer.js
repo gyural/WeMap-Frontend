@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import axios from "axios";
+import styled, { createGlobalStyle } from 'styled-components';
 import { createPolygon, erasePolygon, getPolygonPath, makePolygon } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { getDisasterList } from './DisasterList';
-import { getPath } from './navigation';
+import { getPath, testCoordinate } from './navigation';
 import { findPath } from './findLoad';
 import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
 import LocationSelector from "../Sections/LocationSelector";
@@ -78,6 +79,8 @@ const MapContainer = ({ searchPlace }) => {
     const [disasteList , setDisasterList] = useState([])
     //zoom이 바뀔때마다 리랜더링을 통해서 보이게할 지도 컨텐츠를 조절하기 위함
     const [zoom, setZoom] = useState(undefined)
+    // 사용자 현재위치 state 관리
+    const [currentPosition, setCurrentPosition] = useState(undefined)
     /**
      * 기존의 폴리곤을 지우고 새로운폴리곤을 그리는 함수
      */
@@ -149,6 +152,8 @@ const MapContainer = ({ searchPlace }) => {
               function (position) {
                   var lat = position.coords.latitude,
                       lon = position.coords.longitude;
+                  setCurrentPosition([lon, lat])
+
                   var locPosition = new kakao.maps.LatLng(lat, lon);
                   map.setCenter(locPosition); // 지도의 중심을 현재 위치로 설정
 
@@ -170,6 +175,7 @@ const MapContainer = ({ searchPlace }) => {
           var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
           map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
       }
+      
       // WebSocket 연결 생성
       const websocket = new WebSocket("wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken");
       websocket.onopen = () => {
@@ -229,109 +235,6 @@ const MapContainer = ({ searchPlace }) => {
       const imageSize = new kakao.maps.Size(50, 50);
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
       
-    /**
-     * dummy데이터를 읽고 지도 객체에 마커 표시
-    useEffect(() => {
-      const mapContainer = document.getElementById('map');
-      const mapOption = {
-          center: new kakao.maps.LatLng(36.498649, 127.268141),
-          level: 5
-      };
-  
-      const map = new kakao.maps.Map(mapContainer, mapOption);
-      setMap(map);
-      dummyLocations.forEach(loc => {
-        const markerPosition = new kakao.maps.LatLng(loc.lat, loc.lng);
-        const imageSrc = disasterTypeToImage[loc.disasterTypeToImage];   // 매핑된 이미지 가져오기
-        const imageSize = new kakao.maps.Size(50, 50);
-        const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-    
-        
-        const marker = new kakao.maps.Marker({
-            map: map,
-            position: markerPosition,
-            image: markerImage
-        });
-        
-        const overlayPosition = new kakao.maps.LatLng(loc.lat, loc.lng);
-        
-        const customOverlay = new kakao.maps.CustomOverlay({
-            position: overlayPosition,
-            content: `<div>${loc.title}</div>`,
-            yAnchor: 1.5  
-        });
-        
-        let isOverlayShown = false;  
-        // 마커에 클릭 이벤트 설정
-        kakao.maps.event.addListener(marker, 'click', function() {
-          if (isOverlayShown) {
-              customOverlay.setMap(null);  // 오버레이 숨기기
-          } else {
-              customOverlay.setMap(map);   // 오버레이 보여주기
-          }
-  
-          isOverlayShown = !isOverlayShown;  // 상태 토글
-      });
-    
-        // 기본적으로 커스텀 오버레이는 숨김 상태
-        customOverlay.setMap(null);
-    });
-     */
-    // dummyLocations.forEach(location => {
-    //   const markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
-      
-    //   const marker = new kakao.maps.Marker({
-    //       map: map,
-    //       position: markerPosition,
-    //       image: markerImage
-    //   });
-      
-    //   const overlayPosition = new kakao.maps.LatLng(location.lat, location.lng);
-      
-    //   const customOverlay = new kakao.maps.CustomOverlay({
-    //       position: overlayPosition,
-    //       content: `<div class="manualContainer" style="background-color: #fff; width: 150%; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
-    //       <div class="title" style="color: red; font-weight: 700; font-size: 14px;">산사태 경보 메뉴얼</div>
-    //       <div class="manual-content" style="width: 100%; height: 65%; box-sizing: border-box; overflow-y: scroll;">
-    //           <style>
-    //               .manual-content::-webkit-scrollbar {
-    //                   width: 6px; /* 스크롤바 너비 조정 */
-    //               }
-      
-    //               .manual-content::-webkit-scrollbar-thumb {
-    //                   background-color: #ccc; /* 스크롤바 색상 지정 */
-    //               }
-    //           </style>
-    //           <p style="display: block; width: 100%; height: 100%; white-space: pre-line;">
-    //               산사태 경보 메뉴얼입니다........
-    //               산사태 경보 메뉴얼입니다........
-    //               산사태 경보 메뉴얼입니다........
-    //               산사태 경보 메뉴얼입니다.......산사태 경보 메뉴얼입니다.......v
-    //           </p>
-    //       </div>
-    //       <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
-    //           <button onclick="alert('haha')" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%;
-    //           font-weight: 700;">대피소 찾기</button>
-    //       </div>
-    //   </div>`,
-    //       yAnchor: 1.3
-    //   });
-      
-    //   let isOverlayShown = false;  
-    //   // 마커에 클릭 이벤트 설정
-    //   kakao.maps.event.addListener(marker, 'click', function() {
-    //     if (isOverlayShown) {
-    //         customOverlay.setMap(null);  // 오버레이 숨기기
-    //     } else {
-    //         customOverlay.setMap(map);   // 오버레이 보여주기
-    //     }
-
-    //     isOverlayShown = !isOverlayShown;  // 상태 토글
-    //   });
-  
-    //   // 기본적으로 커스텀 오버레이는 숨김 상태
-    //   customOverlay.setMap(null);
-    //   });
     }
     const newMarkerList = insertMarkerList(disasteList);
 
@@ -343,25 +246,21 @@ const MapContainer = ({ searchPlace }) => {
     // 이전 마커 리스트를 지우는 함수
     drawMarkerList(newMarkerList, map);
     setMarkerList(newMarkerList);
-    
+    console.log("====================");
+    if(disasteList){
+
+      console.log(currentPosition)
+      findPath(map, `${currentPosition[0]}, ${currentPosition[1]}`, `127.29307759409, 36.610261563595`);
+    }
   }, [searchPlace, locations, disasteList]);
 
-  /**
-   * 길찾기 Drawing
-   * */ 
 
-  useEffect(() => {
-    // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
-    // 조치원역 : 36.601107352826, 127.29651502894
-    // 고려대학교 세종캠퍼스 : 36.610261563595, 127.29307759409
-    getPath(map);
-  }, [map]);
+// }, [map]);
 
-
-  
     return (
+      
         <Container>
-          <FindShelter onLocationSelect={handleLocationSelect}></FindShelter>
+          <FindShelter ></FindShelter>
           <LocationSelector onLocationSelect={handleLocationSelect} />
             <div id="map" style={{
                 position: 'absolute',
@@ -372,9 +271,18 @@ const MapContainer = ({ searchPlace }) => {
                 height: '100%',
             }}>
             </div>
+            <button 
+              style = {{
+                width: "200px",
+                height: "200px",
+                position: "absolute",
+                bottom: "0"
+              }}
+              onClick={getPath}>테스팅 버튼</button>
         </Container>
     );
   };
+
 
 
 export default MapContainer;

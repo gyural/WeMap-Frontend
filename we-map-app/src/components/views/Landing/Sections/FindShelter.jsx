@@ -20,8 +20,6 @@ const Button = styled.button`
 
 const FindShelter = ({ onLocationSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedSido, setSelectedSido] = useState(null);
-    const [selectedGugun, setSelectedGugun] = useState(null);
 
     const handleClick = () => {
     setIsOpen(!isOpen);
