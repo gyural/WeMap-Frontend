@@ -3,16 +3,18 @@ import colors from "../../../../Common/Color";
 
 const { kakao } = window;
 
-const getShelter = async () => {
+const getShelter = async (currentLocation) => {
   const apiURL = "https://q59cs7kvf3.execute-api.ap-northeast-2.amazonaws.com/plz/get-shelter"
   const requestData = {
-    'current_location' : [37.57246803097317, 126.95456868160035]
+    'current_location' : currentLocation
   }
-  return await axios.post(apiURL, requestData)
+  const finaldata = JSON.stringify(requestData)
+  console.log(finaldata)
+  return await axios.post(apiURL, finaldata)
   .then ((res) => {
     console.log(res)
     console.log("정상출력")
-    return true;
+    return res;
   }) .catch((error) => {
     console.log(error)
     return false;

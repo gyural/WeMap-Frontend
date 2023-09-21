@@ -1,12 +1,17 @@
 
 import colors from "../../../../Common/Color";
 import MapContainer from "./MapContainer";
-import { testCoordinate, getPath } from "./navigation";
+import { testCoordinate, getPath, getShelter } from "./navigation";
 
 const { kakao } = window
 
-const findPath = async (map, origin, destination) => {
-    const result = await testCoordinate(origin, destination)
+const findPath = async (map, origin, destination, position) => {
+    const data = await getShelter(position)
+    console.log(origin)
+    const shelterList = data.data.body
+    console.log('getShelter 반환값!!!')
+    console.log(shelterList)
+    const result = await testCoordinate(origin, `${shelterList[1].Longitude}, ${shelterList[1].Latitude}`)
     // 출발지에서 도착지까지 길찾기 서비스 생성
     console.log(result)
     const path = result;

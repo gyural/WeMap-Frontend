@@ -252,7 +252,7 @@ const MapContainer = ({ searchPlace }) => {
 
       console.log(currentPosition)
       if(currentPosition !== undefined){
-        findPath(map, `${currentPosition[0]}, ${currentPosition[1]}`, `127.29307759409, 36.610261563595`);
+        findPath(map, `${currentPosition[0]}, ${currentPosition[1]}`, `127.29307759409, 36.610261563595`, [currentPosition[1], currentPosition[0]]);
       }
     }
   }, [searchPlace, locations, disasteList]);
