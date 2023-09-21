@@ -4,7 +4,11 @@ import { createPolygon, erasePolygon, getPolygonPath, makePolygon } from './crea
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { getDisasterList } from './DisasterList';
+import { getPath } from './navigation';
 import { findPath } from './findLoad';
+import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
+import LocationSelector from "../Sections/LocationSelector";
+import FindShelter from './FindShelter';
 // import LocationSelector from "../Sections/LocationSelector";
 
 // 이미지 import
@@ -25,8 +29,7 @@ import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from "../../../../images/missing.png";
 import user from "../../../../images/user.png";
-import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
-import LocationSelector from "../Sections/LocationSelector";
+
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
@@ -347,17 +350,18 @@ const MapContainer = ({ searchPlace }) => {
    * 길찾기 Drawing
    * */ 
 
-  // useEffect(() => {
-  //   // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
-  //   // 조치원역 : 36.601107352826, 127.29651502894
-  //   // 고려대학교 세종캠퍼스 : 36.610261563595, 127.29307759409
-  //   findPath(map, 36.601107352826, 127.29651502894, 36.610261563595, 127.29307759409);
-  // }, [map]);
+  useEffect(() => {
+    // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
+    // 조치원역 : 36.601107352826, 127.29651502894
+    // 고려대학교 세종캠퍼스 : 36.610261563595, 127.29307759409
+    getPath(map);
+  }, [map]);
 
 
   
     return (
         <Container>
+          <FindShelter onLocationSelect={handleLocationSelect}></FindShelter>
           <LocationSelector onLocationSelect={handleLocationSelect} />
             <div id="map" style={{
                 position: 'absolute',
