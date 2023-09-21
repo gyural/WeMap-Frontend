@@ -205,7 +205,7 @@ const MapContainer = ({ searchPlace }) => {
           const location_list = disaster.location_code
         
           location_list.forEach(location_code => {
-            sd_list.push(Number(location_code))
+            sd_list.push([Number(location_code), disaster.disaster_type])
           });
         });
 

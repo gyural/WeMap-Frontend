@@ -15,7 +15,8 @@ const getDisasterList = (socketData) =>{
           location_name : disaster.location_name,
           scale : getscale(disaster.location_code),
           coordinate : disaster.coordinate,
-          manual : disaster.manual
+          manual : disaster.manual,
+          emergency_step : disaster.emergency_step
         })
         
       });
