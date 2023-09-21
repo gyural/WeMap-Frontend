@@ -5,7 +5,7 @@ import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { insertManualCard } from './manualCard';
 import { getDisasterList } from './DisasterList';
-import { findPath } from './findLoad';
+import { initializeMap, findPath } from './findLoad';
 import LocationSelector from "../Sections/LocationSelector";
 
 // 이미지 import
@@ -315,9 +315,11 @@ const MapContainer = ({ searchPlace }) => {
     // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
     // 조치원역 : 36.601107352826, 127.29651502894
     // 고려대학교 세종캠퍼스 : 36.610261563595, 127.29307759409
-    findPath(map);
+    findPath(map, 36.601107352826, 127.29651502894, 36.610261563595, 127.29307759409);
   }, [map]);
 
+
+  
     return (
         <Container>
           <LocationSelector onLocationSelect={handleLocationSelect} />
