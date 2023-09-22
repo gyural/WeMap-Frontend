@@ -112,10 +112,11 @@ const ArriveBtn = styled.div`
 
 const FindShelter = (props) => {
     const { kakao } = window;
-    const drawLoad = () =>{
-        alert("길그리기 함수 실행")
-    }
+    
         const [map, setMap] = useState(undefined);
+				const drawLoad = (destination) =>{
+					findPath(map, currentPosition, destination)
+			}
         const [currentPosition, setCurrentPosition] = useState(undefined)
         const [markerList, setMarkerList] = useState(undefined)
         const [shelterList, setShelterList] = useState(undefined)
@@ -126,7 +127,6 @@ const FindShelter = (props) => {
                 markerList.forEach(marker => {
                   marker.setMap(null)
               });
-              console.log(markerList)
               drawMarkerList(markerList, map)
               return markerList
               } 
@@ -140,7 +140,7 @@ const FindShelter = (props) => {
         }
 
         useEffect(() => {
-        const mapContainer = document.getElementById('map');
+        const mapContainer = document.getElementById('sheltermap');
         const mapOption = {
             center: new kakao.maps.LatLng(37.541, 126.986),
             level: 5
@@ -185,7 +185,7 @@ const FindShelter = (props) => {
                 const res = await getShelter([currentPosition[1], currentPosition[0]]);
                 setShelterList(res.data.body)
                 console.log(shelterList)
-                const newMarkerList =  insertSherterMarkerList(shelterList)
+                const newMarkerList =  insertSherterMarkerList(res.data.body)
                 setMarkerList(newMarkerList)
                 console.log(newMarkerList)
             }
@@ -204,7 +204,7 @@ const FindShelter = (props) => {
 
     return (
         <Container>
-            <div id="map" style={{
+            <div id="sheltermap" style={{
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
