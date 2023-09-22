@@ -112,14 +112,22 @@ const ArriveBtn = styled.div`
 
 const FindShelter = (props) => {
     const { kakao } = window;
-    
+				const moveMap = props.moveMap
         const [map, setMap] = useState(undefined);
-				const drawLoad = (destination) =>{
-					findPath(map, currentPosition, destination)
-			}
+				
+				const [loadInfo, setLoadInfo] = useState(undefined)
         const [currentPosition, setCurrentPosition] = useState(undefined)
+				const [LoadMode, setLoadMode] = useState(false)
         const [markerList, setMarkerList] = useState(undefined)
         const [shelterList, setShelterList] = useState(undefined)
+
+				const drawLoad = async (destination) =>{
+					const LoadInfo = await findPath(map, currentPosition, destination)
+					const distance = (LoadInfo[1] / 1000).toFixed(1)
+					const duration = Math.floor(LoadInfo[0] / 60)
+					setLoadInfo([duration, distance])
+					setLoadMode(true)
+				}
         const insertSherterMarkerList = (shelterList) =>{
             if(map){
               const markerList = getShelterMarkerList(shelterList, map, drawLoad);
@@ -212,23 +220,26 @@ const FindShelter = (props) => {
                 width: '100%',
                 height: '100%',
             }}></div>
-            <Topbar>
-                {/* <BackArrow onClick={moveMap}>
+            {
+							LoadMode && (<Topbar>
+                <BackArrow onClick={moveMap}>
                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
-                </BackArrow> */}
-                <FindBtn>
+                </BackArrow>
+								<FindBtn>
                     <img src={car} alt='차 이미지'></img>
-                    <span>1.2km 약 6분</span>
+                    <span>{loadInfo[1]}km 약 {loadInfo[0]}분</span>
                 </FindBtn>
                 <StartBtn>
                     <span>출발 :</span>
-                    <span>세종 조치원읍 고려대학교</span>
+                    <span>현 위치</span>
                 </StartBtn>
                 <ArriveBtn>
                     <span>도착 :</span>
                     <span>세종 조치원읍 세종여자고등학교</span>
                 </ArriveBtn>
-                </Topbar>
+                </Topbar>)
+						}
+						
         </Container>
     );
 }

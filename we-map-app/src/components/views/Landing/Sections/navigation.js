@@ -28,17 +28,17 @@ const getShelter = async (currentLocation) => {
  * 
  * @param {*} origin 
  * @param {*} destination 
- * @returns 
+ * @returns 길찾기 API 결과에서 Line Path만 뽑아줌
  */
 const testCoordinate = async (origin, destination) => {
   
   const findLoadInfo = await getPath(origin, destination);
-  let result = []
-  findLoadInfo.linePath.forEach(element => {
-      result.push(element)
+  // let result = []
+  // findLoadInfo.linePath.forEach(element => {
+  //     result.push(element)
     
-  });
-  return result
+  // });
+  return findLoadInfo
 }
 /**
  * 
@@ -90,6 +90,7 @@ async function getPath(origin, destination) {
         'distance': data.routes[0].sections[0].distance,
         "linePath" : linePath
       }
+      console.log('asdffffffffffffffff')
       console.log(result)
       return result
     }else{
