@@ -5,13 +5,15 @@ import { getPath } from './navigation';
 
 const Button = styled.button`
   position: absolute;
-  top: 13%;
+  top: 12.5%;
   right: 10px;
   z-index: 10;
   padding: 10px 20px;
   background-color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: 700;
   cursor: pointer;
 `;
 

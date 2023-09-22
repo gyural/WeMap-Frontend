@@ -15,6 +15,8 @@ import FindShelter from './FindShelter';
 import { getShelter } from './navigation';
 // import LocationSelector from "../Sections/LocationSelector";
 import Modal from 'react-modal';
+// import '../../../../css/modal.css';
+
 // 이미지 import
 import pinicon from '../../../../images/pin.png';
 import backarrow from "../../../../images/left-arrow.png";
@@ -113,7 +115,7 @@ const MapContainer = (props) => {
         map.setCenter(locPosition);
       }
     };
-   
+
   
   useEffect(() => {
       const mapContainer = document.getElementById('map');
@@ -265,19 +267,36 @@ const MapContainer = (props) => {
                   backgroundColor: 'rgba(0, 0, 0, 0.5)', // 모달 배경의 반투명 검정
                 },
                 content: {
-                  width: '200px',
-                  height: '200px',
-                  
+                  width: '12%',
+                  height: '28%',
+                  left: '43%',
+                  top: '25.5%',
                   background: 'white', // 모달 내용 배경
+                  overflow: 'hidden',
                 },
               }}
+
               isOpen = {popupOpen}
               onRequestClose={() => setpopupOpen(false)}
             >
-              <div className='title'>
+              <div 
+                className='title'
+                style={{
+                  fontSize: '17px',
+                  fontWeight: '700',
+                  color: colors.red,
+                  marginBottom: '5%',
+                }}
+              >
                 {popupInfo.disasterType}
               </div>
-              <div className='content'>
+              <div 
+                className='content'
+                style={{
+                  fontSize: '14px',
+                  marginBottom: '5%',
+                }}
+              >
                 {popupInfo.content}
               </div>
             </Modal>

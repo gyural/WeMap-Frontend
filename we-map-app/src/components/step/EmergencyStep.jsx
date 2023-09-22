@@ -26,6 +26,9 @@ const Topbar = styled.div`
 
 const BackArrow = styled.button`
     background-color: transparent;
+    position: absolute;
+    left: 5%;
+    top: 6.85%;
     border: none;
     cursor: pointer;
     width: 20px;
@@ -37,18 +40,13 @@ const Image = styled.img`
     height: 20px;
 `;
 
-const BigTitle = styled.h1`
-    color: ${colors.mainBlue}; 
-    font-size: 180%; 
-    text-align: right;
-    margin: 0;
-`;
-
-const SmallTitle = styled.h3`
-    color: ${colors.subGray}; 
-    font-size: 85%; 
-    text-align: right;
-    margin: 2% 0;
+const Title = styled.div`
+    width: 100%;
+    padding: 8% 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    height: 9%;
 `;
 
 const Line = styled.div`
@@ -178,7 +176,7 @@ function EmergencyStep(props) {
             dis_level: level,
             nickname: authState.nickname,
             password: authState.password,
-          })
+        })
         moveUserInfo()
     }
     return (
@@ -188,12 +186,27 @@ function EmergencyStep(props) {
                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
                 </BackArrow>
             </Topbar>
-            <BigTitle>재난 알림 설정</BigTitle>
-            <SmallTitle>
-                위험 등급별 재난 알림 설정을 통해서
-                <br />
-                확인하고 싶은 재난의 알림을 받아보세요!
-            </SmallTitle>
+            <Title>
+            <div
+                style ={{
+                    fontSize: '180%',
+                    fontWeight: 700,
+                    color: colors.mainBlue,
+                    marginBottom: '2%',
+                }}
+            >재난 알림 설정</div>
+            <div
+                style = {{
+                    fontSize: '85%',
+                    color: colors.subGray,
+                    fontWeight: 700,
+                    textAlign: 'right',
+                    marginBottom: '3%',
+                }}
+            >위험 등급별 재난 알림 설정을 통해서
+            <br />
+            확인하고 싶은 재난의 알림을 받아보세요!</div>
+        </Title>
             <Line></Line>
             <Buttons>
                 <Button onClick={() => setModal1IsOpen(true)}>

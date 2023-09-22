@@ -51,10 +51,10 @@ const LoginBtn = styled.button`
     background-color: ${colors.mainBlue};
     color: ${colors.white};
     border: 1px solid ${colors.mainBlue};
-    border-radius: 10px;
-    width: 70px;
-    margin-left: 43%;
-    margin-right: 5px;
+    border-radius: 15px;
+    width: 23%;
+    height: 120%;
+    margin: 0 2.3% 0 40%;
     cursor: pointer;
     &:hover {
         background-color: ${colors.hoverBlue};
@@ -65,9 +65,10 @@ const InfoBtn = styled.button`
     background-color: ${colors.white};
     color: ${colors.black};
     border: 1px solid ${colors.black};
-    border-radius: 10px;
-    width: 70px;
-    margin-right: 5px;
+    border-radius: 15px;
+    width: 23%;
+    height: 120%;
+
     cursor: pointer;
     &:hover {
         background-color: ${colors.black};
@@ -107,8 +108,10 @@ const CommunityBtn = styled.button`
     color: ${colors.white};
     border: none;
     border-radius: 10px;
-    width: 280px;
-    font-size: 20px;
+    width: 83%;
+    height: 7%;
+    font-size: 18px;
+    font-weight: 700;
     margin-top: 5%;
     cursor: pointer;
     &:hover {
@@ -125,7 +128,7 @@ const Button = styled.button`
     height: 133px;
     margin: 2%;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     display: flex;
     flex-direction: column;
@@ -138,6 +141,7 @@ const Button = styled.button`
     img{
         width: 65%;
         height: 60%;
+        margin-bottom: 5%;
     }
 `;
 
@@ -163,6 +167,7 @@ const MissingBtn = styled.button`
     img{
         width: 65%;
         height: 60%;
+        margin-bottom: 5%;
     }
 `;
 
