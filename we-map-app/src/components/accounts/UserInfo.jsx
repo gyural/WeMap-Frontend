@@ -52,9 +52,10 @@ const InfoBox = styled.div`
     border : 1px solid #000;
     border-radius: 12px;
     margin-bottom: 3%;
+    font-size: 14.5px;
     span {
         font-weight: 700;
-        margin-right: 2%;
+        margin: 0 2%;
     }
 `;
 
@@ -70,7 +71,7 @@ const BackArrow = styled.button`
     background-color: transparent;
     position: absolute;
     left: 5%;
-    top: 6.8%;
+    top: 6.85%;
     border: none;
     cursor: pointer;
     width: 20px;

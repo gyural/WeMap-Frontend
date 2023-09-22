@@ -15,7 +15,8 @@ import locationData from '../../../../locationData.json';
 
 import backarrow from "../../../../images/left-arrow.png";
 import car from "../../../../images/car.png";
-import user from "../../../../images/user.png"
+import user from "../../../../images/user.png";
+
 const Container = styled.div`
     padding-top: 10%;
     width: 100%;
@@ -28,7 +29,9 @@ const Container = styled.div`
 
 const Topbar = styled.div`
     width: 100%;
+    height: 20%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-bottom: 3%;
@@ -55,21 +58,20 @@ const FindBtn = styled.div`
     color: ${colors.white};
     border: 1px solid ${colors.mainBlue};
     border-radius: 20px;
-    width: 75%;
-    margin: 0 13%;
+    width: 60%;
+    height: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 18px;
     img {
-        width: 15%;
-        height: 15%;
+        width: 12%;
         margin-left: 5%;
     }
     span {
-        width: 70%;
-        height: 10%;
+        width: 60%;
         margin-left: 8%;
+        font-size: 15px;
     }
     z-index: 2;
 `;
@@ -80,10 +82,9 @@ const StartBtn = styled.div`
     border: 1px solid ${colors.white};
     border-radius: 20px;
     width: 90%;
-    height: 5%;
-    font-size: 15px;
-    font-weight: 700;
-    margin: 3%;
+    height: 30%;
+    font-size: 13px;
+    margin: 2%;
     display: flex;
     align-items: center;
     span {
@@ -98,9 +99,8 @@ const ArriveBtn = styled.div`
     border: 1px solid ${colors.white};
     border-radius: 20px;
     width: 90%;
-    height: 5%;
-    font-size: 15px;
-    font-weight: 700;
+    height: 30%;
+    font-size: 13px;
     display: flex;
     align-items: center;
     span {
@@ -121,21 +121,21 @@ const FindShelter = (props) => {
         const [shelterList, setShelterList] = useState(undefined)
         const insertSherterMarkerList = (shelterList) =>{
             if(map){
-              const markerList = getShelterMarkerList(shelterList, map, drawLoad);
-              if (markerList){
-                markerList.forEach(marker => {
-                  marker.setMap(null)
-              });
-              console.log(markerList)
-              drawMarkerList(markerList, map)
-              return markerList
-              } 
-              else{
+                const markerList = getShelterMarkerList(shelterList, map, drawLoad);
+                if (markerList){
+                    markerList.forEach(marker => {
+                        marker.setMap(null)
+                    });
+                    console.log(markerList)
+                    drawMarkerList(markerList, map)
+                    return markerList
+                } 
+                else{
                 return []  
-              }
+                }
             }
             else{
-              return [];
+                return [];
             }
         }
 
@@ -153,10 +153,10 @@ const FindShelter = (props) => {
                     var lat = position.coords.latitude,
                         lon = position.coords.longitude;
                     setCurrentPosition([lon, lat])
-  
+
                     var locPosition = new kakao.maps.LatLng(lat, lon);
                     map.setCenter(locPosition); // 지도의 중심을 현재 위치로 설정
-  
+
                     // 현재 위치에 마커 찍기
                     const userMarkerImage = new kakao.maps.MarkerImage(user, new kakao.maps.Size(50, 50));
                     const userMarker = new kakao.maps.Marker({
@@ -180,24 +180,24 @@ const FindShelter = (props) => {
 
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            if(currentPosition){
-                const res = await getShelter([currentPosition[1], currentPosition[0]]);
-                setShelterList(res.data.body)
-                console.log(shelterList)
-                const newMarkerList =  insertSherterMarkerList(shelterList)
-                setMarkerList(newMarkerList)
-                console.log(newMarkerList)
+            try {
+                if(currentPosition){
+                    const res = await getShelter([currentPosition[1], currentPosition[0]]);
+                    setShelterList(res.data.body)
+                    console.log(shelterList)
+                    const newMarkerList =  insertSherterMarkerList(res.data.body)
+                    setMarkerList(newMarkerList)
+                    console.log(newMarkerList)
+                }
+            } catch (error) {
+                console.error(error);
             }
-          } catch (error) {
-            console.error(error);
-          }
         };
         if(currentPosition){
             fetchData();
 
         }
-      }, [currentPosition]);
+    }, [currentPosition]);
 
 
     // const moveMap = props.moveMap
@@ -220,15 +220,15 @@ const FindShelter = (props) => {
                     <img src={car} alt='차 이미지'></img>
                     <span>1.2km 약 6분</span>
                 </FindBtn>
-            </Topbar>
-            <StartBtn>
-                <span>출발 :</span>
-                <span>세종 조치원읍 고려대학교</span>
-            </StartBtn>
-            <ArriveBtn>
-                <span>도착 :</span>
-                <span>세종 조치원읍 세종여자고등학교</span>
-            </ArriveBtn>
+                <StartBtn>
+                    <span>출발 :</span>
+                    <span>세종 조치원읍 고려대학교</span>
+                </StartBtn>
+                <ArriveBtn>
+                    <span>도착 :</span>
+                    <span>세종 조치원읍 세종여자고등학교</span>
+                </ArriveBtn>
+                </Topbar>
         </Container>
     );
 }

@@ -13,7 +13,9 @@ const Button = styled.button`
     background-color: ${colors.mainBlue};
     color : ${colors.white};
     border: none;
-    border-radius: 10px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: 700;
     cursor: pointer;
 `;
 
