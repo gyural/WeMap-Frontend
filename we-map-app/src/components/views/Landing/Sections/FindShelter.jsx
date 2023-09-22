@@ -5,9 +5,9 @@ import { createPolygon, erasePolygon, getPolygonPath, makePolygon } from './crea
 
 import { drawPolygon } from './createPolygon';
 import { getDisasterList } from './DisasterList';
-import { getPath, testCoordinate } from './navigation';
+import { getPath, getShelter, testCoordinate } from './navigation';
 import { findPath } from './findLoad';
-import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
+import { drawMarkerList, eraseMarkerList, getShelterMarkerList } from './createMarker';
 import LocationSelector from "../Sections/LocationSelector";
 
 import colors from '../../../../Common/Color';
@@ -15,7 +15,7 @@ import locationData from '../../../../locationData.json';
 
 import backarrow from "../../../../images/left-arrow.png";
 import car from "../../../../images/car.png";
-
+import user from "../../../../images/user.png"
 const Container = styled.div`
     padding-top: 10%;
     width: 100%;
@@ -112,22 +112,95 @@ const ArriveBtn = styled.div`
 
 const FindShelter = (props) => {
     const { kakao } = window;
-        
+    const drawLoad = () =>{
+        alert("길그리기 함수 실행")
+    }
         const [map, setMap] = useState(undefined);
-        
+        const [currentPosition, setCurrentPosition] = useState(undefined)
+        const [markerList, setMarkerList] = useState(undefined)
+        const [shelterList, setShelterList] = useState(undefined)
+        const insertSherterMarkerList = (shelterList) =>{
+            if(map){
+              const markerList = getShelterMarkerList(shelterList, map, drawLoad);
+              if (markerList){
+                markerList.forEach(marker => {
+                  marker.setMap(null)
+              });
+              console.log(markerList)
+              drawMarkerList(markerList, map)
+              return markerList
+              } 
+              else{
+                return []  
+              }
+            }
+            else{
+              return [];
+            }
+        }
+
         useEffect(() => {
         const mapContainer = document.getElementById('map');
         const mapOption = {
             center: new kakao.maps.LatLng(37.541, 126.986),
-            level: 14
+            level: 5
         };
         const map = new kakao.maps.Map(mapContainer, mapOption);
-    
+        /**현재 자기 위치 찍시 */
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    var lat = position.coords.latitude,
+                        lon = position.coords.longitude;
+                    setCurrentPosition([lon, lat])
+  
+                    var locPosition = new kakao.maps.LatLng(lat, lon);
+                    map.setCenter(locPosition); // 지도의 중심을 현재 위치로 설정
+  
+                    // 현재 위치에 마커 찍기
+                    const userMarkerImage = new kakao.maps.MarkerImage(user, new kakao.maps.Size(50, 50));
+                    const userMarker = new kakao.maps.Marker({
+                        map: map,
+                        position: locPosition,
+                        image: userMarkerImage
+                    });
+                },
+                function (error) { // 위치 정보를 얻어오기 실패했을 때의 처리
+                    alert("위치 파악을 실패하였습니다");
+                    var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+                    map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
+                }
+            );
+        } else {
+            map.setCenter(mapOption.center);
+        }
         // 지도 객체를 상태에 저장
         setMap(map);
     }, []);
 
-    const moveMap = props.moveMap
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            if(currentPosition){
+                const res = await getShelter([currentPosition[1], currentPosition[0]]);
+                setShelterList(res.data.body)
+                console.log(shelterList)
+                const newMarkerList =  insertSherterMarkerList(shelterList)
+                setMarkerList(newMarkerList)
+                console.log(newMarkerList)
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        };
+        if(currentPosition){
+            fetchData();
+
+        }
+      }, [currentPosition]);
+
+
+    // const moveMap = props.moveMap
 
     return (
         <Container>
@@ -140,9 +213,9 @@ const FindShelter = (props) => {
                 height: '100%',
             }}></div>
             <Topbar>
-                <BackArrow onClick={moveMap}>
+                {/* <BackArrow onClick={moveMap}>
                     <Image src={backarrow} alt="뒤로가기 버튼"></Image>
-                </BackArrow>
+                </BackArrow> */}
                 <FindBtn>
                     <img src={car} alt='차 이미지'></img>
                     <span>1.2km 약 6분</span>

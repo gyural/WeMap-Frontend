@@ -3,6 +3,11 @@ import colors from "../../../../Common/Color";
 
 const { kakao } = window;
 
+/**
+ * 
+ * @param {*} currentLocation 
+ * @returns 리스트 형태로 shelte 위/경도를 줌
+ */
 const getShelter = async (currentLocation) => {
   const apiURL = "https://q59cs7kvf3.execute-api.ap-northeast-2.amazonaws.com/plz/get-shelter"
   const requestData = {

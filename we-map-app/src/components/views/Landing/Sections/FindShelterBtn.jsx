@@ -18,12 +18,10 @@ const Button = styled.button`
 `;
 
 
-const FindShelterBtn = ({ onLocationSelect }) => {
+const FindShelterBtn = (props) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleClick = () => {
-    setIsOpen(!isOpen);
-    };
+    const handleClick = props.handleClick
 
 return (
     <>

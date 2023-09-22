@@ -46,8 +46,9 @@ const Container = styled.div`
 `;
 const { kakao } = window;
 Modal.defaultStyles = {};
-const MapContainer = ({ searchPlace }) => {
-
+const MapContainer = (props) => {
+    let searchPlace = props.searchPlace
+    let handleMode = props.handleMode
     const [popupOpen, setpopupOpen] = useState(false)
     const [popupInfo, setPopupInfo] = useState({
       "disasterType": "지진",
@@ -96,6 +97,7 @@ const MapContainer = ({ searchPlace }) => {
         return [];
       }
     };
+    
     
     const handleLocationSelect = (location) => {
       // 예제 좌표 데이터 (실제로는 total_code_revised.xlsx에서 가져오기.)
@@ -184,7 +186,6 @@ const MapContainer = ({ searchPlace }) => {
   
   useEffect(() => {
     if (map){
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!')
       if(disasteList){
         const sd_list = []
         disasteList.forEach(disaster => {
@@ -245,7 +246,7 @@ const MapContainer = ({ searchPlace }) => {
     return (
       
         <Container>
-          <FindShelterBtn></FindShelterBtn>
+          <FindShelterBtn handleClick ={handleMode}></FindShelterBtn>
           <LocationSelector onLocationSelect={handleLocationSelect} />
             <div id="map" style={{
                 position: 'absolute',

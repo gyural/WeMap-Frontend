@@ -66,7 +66,80 @@ const getMarkerList = (disasteList, map, setpopupOpen, setPopupInfo) =>{
     return resultList;
 }
 
+/**
+ * 
+ * @param {*} shelterList 
+ * @param {*} map 
+ * @param {*} drawLoad 
+ */
+const getShelterMarkerList = (shelterList, map, drawLoad) => {
+    const resultList = []
+    if(shelterList){
+        for (const shelter of shelterList){
+            if(shelter){
+                let img = disasterTypeToImage["안개"]
+                const shleterName = shelter.Name;
+                const Address = shelter.Address;
 
+                resultList.push(makeShelterMarker(img.toString(), map, [shelter.Latitude, shelter.Longitude], shleterName, Address, drawLoad))
+            }
+        }
+    }
+    return resultList
+};
+
+
+const makeShelterMarker = (image, targetmap, location, shleterName, Address, drawLoad) => {
+    window.handleClick = () =>{
+        alert('drawLoad 작동!!')
+        // drawLoad()
+    }
+
+    // 마커 객체 생성
+    const markerPosition = new kakao.maps.LatLng(location[0], location[1])
+    const imageSize = new kakao.maps.Size(40, 40);
+    const markerImage = new kakao.maps.MarkerImage(image, imageSize);
+    const marker = new kakao.maps.Marker({
+        map: targetmap,
+        position: markerPosition,
+        image: markerImage
+    });
+
+    const convertShleterName = JSON.stringify(shleterName)
+    const convertAddress = JSON.stringify(Address)
+
+    var shleterCard = `<div class="manualContainer" style="background-color: #fff; display: flelx; flex-direction: column; width: 190px; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
+                            <div class="title" style= " width: 150px; margin: 0 auto; hecolor: balck; font-weight: 700; font-size: 14px; word-wrap: break-word; white-space: pre-wrap;">보호소명 : ${convertShleterName}</div>
+                            <div class="title" style="width: 150px; margin: 0 auto; color: black; font-weight: 700; font-size: 14px; word-wrap: break-word; white-space: pre-wrap;">보호소 주소 : ${convertAddress}</div>
+                            
+                            <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
+                                <button onclick="handleClick()" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
+                                font-weight: 700;">보호소 길찾기</button>
+                            </div>
+                        </div>`
+
+    const customOverlay = new kakao.maps.CustomOverlay({
+        position: markerPosition,
+        content: shleterCard,
+        yAnchor: 1.3
+            });
+    // 마커에 클릭 이벤트 설정
+    let isOverlayShown = false;  
+    kakao.maps.event.addListener(marker, 'click', function() {
+        if (isOverlayShown) {
+            customOverlay.setMap(null);  // 오버레이 숨기기
+        } else {
+            customOverlay.setMap(targetmap);   // 오버레이 보여주기
+        }
+
+        isOverlayShown = !isOverlayShown;  // 상태 토글
+    });
+
+      // 기본적으로 커스텀 오버레이는 숨김 상태
+    customOverlay.setMap(null);
+    
+    return marker
+}
 /**
  * 
  * @param {*} image 
@@ -136,8 +209,8 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
 
 
     
-    let isOverlayShown = false;  
     // 마커에 클릭 이벤트 설정
+    let isOverlayShown = false;  
     kakao.maps.event.addListener(marker, 'click', function() {
         if (isOverlayShown) {
             customOverlay.setMap(null);  // 오버레이 숨기기
@@ -153,6 +226,8 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
     
     return marker
 }
+
+
 /**
  * 
  * @param {*} markerList 
@@ -176,4 +251,4 @@ const drawMarkerList = (markerList, map) =>{
     
     });
 }
-export {getMarkerList, makeMarker, eraseMarkerList, drawMarkerList}
+export {getMarkerList, makeMarker, eraseMarkerList, drawMarkerList, getShelterMarkerList}
