@@ -149,7 +149,8 @@ const MapContainer = ({ searchPlace }) => {
       } else {
           map.setCenter(mapOption.center);
       }
-  
+      setMap(map)
+      
       // Establish WebSocket connection
       const websocket = new WebSocket("wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken");
       
@@ -177,11 +178,12 @@ const MapContainer = ({ searchPlace }) => {
           console.log('언마운트 후 disconnected');
           websocket.close();
       };
-  
+      
   }, []);
   
   useEffect(() => {
     if (map){
+      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!')
       if(disasteList){
         const sd_list = []
         disasteList.forEach(disaster => {
@@ -202,6 +204,7 @@ const MapContainer = ({ searchPlace }) => {
           
         });
 
+        console.log(sd_list)
         //폴리곤을 갱신해주기
         renewPolygon(sd_list)
         
@@ -236,7 +239,7 @@ const MapContainer = ({ searchPlace }) => {
         findPath(map, `${currentPosition[0]}, ${currentPosition[1]}`, `127.29307759409, 36.610261563595`, [currentPosition[1], currentPosition[0]]);
       }
     }
-  }, [searchPlace, locations, disasteList]);
+  }, [searchPlace, locations, disasteList, map]);
 
     return (
       
