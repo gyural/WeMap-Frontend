@@ -33,6 +33,7 @@ import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from "../../../../images/missing.png";
 import user from "../../../../images/user.png";
+import FindShelterBtn from './FindShelterBtn';
 
 
 
@@ -244,7 +245,7 @@ const MapContainer = ({ searchPlace }) => {
     return (
       
         <Container>
-          <FindShelter ></FindShelter>
+          <FindShelterBtn></FindShelterBtn>
           <LocationSelector onLocationSelect={handleLocationSelect} />
             <div id="map" style={{
                 position: 'absolute',
