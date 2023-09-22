@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import locationData from '../../../../locationData.json';
+import axios from 'axios';
 import { getPath } from './navigation';
 
 const Button = styled.button`
@@ -68,10 +68,31 @@ const LocationSelector = ({ onLocationSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSido, setSelectedSido] = useState(null);
   const [selectedGugun, setSelectedGugun] = useState(null);
+  const [locationData, setLocationData] = useState({});
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    try {
+      const response = await axios.get('https://q59cs7kvf3.execute-api.ap-northeast-2.amazonaws.com/plz/getCode', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true
+      });
+      console.log(response)
+      // API 응답 데이터를 locationData 상태에 저장
+      setLocationData(response.data.body);
+      
+  
+    } catch (error) {
+      console.error("Error sending POST request", error);
+    }
+  
     setIsOpen(!isOpen);
   };
+  
+ 
+
+  
 
   const handleSidoSelect = (sido) => {
     setSelectedSido(sido);
@@ -82,48 +103,34 @@ const LocationSelector = ({ onLocationSelect }) => {
     setSelectedGugun(gugun);
   };
 
-  const handleLocationFinalSelect = (location) => {
-    onLocationSelect(`${selectedSido} ${selectedGugun} ${location}`);
+  const handleLocationFinalSelect = (dong) => {
+    onLocationSelect(`${selectedSido} ${selectedGugun} ${dong}`);
     setIsOpen(false);
   };
+
   return (
     <>
       <Button onClick={handleClick}>지역 선택</Button>
         
       <ModalOverlay open={isOpen}>
         <ModalContainer>
-          {locationData.map(entry => {
-            const 병합_코드 = String(entry.병합_코드);
-            const locationName = entry.병합_명칭;
-            if (!selectedSido) {
-              if (병합_코드.length === 2) {
-                return (
-                  <StyledButton key={locationName} onClick={() => handleSidoSelect(locationName)}>
-                    {locationName}
-                  </StyledButton>
-                );
-              }
-            } else if (selectedSido && !selectedGugun) {
-              if (locationName.startsWith(selectedSido) && 병합_코드.length === 5) {
-                const gugunName = locationName.split(" ")[1];
-                return (
-                  <StyledButton key={gugunName} onClick={() => handleGugunSelect(gugunName)}>
-                    {gugunName}
-                  </StyledButton>
-                );
-              }
-            } else if (selectedSido && selectedGugun) {
-                if (locationName.startsWith(`${selectedSido} ${selectedGugun}`) && 병합_코드.length > 5) {
-                  const dongName = locationName.split(" ").pop();
-                  return (
-                    <StyledButton key={dongName} onClick={() => handleLocationFinalSelect(dongName)}>
-                      {dongName}
-                    </StyledButton>
-                  );
-                }
-            }
-            return null;
-          })}
+          {!selectedSido && Object.keys(locationData).map(sido => (
+            <StyledButton key={sido} onClick={() => handleSidoSelect(sido)}>
+              {sido}
+            </StyledButton>
+          ))}
+
+          {selectedSido && !selectedGugun && Object.keys(locationData[selectedSido]?.군구 || {}).map(gugun => (
+            <StyledButton key={gugun} onClick={() => handleGugunSelect(gugun)}>
+              {gugun}
+            </StyledButton>
+          ))}
+
+          {selectedSido && selectedGugun && Object.keys(locationData[selectedSido]?.군구[selectedGugun]?.읍면동 || {}).map(dong => (
+            <StyledButton key={dong} onClick={() => handleLocationFinalSelect(dong)}>
+              {dong}
+            </StyledButton>
+          ))}
 
           {selectedSido && (
             <StyledButton onClick={() => {

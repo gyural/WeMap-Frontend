@@ -32,7 +32,6 @@ const getDisasterList = (socketData) =>{
 }
 
 const getscale = (location_code) =>{
-    console.log(location_code)
     const len = location_code[0].length
 
     if (len === 2){

@@ -79,8 +79,7 @@ const makePolygon = async(sdList) =>{
  * 매개변수로 받은 맵 객체에 폴리곤 객체를 그려주는 함수
  */
 const drawPolygon = (polygonList, map) =>{
-    console.log('in draw')
-    console.log(polygonList)
+    
     if(polygonList.length > 0){
         for (const polygon of polygonList){
             polygon.setMap(map)
@@ -94,8 +93,7 @@ const drawPolygon = (polygonList, map) =>{
  * 매개변수로 받은 맵 객체에 폴리곤 객체를 지워주는 함수
 */
 const erasePolygon = (polygonList, map) =>{
-    console.log('in erase')
-    console.log(polygonList)
+    
     if(polygonList.length > 0){
         for (const polygon of polygonList){
             polygon.setMap(null)

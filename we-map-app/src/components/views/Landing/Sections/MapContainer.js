@@ -1,3 +1,5 @@
+/* global kakao */
+
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import styled, { createGlobalStyle } from 'styled-components';
@@ -33,6 +35,8 @@ import missing from "../../../../images/missing.png";
 import user from "../../../../images/user.png";
 
 
+
+
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
     width: 100%;
@@ -50,14 +54,10 @@ const MapContainer = ({ searchPlace }) => {
     });
     
     const [map, setMap] = useState(undefined);
-    //현재 화면에 있는 다각형 객체 리스트 
     const [polygonList, setPolygonList] = useState([])
-    //현재 화면에 있는 마커 객체 리스트
     const [markerList, setMarkerList] = useState([])
     const [locations, setLocations] = useState([]);
-    //현재 재난 정보 소캣 데이터 받을 시에 바뀜
     const [disasteList , setDisasterList] = useState([])
-    //zoom이 바뀔때마다 리랜더링을 통해서 보이게할 지도 컨텐츠를 조절하기 위함
     const [zoom, setZoom] = useState(undefined)
     // 사용자 현재위치 state 관리
     const [currentPosition, setCurrentPosition] = useState(undefined)
@@ -80,8 +80,6 @@ const MapContainer = ({ searchPlace }) => {
     const insertMarkerList = (disasteList) => {
       if (map) {
         const markerList = getMarkerList(disasteList, map, setpopupOpen, setPopupInfo);
-        console.log('반환된 마커 리스트');
-        console.log(markerList);
         if (markerList) {
           markerList.forEach(marker => {
             marker.setMap(null)
@@ -98,18 +96,10 @@ const MapContainer = ({ searchPlace }) => {
       }
     };
     
-    /**
-     * MapCotainer가 마운트 / 언마운트 될때만 작동한는 Hook
-     * 1) 웹소캣의 함수들의 정의 2) 웹소캣 connect / disconnect를 다룸
-     */
     const handleLocationSelect = (location) => {
       // 예제 좌표 데이터 (실제로는 total_code_revised.xlsx에서 가져오기.)
       const coordinates = {
-        "서울특별서 서대문구 천연동": { lat: 37.57246803097317, lon:126.95456868160035 },
-        "서울특별시 서대문구 홍제1동": { lat: 37.58663517380208, lon: 126.94075008836593 },
-        "부산광역시 기장군 장안읍": {lat: 35.341538209873704, lon: 129.25924414776276},
-        "부산광역시 기장군 철마면": {lat: 35.28979586486741, lon: 129.14602983502212},
-        "부산광역시 부산진구 연지동": {lat: 35.174402409097375, lon: 129.05393899065228}
+        "서울특별서 서대문구 천연동": { lat: 37.57246803097317, lon:126.95456868160035 }
         // ... 기타 도시 좌표 ...
       };
   
@@ -119,19 +109,24 @@ const MapContainer = ({ searchPlace }) => {
         map.setCenter(locPosition);
       }
     };
-    useEffect(() => {
+    function onLocationButtonClick(locationName) {
+      fetchCoordinates(locationName).then(coords => {
+          const [lat, lng] = coords;
+          map.setCenter(new kakao.maps.LatLng(lat, lng));
+      });
+  }
+  
+  useEffect(() => {
       const mapContainer = document.getElementById('map');
+  
       const mapOption = {
-          center: new kakao.maps.LatLng(37.541, 126.986),
+          center: new kakao.maps.LatLng(33.450701, 126.570667), // default center
           level: 14
       };
-      const map = new kakao.maps.Map(mapContainer, mapOption);
   
-      // 지도 객체를 상태에 저장
-      setMap(map);
+      const map = new kakao.maps.Map(mapContainer, mapOption);
       
-      
-      // 사용자 위치에 따른 지도 중심 설정
+      // Set user's current location on the map
       if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
               function (position) {
@@ -157,38 +152,37 @@ const MapContainer = ({ searchPlace }) => {
               }
           );
       } else {
-          var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
-          map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
+          map.setCenter(mapOption.center);
       }
-      
-      // WebSocket 연결 생성
+  
+      // Establish WebSocket connection
       const websocket = new WebSocket("wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken");
-      websocket.onopen = () => {
-        console.log("Connected to the WebSocket");
-        // 연결이 수립되면 메시지 전송
-        websocket.send(JSON.stringify({ action: "onData" }));
-      };
-      websocket.onmessage = (event) => {
-        console.log("Received message:", JSON.parse(event.data));
-        // 수신한 데이터를 state에 저장
       
-        setDisasterList(getDisasterList(JSON.parse((event.data))))
+      websocket.onopen = () => {
+          console.log("Connected to the WebSocket");
+          websocket.send(JSON.stringify({ action: "onData" }));
       };
-      websocket.onerror = (error) => {
-        console.error("WebSocket Error:", error);
+  
+      websocket.onmessage = (event) => {
+          console.log("Received message:", JSON.parse(event.data));
+          setDisasterList(getDisasterList(JSON.parse((event.data))));
       };
+  
+      websocket.onerror = (error) => console.error("WebSocket Error:", error);
+  
       websocket.onclose = (event) => {
-        if (event.wasClean) {
-          console.log(`Closed cleanly, code=${event.code}, reason=${event.reason}`);
-        } else {
-          console.error("Connection died");
-        }
+          if (event.wasClean) {
+              console.log(`Closed cleanly, code=${event.code}, reason=${event.reason}`);
+          } else {
+              console.error("Connection died");
+          }
       };
-      // 컴포넌트 언마운트 시 연결 종료
+  
       return () => {
-        console.log('언마운트 후 disconnected')
-        websocket.close();
+          console.log('언마운트 후 disconnected');
+          websocket.close();
       };
+  
   }, []);
   
   useEffect(() => {
@@ -199,8 +193,18 @@ const MapContainer = ({ searchPlace }) => {
           const location_list = disaster.location_code
         
           location_list.forEach(location_code => {
+            //같은 지역에 재난문자가 있다면 원래
+            for (let i = 0; i < sd_list.length; i++) {
+              if (sd_list[i][0] === Number(location_code[0])) {
+                  console.log('중복 제거 동작!!!')
+                  sd_list.splice(i, 1); // i번째 원소를 삭제
+                  i--; // 배열의 길이가 줄어들었으므로 인덱스를 하나 감소시킴
+              }
+            }
             sd_list.push([Number(location_code), disaster.disaster_type])
-          });
+            // 해당 location_code를 기준으로 배열에서 원소를 삭제
+            })
+          
         });
 
         //폴리곤을 갱신해주기
@@ -211,8 +215,8 @@ const MapContainer = ({ searchPlace }) => {
       //zoom이 바뀔때 마다 메뉴얼카드 추가 / 삭제
       kakao.maps.event.addListener(map, 'zoom_changed', function() {
         var level = map.getLevel();
-        console.log('zoom Changed')
-        console.log(level)
+        // console.log('zoom Changed')
+        // console.log(level)
         
       })
     
@@ -223,8 +227,6 @@ const MapContainer = ({ searchPlace }) => {
     }
     const newMarkerList = insertMarkerList(disasteList);
 
-    // 이전 마커 리스트를 지우는 함수
-    eraseMarkerList(markerList, map);
 
     // 1초 뒤에 새로운 마커 리스트를 지도에 그리는 함수를 실행하고, 그 결과를 마커 리스트로 설정
     
@@ -255,15 +257,7 @@ const MapContainer = ({ searchPlace }) => {
                 height: '100%',
             }}>
             </div>
-            <button 
-              onClick={handlePopUp}
-              style = {{
-                width: "200px",
-                height: "100px",
-                position: "absolute",
-                bottom: "0",
-              }}
-              >테스팅 버튼</button>
+            
             <Modal
               style={{
                 overlay: {
