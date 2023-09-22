@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import locationData from '../../../../locationData.json';
 import { getPath } from './navigation';
+
 const Button = styled.button`
   position: absolute;
-  top: 10px;
+  top: 13%;
   right: 10px;
   z-index: 10;
   padding: 10px 20px;

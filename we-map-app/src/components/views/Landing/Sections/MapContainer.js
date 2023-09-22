@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import axios from "axios";
+import styled, { createGlobalStyle } from 'styled-components';
 import { createPolygon, erasePolygon, getPolygonPath, makePolygon } from './createPolygon';
 import colors from '../../../../Common/Color';
 import { drawPolygon } from './createPolygon';
 import { getDisasterList } from './DisasterList';
+import { getPath, testCoordinate } from './navigation';
 import { findPath } from './findLoad';
+import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
+import LocationSelector from "../Sections/LocationSelector";
+import FindShelter from './FindShelter';
+import { getShelter } from './navigation';
 // import LocationSelector from "../Sections/LocationSelector";
 import Modal from 'react-modal';
 // 이미지 import
@@ -25,8 +31,7 @@ import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from "../../../../images/missing.png";
 import user from "../../../../images/user.png";
-import { drawMarkerList, eraseMarkerList, getMarkerList } from './createMarker';
-import LocationSelector from "../Sections/LocationSelector";
+
 
 /**Map Container를 감싸는 최종 부모 컴포넌트 */
 const Container = styled.div`
@@ -54,6 +59,8 @@ const MapContainer = ({ searchPlace }) => {
     const [disasteList , setDisasterList] = useState([])
     //zoom이 바뀔때마다 리랜더링을 통해서 보이게할 지도 컨텐츠를 조절하기 위함
     const [zoom, setZoom] = useState(undefined)
+    // 사용자 현재위치 state 관리
+    const [currentPosition, setCurrentPosition] = useState(undefined)
     /**
      * 기존의 폴리곤을 지우고 새로운폴리곤을 그리는 함수
      */
@@ -130,6 +137,8 @@ const MapContainer = ({ searchPlace }) => {
               function (position) {
                   var lat = position.coords.latitude,
                       lon = position.coords.longitude;
+                  setCurrentPosition([lon, lat])
+
                   var locPosition = new kakao.maps.LatLng(lat, lon);
                   map.setCenter(locPosition); // 지도의 중심을 현재 위치로 설정
 
@@ -151,6 +160,7 @@ const MapContainer = ({ searchPlace }) => {
           var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
           map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
       }
+      
       // WebSocket 연결 생성
       const websocket = new WebSocket("wss://lvb2z5ix97.execute-api.ap-northeast-2.amazonaws.com/dev?token=sometoken");
       websocket.onopen = () => {
@@ -209,6 +219,7 @@ const MapContainer = ({ searchPlace }) => {
       const imageSrc =pinicon;
       const imageSize = new kakao.maps.Size(50, 50);
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+      
     }
     const newMarkerList = insertMarkerList(disasteList);
 
@@ -220,11 +231,23 @@ const MapContainer = ({ searchPlace }) => {
     // 이전 마커 리스트를 지우는 함수
     drawMarkerList(newMarkerList, map);
     setMarkerList(newMarkerList);
-    
+    console.log("====================");
+    if(disasteList){
+
+      console.log(currentPosition)
+      if(currentPosition !== undefined){
+        findPath(map, `${currentPosition[0]}, ${currentPosition[1]}`, `127.29307759409, 36.610261563595`, [currentPosition[1], currentPosition[0]]);
+      }
+    }
   }, [searchPlace, locations, disasteList]);
 
+
+// }, [map]);
+
     return (
+      
         <Container>
+          <FindShelter ></FindShelter>
           <LocationSelector onLocationSelect={handleLocationSelect} />
             <div id="map" style={{
                 position: 'absolute',

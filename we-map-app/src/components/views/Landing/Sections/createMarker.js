@@ -53,7 +53,7 @@ const getMarkerList = (disasteList, map, setpopupOpen, setPopupInfo) =>{
                 const disasterType = disaster.disaster_type
                 const color = (disasterType === "실종" || disasterType === "기타") ? "orange": "red"
                 if(img === undefined){
-                  img = disasterTypeToImage["기타"]
+                    img = disasterTypeToImage["기타"]
                 }
                 const locationList = disaster.coordinate
                 locationList.forEach(location => {
@@ -128,18 +128,46 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
                     </div>`
       
 
-      
-      const customOverlay = new kakao.maps.CustomOverlay({
-          position: markerPosition,
-          content: disasterCardContent,
-          yAnchor: 1.3
-      });
 
-      
-      
-      let isOverlayShown = false;  
-      // 마커에 클릭 이벤트 설정
-      kakao.maps.event.addListener(marker, 'click', function() {
+    const customOverlay = new kakao.maps.CustomOverlay({
+        position: markerPosition,
+        content: `<div class="manualContainer" style="background-color: #fff; width: 190px; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
+        <div class="title" style="color: ${color}; font-weight: 700; font-size: 14px;">${disasterType} 재난 문자</div>
+        <div class="manual-content" style="width: 100%; height: 70%; box-sizing: border-box; overflow-y: scroll;">
+            <style>
+                .manual-content::-webkit-scrollbar {
+                      width: 6px; /* 스크롤바 너비 조정 */
+                }
+
+                .manual-content::-webkit-scrollbar-thumb {
+                      background-color: #ccc; /* 스크롤바 색상 지정 */
+                }
+
+                p {
+                    display: block;
+                    margin-block-start: 0.1em;
+                    margin-block-end: 1em;
+                    margin-inline-start: 0px;
+                    margin-inline-end: 0px;
+                }
+            </style>
+            <p style=" width: 100%; height: 100%; white-space: pre-line; margin-top: 0" >
+                ${msg}
+            </p>
+        </div>
+        <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
+            <button onclick=handleClick() style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
+            font-weight: 700;">메뉴얼 보기</button>
+        </div>
+    </div>`,
+        yAnchor: 1.3
+            });
+
+
+    
+    let isOverlayShown = false;  
+    // 마커에 클릭 이벤트 설정
+    kakao.maps.event.addListener(marker, 'click', function() {
         if (isOverlayShown) {
             customOverlay.setMap(null);  // 오버레이 숨기기
         } else {
@@ -147,12 +175,12 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
         }
 
         isOverlayShown = !isOverlayShown;  // 상태 토글
-      });
-  
+    });
+
       // 기본적으로 커스텀 오버레이는 숨김 상태
-      customOverlay.setMap(null);
-      
-      return marker
+    customOverlay.setMap(null);
+    
+    return marker
 }
 /**
  * 
@@ -160,10 +188,10 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
  * @param {*} map 
  */
 const eraseMarkerList = (markerList, map) =>{
-  markerList.forEach(marker => {
-    marker.setMap(null)
-    console.log('작동')
-  });
+    markerList.forEach(marker => {
+        marker.setMap(null)
+        console.log('작동')
+    });
 }
 
 /**
@@ -172,9 +200,9 @@ const eraseMarkerList = (markerList, map) =>{
  * @param {*} map 
  */
 const drawMarkerList = (markerList, map) =>{
-  markerList.forEach(marker => {
-    marker.setMap(map)
+    markerList.forEach(marker => {
+        marker.setMap(map)
     
-  });
+    });
 }
 export {getMarkerList, makeMarker, eraseMarkerList, drawMarkerList}

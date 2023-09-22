@@ -1,13 +1,53 @@
 import axios from "axios";
+import colors from "../../../../Common/Color";
 
 const { kakao } = window;
 
-async function getPath() {
+const getShelter = async (currentLocation) => {
+  const apiURL = "https://q59cs7kvf3.execute-api.ap-northeast-2.amazonaws.com/plz/get-shelter"
+  const requestData = {
+    'current_location' : currentLocation
+  }
+  const finaldata = JSON.stringify(requestData)
+  console.log(finaldata)
+  return await axios.post(apiURL, finaldata)
+  .then ((res) => {
+    console.log(res)
+    console.log("정상출력")
+    return res;
+  }) .catch((error) => {
+    console.log(error)
+    return false;
+  })
+}
+
+/**
+ * 
+ * @param {*} origin 
+ * @param {*} destination 
+ * @returns 
+ */
+const testCoordinate = async (origin, destination) => {
+  
+  const findLoadInfo = await getPath(origin, destination);
+  let result = []
+  findLoadInfo.linePath.forEach(element => {
+      result.push(element)
+    
+  });
+  console.log(result)
+  return result
+}
+/**
+ * 
+ * @param {*} origin 
+ * @param {*} destination 
+ * @returns Path 반환
+ */
+async function getPath(origin, destination) {
+
   const REST_API_KEY = '4a58c0a9ecd928a16d7c702a025ca7c3';
   const apiURL = 'https://apis-navi.kakaomobility.com/v1/directions';
-
-  const origin = `127.268141,36.498649`;
-  const destination = `127.267441,36.398149`;
 
   const headers = {
     Authorization: `KakaoAK ${REST_API_KEY}`,
@@ -29,6 +69,8 @@ async function getPath() {
     }
 
     const data = response.data;
+    console.log(response)
+
     if(data.routes[0].result_msg === "길찾기 성공"){
 
       console.log('길찾기 성공!!!')
@@ -47,6 +89,7 @@ async function getPath() {
         "linePath" : linePath
       }
       console.log(result)
+      return result
     }else{
       console.log('길찾기 실패')
       return undefined
@@ -57,4 +100,4 @@ async function getPath() {
   }
 }
 
-export { getPath };
+export { getShelter, getPath, testCoordinate };
