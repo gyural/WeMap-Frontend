@@ -267,10 +267,11 @@ const MapContainer = (props) => {
                   backgroundColor: 'rgba(0, 0, 0, 0.5)', // 모달 배경의 반투명 검정
                 },
                 content: {
-                  width: '12%',
-                  height: '28%',
-                  left: '43%',
-                  top: '25.5%',
+                  width: '15%',
+                  height: '33%',
+                  left: '41.3%',
+                  top: '30%',
+                  marginRight: '5%',
                   background: 'white', // 모달 내용 배경
                   overflow: 'hidden',
                 },

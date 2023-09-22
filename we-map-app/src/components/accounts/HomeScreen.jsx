@@ -32,7 +32,7 @@ const Button1 = styled.button`
   font-weight: bold;
   margin-top: 3%; 
   margin-bottom: 2%; 
-  width: 100%;
+  width: 90%;
   border: none;
   cursor: pointer;
   border-radius: 20px;
@@ -48,7 +48,7 @@ const Button2 = styled.button`
   font-size: 150%; 
   font-weight: bold;
   margin-top: 2%; 
-  width: 100%;
+  width: 90%;
   border: none;
   cursor: pointer;
   border-radius: 20px;
