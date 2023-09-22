@@ -6,9 +6,11 @@ import { getUserAuth, login } from "../../APIs/Auth";
 import { AuthContext } from "../../App";
 import colors from "../../Common/Color";
 
+import msg from "../../images/emergency-message.png";
+
 
 const Container = styled.div`
-    padding-top: 80px;
+    padding-top: 33%;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -17,31 +19,41 @@ const Container = styled.div`
     align-items: center;
 `;
 
+const Image = styled.img`
+    width: 70px;
+    height: 70px;
+    margin: 3%;
+    z-index: 2;
+`;
+
 const TitleWrapper = styled.div`
   color: ${colors.mainBlue};
-  font-size: 200%;
+  font-size: 48px;
   font-weight: 700;
-  margin-bottom: 8%;
+  margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Form = styled.form`
   width: 96%;
   height: 33%;
-  display: block;
-  margin-bottom: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 3px;
 `;
+
 const Input = styled.input`
-    padding: 4px;
+    padding: 15px;
     font-size: 12px;
     display: block;
     width: 93%;
-    height: 35%;
-    margin-top: 3.8%;
+    height: 30%;
+    margin-top: 3.3%;
     border: 1px solid #000;
-    border-radius: 15px;
+    border-radius: 18px;
     box-sizing: border-box;
     &:focus {
       outline: none;
@@ -53,20 +65,20 @@ const Input = styled.input`
 `;
 
 const ButtonWrapper = styled.div`
-    width: 88%;
-    height: 10%;
+    width: 80%;
+    height: 11%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-bottom: 4%;
     font-size: 140%;
 `;
 
 const Button = styled.button`
       display: 'block';
-      width: 47%;
-      height: 100%;
+      width: 43%;
+      height: 70%;
       color: ${props => props.color};
-      font-size: 100%;
+      font-size: 18px;
       background-color: ${props => props.bgcolor};
       display: flex;
       justify-content: center;
@@ -79,6 +91,7 @@ const Button = styled.button`
         background-color: ${props => props.hoverColor}
       }
 `;
+
 const DivideWrapper = styled.div`
   position: relative;
   height: 4px;
@@ -101,6 +114,7 @@ const TextBox = styled.div`
   text-align: center;
   left: 37%;
   bottom: -6px;
+  font-size: 14px;
 `;
 
 
@@ -167,6 +181,7 @@ function LoginCard(props) {
         <Container>
 
             <TitleWrapper>
+              <Image src={msg} alt="WeMap 로고"></Image>
                 WeMap
             </TitleWrapper>
             <Form
@@ -194,6 +209,7 @@ function LoginCard(props) {
                         width: '90%',
                         height: '20%',
                         alignItems: 'center',
+                        marginTop: '1.3%',
                     }}
                 >
                     <input
@@ -202,7 +218,13 @@ function LoginCard(props) {
                         checked={formData.isChecked}
                         onChange={handleChange}
                     />
-                    <p>로그인 상태 유지</p>
+                    <p
+                      style ={{
+                        fontSize: '14px',
+                      }}
+                    >
+                      로그인 상태 유지
+                    </p>
                 </div>
             </Form>
 
@@ -244,7 +266,12 @@ function LoginCard(props) {
               }}
             >
 
-              <div> 
+              <div
+                style = {{
+                  marginLeft: '4%',
+                  fontSize: '14px',
+                }}
+              > 
                     계정이 없으신가요?
                 </div>
                 <div
@@ -252,8 +279,9 @@ function LoginCard(props) {
                         textDecoration: 'underline',
                         color: colors.mainBlue,
                         cursor: 'pointer',
-                        marginLeft: '4%',
-                           }}
+                        marginLeft: '2%',
+                        fontSize: '14px',
+                      }}
                     onClick = {handleMode}
                 >
                     회원가입하기

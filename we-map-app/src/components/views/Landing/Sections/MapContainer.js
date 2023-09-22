@@ -44,6 +44,7 @@ const Container = styled.div`
     height: 100%;
     position: relative;
 `;
+
 const { kakao } = window;
 Modal.defaultStyles = {};
 const MapContainer = ({ searchPlace }) => {
@@ -245,7 +246,8 @@ const MapContainer = ({ searchPlace }) => {
     return (
       
         <Container>
-          <FindShelterBtn></FindShelterBtn>
+          <FindShelterBtn
+          ></FindShelterBtn>
           <LocationSelector onLocationSelect={handleLocationSelect} />
             <div id="map" style={{
                 position: 'absolute',
