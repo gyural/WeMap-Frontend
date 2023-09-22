@@ -80,8 +80,6 @@ const MapContainer = ({ searchPlace }) => {
     const insertMarkerList = (disasteList) => {
       if (map) {
         const markerList = getMarkerList(disasteList, map, setpopupOpen, setPopupInfo);
-        console.log('반환된 마커 리스트');
-        console.log(markerList);
         if (markerList) {
           markerList.forEach(marker => {
             marker.setMap(null)
@@ -199,8 +197,18 @@ const MapContainer = ({ searchPlace }) => {
           const location_list = disaster.location_code
         
           location_list.forEach(location_code => {
+            //같은 지역에 재난문자가 있다면 원래
+            for (let i = 0; i < sd_list.length; i++) {
+              if (sd_list[i][0] === Number(location_code[0])) {
+                  console.log('중복 제거 동작!!!')
+                  sd_list.splice(i, 1); // i번째 원소를 삭제
+                  i--; // 배열의 길이가 줄어들었으므로 인덱스를 하나 감소시킴
+              }
+            }
             sd_list.push([Number(location_code), disaster.disaster_type])
-          });
+            // 해당 location_code를 기준으로 배열에서 원소를 삭제
+            })
+          
         });
 
         //폴리곤을 갱신해주기
@@ -211,8 +219,8 @@ const MapContainer = ({ searchPlace }) => {
       //zoom이 바뀔때 마다 메뉴얼카드 추가 / 삭제
       kakao.maps.event.addListener(map, 'zoom_changed', function() {
         var level = map.getLevel();
-        console.log('zoom Changed')
-        console.log(level)
+        // console.log('zoom Changed')
+        // console.log(level)
         
       })
     
@@ -241,9 +249,6 @@ const MapContainer = ({ searchPlace }) => {
     }
   }, [searchPlace, locations, disasteList]);
 
-
-// }, [map]);
-
     return (
       
         <Container>
@@ -258,15 +263,7 @@ const MapContainer = ({ searchPlace }) => {
                 height: '100%',
             }}>
             </div>
-            <button 
-              onClick={handlePopUp}
-              style = {{
-                width: "200px",
-                height: "100px",
-                position: "absolute",
-                bottom: "0",
-              }}
-              >테스팅 버튼</button>
+            
             <Modal
               style={{
                 overlay: {

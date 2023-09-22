@@ -117,18 +117,24 @@ function LoginCard(props) {
     });
     const handleSubmit = () => {
         login(formData.id, formData.password).then(
-              async ()=>{
-                // const res = await getUserAuth()
-                // const userInfo = res.data
-                setAuthState({
-                  isLoggedIn: true,
-                  userName: formData.id,
-                  dis_level: 1,
-                  nickname: formData.id,
-                  password: 'test',
-                  update_at: 'test',
-                })
-                moveMap()
+              async (res)=>{
+                if(res === undefined){
+                  alert('로그인 실패')
+                }
+                else{
+
+                  // const res = await getUserAuth()
+                  // const userInfo = res.data
+                  setAuthState({
+                    isLoggedIn: true,
+                    userName: formData.id,
+                    dis_level: 1,
+                    nickname: formData.id,
+                    password: 'test',
+                    update_at: 'test',
+                  })
+                  moveMap()
+                }
                 
             }
         ).catch(

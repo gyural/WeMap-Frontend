@@ -27,7 +27,7 @@ const baseURL = 'https://7wkx0w4ygg.execute-api.ap-northeast-2.amazonaws.com/rel
  */
 
 const login = async (email, pw) => {
-    const apiURL = baseURL + 'login/';
+    const apiURL = 'https://b6saprgg73.execute-api.ap-northeast-2.amazonaws.com/plz/login';
     const requestData = {
         'email': email,
         'password': pw
@@ -36,13 +36,18 @@ const login = async (email, pw) => {
 
     return await axios.post(apiURL, finaldata, {
         headers: {
-        'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
-            withCredentials : 'true'
-
+          'Content-Type': 'application/json', // JSON 데이터를 보내는 것을 명시
         },
+        withCredentials : true
+
     })
     .then(res =>{
-        return res.data
+        console.log(res)
+        if(res.status === 200){
+            return res.data
+        }else{
+            return undefined
+        }
     })
     .catch(error =>{
         console.log(error)
@@ -112,14 +117,25 @@ const register = async (email, pw) => {
         withCredentials : true
 
     })
-    .then(() => {
-        alert('회원가입 성공')
-        return true;
+    .then((res) => {
+        const status = res.data.statusCode
+        console.log(res)
+        if (status === 200){
+            alert('회원가입 성공')
+            return true;
+
+        }
+        else{
+            console.log(status)
+            alert('회원가입 실패')
+            return false
+        }
         // 벡엔드에서 httponly 쿠키로 토큰들이 전송되어 로그인됨
     }).catch((error) => {
         console.log(error)
+        alert('서버 응답 에러')
         // 백엔드에서 자동으로 리프레시 해주므로 구현할 필요없음
-        return true;
+        return false;
     })
 }
 

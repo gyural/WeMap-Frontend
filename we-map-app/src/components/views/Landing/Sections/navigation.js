@@ -12,8 +12,6 @@ const getShelter = async (currentLocation) => {
   console.log(finaldata)
   return await axios.post(apiURL, finaldata)
   .then ((res) => {
-    console.log(res)
-    console.log("정상출력")
     return res;
   }) .catch((error) => {
     console.log(error)
@@ -35,7 +33,6 @@ const testCoordinate = async (origin, destination) => {
       result.push(element)
     
   });
-  console.log(result)
   return result
 }
 /**

@@ -97,7 +97,6 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
     });
     const testManual = JSON.stringify(menual)
     const singleQuotedString = testManual.replace(/"/g, "'");
-    console.log(testManual)
     var disasterCardContent = `<div class="manualContainer" style="background-color: #fff; width: 190px; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
                             <div class="title" style="color: ${color}; font-weight: 700; font-size: 14px;">${disasterType} 재난 문자</div>
                             <div class="manual-content" style="width: 100%; height: 70%; box-sizing: border-box; overflow-y: scroll;">
@@ -131,35 +130,7 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
 
     const customOverlay = new kakao.maps.CustomOverlay({
         position: markerPosition,
-        content: `<div class="manualContainer" style="background-color: #fff; width: 190px; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
-        <div class="title" style="color: ${color}; font-weight: 700; font-size: 14px;">${disasterType} 재난 문자</div>
-        <div class="manual-content" style="width: 100%; height: 70%; box-sizing: border-box; overflow-y: scroll;">
-            <style>
-                .manual-content::-webkit-scrollbar {
-                      width: 6px; /* 스크롤바 너비 조정 */
-                }
-
-                .manual-content::-webkit-scrollbar-thumb {
-                      background-color: #ccc; /* 스크롤바 색상 지정 */
-                }
-
-                p {
-                    display: block;
-                    margin-block-start: 0.1em;
-                    margin-block-end: 1em;
-                    margin-inline-start: 0px;
-                    margin-inline-end: 0px;
-                }
-            </style>
-            <p style=" width: 100%; height: 100%; white-space: pre-line; margin-top: 0" >
-                ${msg}
-            </p>
-        </div>
-        <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
-            <button onclick=handleClick() style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
-            font-weight: 700;">메뉴얼 보기</button>
-        </div>
-    </div>`,
+        content: disasterCardContent,
         yAnchor: 1.3
             });
 

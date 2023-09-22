@@ -13,9 +13,7 @@ const findPath = async (map, origin, destination, position) => {
     console.log(shelterList)
     const result = await testCoordinate(origin, `${shelterList[1].Longitude}, ${shelterList[1].Latitude}`)
     // 출발지에서 도착지까지 길찾기 서비스 생성
-    console.log(result)
     const path = result;
-    console.log(path);
     const polyline = new kakao.maps.Polyline({
 
         path : result,  // 출발지와 도착지 설정
