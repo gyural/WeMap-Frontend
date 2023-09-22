@@ -44,6 +44,7 @@ const Container = styled.div`
     height: 100%;
     position: relative;
 `;
+
 const { kakao } = window;
 Modal.defaultStyles = {};
 const MapContainer = (props) => {

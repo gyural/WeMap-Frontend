@@ -6,7 +6,7 @@ import { register } from '../../APIs/Auth'
 import colors from '../../Common/Color'
 
 const Container = styled.div`
-    padding-top: 80px;
+    padding-top: 30%;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -16,14 +16,14 @@ const Container = styled.div`
 `;
 
 const Input = styled.input`
-    padding: 4px;
+    padding: 15px;
     font-size: 12px;
     display: block;
     width: 93%;
-    height: 24%;
-    margin-top: 3.8%;
+    height: 30%;
+    margin-top: 3.3%;
     border: 1px solid #000;
-    border-radius: 15px;
+    border-radius: 18px;
     box-sizing: border-box;
     &:focus {
       outline: none;
@@ -36,36 +36,38 @@ const Input = styled.input`
 
 const TitleWrapper = styled.div`
   color: ${colors.mainBlue};
-  font-size: 200%;
+  font-size: 35px;
   font-weight: 700;
-  margin-bottom: 8%;
+  margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Form = styled.form`
   width: 96%;
-  height: 36%;
-  display: block;
-  margin-bottom: 5%;
+  height: 33%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 7%;
 `;
 
 const ButtonWrapper = styled.div`
-    width: 88%;
-    height: 10%;
+    width: 80%;
+    height: 11%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-bottom: 4%;
     font-size: 140%;
 `;
 
 const Button = styled.button`
       display: 'block';
-      width: 47%;
-      height: 90%;
+      width: 43%;
+      height: 70%;
       color: ${props => props.color};
-      font-size: 90%;
+      font-size: 18px;
       background-color: ${props => props.bgcolor};
       display: flex;
       justify-content: center;
@@ -101,6 +103,7 @@ const TextBox = styled.div`
   text-align: center;
   left: 37%;
   bottom: -6px;
+  font-size: 14px;
 `;
 
 
@@ -202,7 +205,7 @@ function RegisterCard(props) {
             <div className="social-signup"
               style ={{
                 width: '100%',
-                height: '20%',
+                height: '18%',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -219,8 +222,8 @@ function RegisterCard(props) {
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",
-                        borderRadius: "12px",
-                        marginBottom: "2%",
+                        borderRadius: "15px",
+                        marginBottom: "2.5%",
                     }}
                 ></a>
                 <a
@@ -234,7 +237,7 @@ function RegisterCard(props) {
                         backgroundImage: `url(${naver_signup})`,
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",
-                        borderRadius: "12px",
+                        borderRadius: "15px",
                     }}
                 ></a>
             </div>
