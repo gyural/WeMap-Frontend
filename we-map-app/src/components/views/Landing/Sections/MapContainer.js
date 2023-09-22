@@ -6,7 +6,7 @@ import { drawPolygon } from './createPolygon';
 import { getDisasterList } from './DisasterList';
 import { findPath } from './findLoad';
 // import LocationSelector from "../Sections/LocationSelector";
-
+import Modal from 'react-modal';
 // 이미지 import
 import pinicon from '../../../../images/pin.png';
 import backarrow from "../../../../images/left-arrow.png";
@@ -32,39 +32,18 @@ import LocationSelector from "../Sections/LocationSelector";
 const Container = styled.div`
     width: 100%;
     height: 100%;
+    position: relative;
 `;
-
-const disasterTypeToImage = {
-    "태풍": typhoon,
-    "산불": forestFire,
-    "산사태": landslide,
-    "홍수": flood,
-    "호우": heavyRain,
-    "폭염": hot,
-    "안개": fog,
-    "대설": heavySnow,
-    "지진": earthquake,
-    "해일": tsunami,
-    "황사": yellowDust,
-    "화재": fire,
-    "교통사고": carAccident,
-    "실종": missing,
-  };
-
-/**
- * 일단 더미데이터. title이름 지울까 말까..
- */
-const dummyLocations = [
-    { disasterTypeToImage: "폭염", lat: 37.54691607089423, lng: 126.97587727253645, title: "Location 1" },
-    { disasterTypeToImage: "태풍", lat: 35.14668684882411, lng: 129.01750627649565, title: "Location 2" },
-    { disasterTypeToImage: "산불", lat: 37.289198, lng: 127.012131, title: "Location 3" },
-    { disasterTypeToImage: "화재", lat: 35.102102, lng: 129.030605, title: "이재모피자" },
-  ];
-  
-
 const { kakao } = window;
-
+Modal.defaultStyles = {};
 const MapContainer = ({ searchPlace }) => {
+
+    const [popupOpen, setpopupOpen] = useState(false)
+    const [popupInfo, setPopupInfo] = useState({
+      "disasterType": "지진",
+      "content": "- 가정 내라디오·TV·인터넷을 통해 기상예보 및 호우상황을 잘알아두세요. 응급약품·손전등·식수·비상식량 등의 생필품은 미리준비하세요. 지붕이나 벽의 틈새로 빗물이 새는 곳이 있는지 점검하고 보수하세요. 가정과 집 주변의 배수구·빗물받이 등을 점검하고, 막힌 곳을 뚫어주세요. 빗물받이의 덮개를 제거하고, 주변을 청소해주세요. 집중 호우 시 빗물받이가 막혀있으면, 배수기능이 안되어 도로나주택에 침수가 발생할 수 있습니다. 하천에 주차된 자동차는 안전한 곳으로 이동하고, 침수가 예상되는 건물의 지하공간에는 주차하지 마세요. - 외출중 외출 중 홍수로 밀려온 물은 기름이나 오수로 오염되었을 경우가 많으니 물이 빠져나갈 때 멀리 떨어지세요. 홍수로 밀려온 물에 몸이 젖은 경우 비누를 이용해 깨끗이 씻으세요. 흐르는 물에서는 약 15cm 깊이의 물에도 휩쓸려 갈수 있으니 주의하세요. 재난발생 지역, 홍수가 지나가 약화되어 붕괴 위험이 있는 제방 근처 및 도로에는 가까이 가지 마세요. 파손된 상하수도나 도로가 있다면 구청이나 동 주민센터에 신고하세요. 가로등과 신호등, 바닥에 떨어진 전선과 맨홀뚜껑은 감전의 위험이 있으니 주의하세요. 넘어진 전주·가로등 등 파손된 전기시설물에는 절대 접근하지 말고 한국전력(국번 없이 123)에 신고하세요."
+    });
+    
     const [map, setMap] = useState(undefined);
     //현재 화면에 있는 다각형 객체 리스트 
     const [polygonList, setPolygonList] = useState([])
@@ -85,10 +64,15 @@ const MapContainer = ({ searchPlace }) => {
       drawPolygon(newPolygonList, map)
       setPolygonList(newPolygonList)
     }
-
+    /**
+     * 메뉴얼 팝업 핸들링 함수
+     */
+    const handlePopUp = () =>{
+      setpopupOpen(!popupOpen)
+    }
     const insertMarkerList = (disasteList) => {
       if (map) {
-        const markerList = getMarkerList(disasteList, map);
+        const markerList = getMarkerList(disasteList, map, setpopupOpen, setPopupInfo);
         console.log('반환된 마커 리스트');
         console.log(markerList);
         if (markerList) {
@@ -225,110 +209,6 @@ const MapContainer = ({ searchPlace }) => {
       const imageSrc =pinicon;
       const imageSize = new kakao.maps.Size(50, 50);
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-      
-    /**
-     * dummy데이터를 읽고 지도 객체에 마커 표시
-    useEffect(() => {
-      const mapContainer = document.getElementById('map');
-      const mapOption = {
-          center: new kakao.maps.LatLng(36.498649, 127.268141),
-          level: 5
-      };
-  
-      const map = new kakao.maps.Map(mapContainer, mapOption);
-      setMap(map);
-      dummyLocations.forEach(loc => {
-        const markerPosition = new kakao.maps.LatLng(loc.lat, loc.lng);
-        const imageSrc = disasterTypeToImage[loc.disasterTypeToImage];   // 매핑된 이미지 가져오기
-        const imageSize = new kakao.maps.Size(50, 50);
-        const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-    
-        
-        const marker = new kakao.maps.Marker({
-            map: map,
-            position: markerPosition,
-            image: markerImage
-        });
-        
-        const overlayPosition = new kakao.maps.LatLng(loc.lat, loc.lng);
-        
-        const customOverlay = new kakao.maps.CustomOverlay({
-            position: overlayPosition,
-            content: `<div>${loc.title}</div>`,
-            yAnchor: 1.5  
-        });
-        
-        let isOverlayShown = false;  
-        // 마커에 클릭 이벤트 설정
-        kakao.maps.event.addListener(marker, 'click', function() {
-          if (isOverlayShown) {
-              customOverlay.setMap(null);  // 오버레이 숨기기
-          } else {
-              customOverlay.setMap(map);   // 오버레이 보여주기
-          }
-  
-          isOverlayShown = !isOverlayShown;  // 상태 토글
-      });
-    
-        // 기본적으로 커스텀 오버레이는 숨김 상태
-        customOverlay.setMap(null);
-    });
-     */
-    // dummyLocations.forEach(location => {
-    //   const markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
-      
-    //   const marker = new kakao.maps.Marker({
-    //       map: map,
-    //       position: markerPosition,
-    //       image: markerImage
-    //   });
-      
-    //   const overlayPosition = new kakao.maps.LatLng(location.lat, location.lng);
-      
-    //   const customOverlay = new kakao.maps.CustomOverlay({
-    //       position: overlayPosition,
-    //       content: `<div class="manualContainer" style="background-color: #fff; width: 150%; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
-    //       <div class="title" style="color: red; font-weight: 700; font-size: 14px;">산사태 경보 메뉴얼</div>
-    //       <div class="manual-content" style="width: 100%; height: 65%; box-sizing: border-box; overflow-y: scroll;">
-    //           <style>
-    //               .manual-content::-webkit-scrollbar {
-    //                   width: 6px; /* 스크롤바 너비 조정 */
-    //               }
-      
-    //               .manual-content::-webkit-scrollbar-thumb {
-    //                   background-color: #ccc; /* 스크롤바 색상 지정 */
-    //               }
-    //           </style>
-    //           <p style="display: block; width: 100%; height: 100%; white-space: pre-line;">
-    //               산사태 경보 메뉴얼입니다........
-    //               산사태 경보 메뉴얼입니다........
-    //               산사태 경보 메뉴얼입니다........
-    //               산사태 경보 메뉴얼입니다.......산사태 경보 메뉴얼입니다.......v
-    //           </p>
-    //       </div>
-    //       <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
-    //           <button onclick="alert('haha')" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%;
-    //           font-weight: 700;">대피소 찾기</button>
-    //       </div>
-    //   </div>`,
-    //       yAnchor: 1.3
-    //   });
-      
-    //   let isOverlayShown = false;  
-    //   // 마커에 클릭 이벤트 설정
-    //   kakao.maps.event.addListener(marker, 'click', function() {
-    //     if (isOverlayShown) {
-    //         customOverlay.setMap(null);  // 오버레이 숨기기
-    //     } else {
-    //         customOverlay.setMap(map);   // 오버레이 보여주기
-    //     }
-
-    //     isOverlayShown = !isOverlayShown;  // 상태 토글
-    //   });
-  
-    //   // 기본적으로 커스텀 오버레이는 숨김 상태
-    //   customOverlay.setMap(null);
-    //   });
     }
     const newMarkerList = insertMarkerList(disasteList);
 
@@ -343,19 +223,6 @@ const MapContainer = ({ searchPlace }) => {
     
   }, [searchPlace, locations, disasteList]);
 
-  /**
-   * 길찾기 Drawing
-   * */ 
-
-  // useEffect(() => {
-  //   // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
-  //   findPath(map, 36.610261563595, 127.29307759409, 36.601107352826, 127.29651502894);
-  // }, [map]);
-  // useEffect(() => {
-  //   // findPath(map, 출발지 위도, 출발지 경도, 도착지 위도, 도착지 경도)
-  //   findPath(map, 36.601107352826, 127.29651502894, 36.610261563595, 127.29307759409);
-  // }, [map]);
-
     return (
         <Container>
           <LocationSelector onLocationSelect={handleLocationSelect} />
@@ -368,6 +235,37 @@ const MapContainer = ({ searchPlace }) => {
                 height: '100%',
             }}>
             </div>
+            <button 
+              onClick={handlePopUp}
+              style = {{
+                width: "200px",
+                height: "100px",
+                position: "absolute",
+                bottom: "0",
+              }}
+              >테스팅 버튼</button>
+            <Modal
+              style={{
+                overlay: {
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)', // 모달 배경의 반투명 검정
+                },
+                content: {
+                  width: '200px',
+                  height: '200px',
+                  
+                  background: 'white', // 모달 내용 배경
+                },
+              }}
+              isOpen = {popupOpen}
+              onRequestClose={() => setpopupOpen(false)}
+            >
+              <div className='title'>
+                {popupInfo.disasterType}
+              </div>
+              <div className='content'>
+                {popupInfo.content}
+              </div>
+            </Modal>
         </Container>
     );
   };
