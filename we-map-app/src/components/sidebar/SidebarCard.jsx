@@ -21,6 +21,7 @@ import missing from "../../images/missing.png";
 import { useContext } from 'react';
 import { AuthContext } from '../../App';
 import { logOut } from '../../APIs/Auth';
+
 const Container = styled.div`
     padding-top: 10%;
     width: 100%;
@@ -182,7 +183,7 @@ function SidebarCard(props) {
     const handleLogout = async () =>{
         await logOut()
         moveHome()
-      }
+    }
     return (
         <Container>
             <Topbar>

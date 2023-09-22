@@ -241,9 +241,6 @@ const MapContainer = ({ searchPlace }) => {
     }
   }, [searchPlace, locations, disasteList]);
 
-
-// }, [map]);
-
     return (
       
         <Container>

@@ -5,12 +5,14 @@ import LoginCard from './components/accounts/LoginCard';
 import RegisterCard from './components/accounts/RegisterCard';
 import SidebarCard from './components/sidebar/SidebarCard';
 import EmergencyStep from './components/step/EmergencyStep';
+import FindShelter from './components/views/Landing/Sections/FindShelter';
 import wifiIcon from './images/device_wifi.png';
 import signalIcon from './images/device_signal.png';
 import batteryIcon from './images/device_bettery.png';
 import Clock from './components/UI/Clock';
 import AccountHandler from './components/accounts/AccountHandler';
 import MobileContent from './components/UI/MobileContent';
+import LocationSelector from './components/views/Landing/Sections/LocationSelector';
 // import {socket} from './APIs/Websocket'
 const AuthContext = createContext();
 
@@ -74,7 +76,7 @@ function App() {
       </MobileHeader>
       <AuthContext.Provider value={{ authState, setAuthState }}>
 
-        <MobileContent></MobileContent>
+        <FindShelter></FindShelter>
       </AuthContext.Provider>
     </MobileFrame>
   );
