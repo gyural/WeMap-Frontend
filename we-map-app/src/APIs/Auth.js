@@ -43,7 +43,7 @@ const login = async (email, pw) => {
     })
     .then(res =>{
         console.log(res)
-        if(res.status === 200){
+        if(res.data.statusCode === 200){
             return res.data
         }else{
             return undefined
