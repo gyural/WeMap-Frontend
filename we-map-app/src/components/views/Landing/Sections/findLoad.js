@@ -20,9 +20,9 @@ const findPath = async (map, origin, destination, position) => {
 
         path : result,  // 출발지와 도착지 설정
         strokeWeight : 5,  // 선의 두께 설정
-        strokeColor : colors.red, // 선의 색상 설정
+        strokeColor : colors.mainBlue, // 선의 색상 설정
         strokeOpacity : 0.7, // 선의 투명도 설정
-        fillColor : colors.red,  // 채우기 색상 설정
+        fillColor : colors.mainBlue,  // 채우기 색상 설정
         fillOpacity : 0.4,  // 채우기 투명도 설정
     });
 
