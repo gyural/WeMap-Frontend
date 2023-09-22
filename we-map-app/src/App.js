@@ -76,7 +76,7 @@ function App() {
       </MobileHeader>
       <AuthContext.Provider value={{ authState, setAuthState }}>
 
-        <FindShelter></FindShelter>
+        <MobileContent></MobileContent>
       </AuthContext.Provider>
     </MobileFrame>
   );

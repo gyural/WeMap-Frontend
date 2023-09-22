@@ -109,12 +109,7 @@ const MapContainer = ({ searchPlace }) => {
         map.setCenter(locPosition);
       }
     };
-    function onLocationButtonClick(locationName) {
-      fetchCoordinates(locationName).then(coords => {
-          const [lat, lng] = coords;
-          map.setCenter(new kakao.maps.LatLng(lat, lng));
-      });
-  }
+   
   
   useEffect(() => {
       const mapContainer = document.getElementById('map');
