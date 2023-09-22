@@ -115,16 +115,15 @@ function RegisterCard(props) {
     });
 
     
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (formData.check_password === formData.password) {
-            if (register(formData.id, formData.password)) {
+            if (await register(formData.id, formData.password)) {
               alert("회원가입 완료!!")
               moveHome()
-            }
-        } else {
-            alert("비밀번호가 일치하지 않습니다.");
-        }
-    };
+              }
+        }else {
+          alert("비밀번호가 일치하지 않습니다.");
+    }};
 
     const handleChange = (e) => {
         const { name, value, checked } = e.target;

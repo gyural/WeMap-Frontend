@@ -101,7 +101,6 @@ const getGeoBoundary = async (geoCode) =>{
           return result
             
           }
-          console.log('singl 좌표')
           const vertex = data.features[0].geometry.coordinates[0]
           const resultList = [[]]
           for (const v of vertex) {
