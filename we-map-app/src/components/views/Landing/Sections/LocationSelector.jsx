@@ -78,7 +78,7 @@ const LocationSelector = ({ onLocationSelect }) => {
         },
         withCredentials: true
       });
-      console.log(response)
+      // console.log(response.data)
       // API 응답 데이터를 locationData 상태에 저장
       setLocationData(response.data.body);
       
