@@ -128,13 +128,8 @@ const makeShelterMarker = (image, targetmap, location, shleterName, Address, dra
                             <div class="title" style= " width: 150px; margin: 0 auto; hecolor: balck; word-wrap: break-word; white-space: pre-wrap; margin-bottom: 3%;"><span style="font-size: 15px; font-weight: 700; color: #0081C9;">보호소명</span></br>${convertShleterName}</div>
                             <div class="title" style="width: 150px; margin: 0 auto; color: black; word-wrap: break-word; white-space: pre-wrap;"><span style="font-size: 15px; font-weight: 700; color: #0081C9;">보호소 주소</span></br>${convertAddress}</div>
                             
-<<<<<<< HEAD
                             <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
                                 <button onclick= "handleClick(${customDestination[0]}, ${customDestination[1]}, '${convertShleterName}') ") style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
-=======
-                            <div class="button-wrapper" style="width: 95%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
-                                <button onclick="handleClick(${customDestination[0]}, ${customDestination[1]})" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
->>>>>>> c0ff652b2f51c459350500f7869ac64f6415ffc3
                                 font-weight: 700;">보호소 길찾기</button>
                             </div>
                         </div>`
