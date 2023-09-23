@@ -79,17 +79,6 @@ const disasterTypeToImage = {
     return coordinates;
   }
   
-  
-/**
- * 일단 더미데이터. title이름 지울까 말까..
- */
-const dummyLocations = [
-    { disasterTypeToImage: "폭염", lat: 37.54691607089423, lng: 126.97587727253645, title: "Location 1" },
-    { disasterTypeToImage: "태풍", lat: 35.14668684882411, lng: 129.01750627649565, title: "Location 2" },
-    { disasterTypeToImage: "산불", lat: 37.289198, lng: 127.012131, title: "Location 3" },
-    { disasterTypeToImage: "화재", lat: 35.102102, lng: 129.030605, title: "이재모피자" },
-  ];
-  
 
   const MapContainer = ({ searchPlace }) => {
     const [locationData, setLocationData] = useState(null);
