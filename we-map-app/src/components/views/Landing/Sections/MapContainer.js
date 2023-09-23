@@ -58,6 +58,51 @@ const MapContainer = (props) => {
       "content": "- 가정 내라디오·TV·인터넷을 통해 기상예보 및 호우상황을 잘알아두세요. 응급약품·손전등·식수·비상식량 등의 생필품은 미리준비하세요. 지붕이나 벽의 틈새로 빗물이 새는 곳이 있는지 점검하고 보수하세요. 가정과 집 주변의 배수구·빗물받이 등을 점검하고, 막힌 곳을 뚫어주세요. 빗물받이의 덮개를 제거하고, 주변을 청소해주세요. 집중 호우 시 빗물받이가 막혀있으면, 배수기능이 안되어 도로나주택에 침수가 발생할 수 있습니다. 하천에 주차된 자동차는 안전한 곳으로 이동하고, 침수가 예상되는 건물의 지하공간에는 주차하지 마세요. - 외출중 외출 중 홍수로 밀려온 물은 기름이나 오수로 오염되었을 경우가 많으니 물이 빠져나갈 때 멀리 떨어지세요. 홍수로 밀려온 물에 몸이 젖은 경우 비누를 이용해 깨끗이 씻으세요. 흐르는 물에서는 약 15cm 깊이의 물에도 휩쓸려 갈수 있으니 주의하세요. 재난발생 지역, 홍수가 지나가 약화되어 붕괴 위험이 있는 제방 근처 및 도로에는 가까이 가지 마세요. 파손된 상하수도나 도로가 있다면 구청이나 동 주민센터에 신고하세요. 가로등과 신호등, 바닥에 떨어진 전선과 맨홀뚜껑은 감전의 위험이 있으니 주의하세요. 넘어진 전주·가로등 등 파손된 전기시설물에는 절대 접근하지 말고 한국전력(국번 없이 123)에 신고하세요."
     });
     
+const disasterTypeToImage = {
+    "태풍": typhoon,
+    "산불": forestFire,
+    "산사태": landslide,
+    "홍수": flood,
+    "호우": heavyRain,
+    "폭염": hot,
+    "안개": fog,
+    "대설": heavySnow,
+    "지진": earthquake,
+    "해일": tsunami,
+    "황사": yellowDust,
+    "화재": fire,
+    "교통사고": carAccident,
+    "실종": missing,
+  };
+
+  async function fetchCoordinates(locationName) {
+    const response = await fetch('https://total-code.s3.ap-northeast-2.amazonaws.com/data.json');
+    const data = await response.json();
+  
+    let coordinates;
+  
+    if (data[locationName]) { // 도/특별시/광역시 단위
+      coordinates = data[locationName].current_coordinate;
+    } else {
+      for (let city in data) {
+        if (data[city].군구[locationName]) { // 군/구 단위
+          coordinates = data[city].군구[locationName].current_coordinate;
+        } else {
+          for (let district in data[city].군구) {
+            if (data[city].군구[district].읍면동[locationName]) { // 읍/면/동 단위
+              coordinates = data[city].군구[district].읍면동[locationName];
+            }
+          }
+        }
+      }
+    }
+  
+    return coordinates;
+  }
+  
+
+
+>>>>>>> feature/movinglocation
     const [map, setMap] = useState(undefined);
     const [polygonList, setPolygonList] = useState([])
     const [markerList, setMarkerList] = useState([])

@@ -68,6 +68,7 @@ const LocationSelector = ({ onLocationSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSido, setSelectedSido] = useState(null);
   const [selectedGugun, setSelectedGugun] = useState(null);
+  const [selectedDong, setSelectedDong] =useState(null);
   const [locationData, setLocationData] = useState({});
 
   const fetchSidoData = async () => {
@@ -75,10 +76,13 @@ const LocationSelector = ({ onLocationSelect }) => {
       const response = await axios.get('https://f4e1b1y4g9.execute-api.ap-northeast-2.amazonaws.com/plz/sido');
       const parsedData = JSON.parse(response.data.body); // body 속성 파싱
       setLocationData({ sido: parsedData });
+      return parsedData;
     } catch (error) {
       console.error("Error fetching sido data", error);
     }
   };
+
+  
 
   const fetchLocationData = async (url, data) => {
     try {
@@ -91,46 +95,56 @@ const LocationSelector = ({ onLocationSelect }) => {
 
       const parsedData = JSON.parse(response.data.body); 
       return parsedData;
-      } catch (error) {
+    } catch (error) {
       console.error("Error fetching location data", error);
+      throw error;  // 추가: 에러를 다시 throw하여 호출하는 곳에서 처리할 수 있도록 합니다.
     }
   };
+  
 
   const handleSidoSelect = async (sido) => {
-    setSelectedSido(sido);
+    setSelectedSido(sido); 
     
-    const sidoValue = locationData.sido[sido]; 
-    const gugunData = await fetchLocationData('https://f4e1b1y4g9.execute-api.ap-northeast-2.amazonaws.com/plz/resion', { code: sidoValue.code });
+    const siData = await fetchSidoData()
+    const Hcode = siData[sido].code
+    const gugunData = await fetchLocationData('https://f4e1b1y4g9.execute-api.ap-northeast-2.amazonaws.com/plz/resion', { code:  Hcode });
+  
     setLocationData(prevState => ({ ...prevState, gugun: gugunData }));
   };
   
+  
   const handleGugunSelect = async (gugun) => {
     setSelectedGugun(gugun);
-    const gugunValue = locationData.gugun[gugun]; 
-    const dongData = await fetchLocationData('https://f4e1b1y4g9.execute-api.ap-northeast-2.amazonaws.com/plz/resion', { code: locationData.sido[selectedSido], gugun: gugunValue.code });
+    const gugunValue = locationData.gugun[gugun];
+    
+    const dataToSend = {
+      code: gugunValue.code  
+    };
+    const dongData = await fetchLocationData('https://f4e1b1y4g9.execute-api.ap-northeast-2.amazonaws.com/plz/resion', dataToSend);
+    
     setLocationData(prevState => ({ ...prevState, dong: dongData }));
   };
   
+  
   const handleDongSelect = async (dong) => {
-    const dongValue = locationData.dong[dong]; 
-    const fullLocation = `${locationData.sido[selectedSido]} ${locationData.gugun[selectedGugun]} ${dongValue}`;
-    const locationInfo = await fetchLocationData('https://f4e1b1y4g9.execute-api.ap-northeast-2.amazonaws.com/plz/resion', { code: fullLocation.code });
-    onLocationSelect(locationInfo);
-    setIsOpen(false);
-  };
-  
-  
+    setSelectedDong(dong);
+    const dongValue = locationData.dong[dong];
+    if (dongValue && dongValue.coordinate) {
+      const [lat, lng] = dongValue.coordinate; 
+      onLocationSelect({ lat, lng });          
+  }
+};
 
+  
   useEffect(() => {
     fetchSidoData();
   }, []);
 
-
   return (
     <>
       <Button onClick={() => setIsOpen(!isOpen)}>지역 선택</Button>
-      <ModalOverlay open={isOpen}>
-        <ModalContainer>
+      <ModalOverlay open={isOpen} onClick={() => setIsOpen(false)}>
+        <ModalContainer onClick={e => e.stopPropagation()}>
           {!selectedSido && Object.keys(locationData.sido || {}).map(sido => (
             <StyledButton key={sido} onClick={() => handleSidoSelect(sido)}>
               {sido}
@@ -146,18 +160,14 @@ const LocationSelector = ({ onLocationSelect }) => {
               {dong}
             </StyledButton>
           ))}
-          {selectedSido && (
-            <StyledButton onClick={() => {
-              if (selectedGugun) {
-                setSelectedGugun(null);
-              } else {
-                setSelectedSido(null);
-              }
-            }}>이전</StyledButton>
-          )}
+
         </ModalContainer>
       </ModalOverlay>
     </>
   );
 }
+
 export default LocationSelector;
+
+
+
