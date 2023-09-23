@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/WeMap-Frontend/static/css/main.83127b3f.css",
-    "main.js": "/WeMap-Frontend/static/js/main.dc61ad84.js",
+    "main.js": "/WeMap-Frontend/static/js/main.a591f102.js",
     "static/js/787.fe4e9ddb.chunk.js": "/WeMap-Frontend/static/js/787.fe4e9ddb.chunk.js",
     "static/media/WeMap.png": "/WeMap-Frontend/static/media/WeMap.d6539f8ed002ccde1608.png",
     "static/media/hurricane.png": "/WeMap-Frontend/static/media/hurricane.8a69d13e3ae2a7be1770.png",
@@ -13,6 +13,7 @@
     "static/media/tsunami.png": "/WeMap-Frontend/static/media/tsunami.30a56df8ebfc7d60f819.png",
     "static/media/heavy-rain.png": "/WeMap-Frontend/static/media/heavy-rain.83812ea064159c449915.png",
     "static/media/heavy-snow.png": "/WeMap-Frontend/static/media/heavy-snow.8bcf570923fb5cb67847.png",
+    "static/media/shelter.png": "/WeMap-Frontend/static/media/shelter.3eef0d3d5fd12f316e34.png",
     "static/media/yellow-dust.png": "/WeMap-Frontend/static/media/yellow-dust.14fea1b47e5131591f00.png",
     "static/media/landslide.png": "/WeMap-Frontend/static/media/landslide.a2e69bec3a8c82fe9b76.png",
     "static/media/earthquake.png": "/WeMap-Frontend/static/media/earthquake.aca7f93207d686a886bb.png",
@@ -23,11 +24,11 @@
     "static/media/warning.png": "/WeMap-Frontend/static/media/warning.7560a5ccc92ceefb9ed7.png",
     "index.html": "/WeMap-Frontend/index.html",
     "main.83127b3f.css.map": "/WeMap-Frontend/static/css/main.83127b3f.css.map",
-    "main.dc61ad84.js.map": "/WeMap-Frontend/static/js/main.dc61ad84.js.map",
+    "main.a591f102.js.map": "/WeMap-Frontend/static/js/main.a591f102.js.map",
     "787.fe4e9ddb.chunk.js.map": "/WeMap-Frontend/static/js/787.fe4e9ddb.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.83127b3f.css",
-    "static/js/main.dc61ad84.js"
+    "static/js/main.a591f102.js"
   ]
 }
