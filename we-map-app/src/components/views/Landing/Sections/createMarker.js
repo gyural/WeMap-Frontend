@@ -12,6 +12,7 @@ import yellowDust from "../../../../images/yellow-dust.png";
 import fire from "../../../../images/fire.png";
 import carAccident from "../../../../images/accident.png";
 import missing from"../../../../images/missing.png"; // 실종 및 기타 이미지 경로 추가
+import shelter from "../../../../images/shelter.png";
 import { getPath } from "./navigation";
 import Modal from "react-modal"
 const { kakao } = window;
@@ -33,6 +34,7 @@ const disasterTypeToImage = {
     "교통통제": carAccident,
     "실종": missing, // 실종 이미지 경로로 변경
     "기타": missing, // 기타 이미지 경로로 변경
+    "대피소" : shelter,
 };
 
 
@@ -81,7 +83,7 @@ const getShelterMarkerList = (shelterList, map, drawLoad) => {
         for (const shelter of shelterList){
             if(shelter){
                 console.log(shelter)
-                let img = disasterTypeToImage["안개"]
+                let img = disasterTypeToImage["대피소"]
                 const shleterName = shelter.Name;
                 const Address = shelter.Address;
                 console.log(shelter.Latitude, shelter.Longitude)
@@ -112,15 +114,19 @@ const makeShelterMarker = (image, targetmap, location, shleterName, Address, dra
         image: markerImage
     });
 
-    const convertShleterName = JSON.stringify(shleterName)
-    const convertAddress = JSON.stringify(Address)
+    let convertShleterName = JSON.stringify(shleterName)
+    let convertAddress = JSON.stringify(Address)
+    
+    convertShleterName = convertShleterName.replace(/"/g, '');
+    convertAddress = convertAddress.replace(/"/g, '');
+
     const customDestination = location
     console.log(customDestination)
-    var shleterCard = `<div class="manualContainer" style="background-color: #fff; display: flelx; flex-direction: column; width: 190px; height: 200px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
-                            <div class="title" style= " width: 150px; margin: 0 auto; hecolor: balck; font-weight: 700; font-size: 14px; word-wrap: break-word; white-space: pre-wrap;">보호소명 : ${convertShleterName}</div>
-                            <div class="title" style="width: 150px; margin: 0 auto; color: black; font-weight: 700; font-size: 14px; word-wrap: break-word; white-space: pre-wrap;">보호소 주소 : ${convertAddress}</div>
+    var shleterCard = `<div class="manualContainer" style="background-color: #fff; display: flelx; flex-direction: column; width: 190px; height: 220px; padding: 10%; border-radius: 12px; box-sizing: border-box; position: relative;">
+                            <div class="title" style= " width: 150px; margin: 0 auto; hecolor: balck; word-wrap: break-word; white-space: pre-wrap; margin-bottom: 3%;"><span style="font-size: 15px; font-weight: 700; color: #0081C9;">보호소명</span></br>${convertShleterName}</div>
+                            <div class="title" style="width: 150px; margin: 0 auto; color: black; word-wrap: break-word; white-space: pre-wrap;"><span style="font-size: 15px; font-weight: 700; color: #0081C9;">보호소 주소</span></br>${convertAddress}</div>
                             
-                            <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
+                            <div class="button-wrapper" style="width: 95%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
                                 <button onclick="handleClick(${customDestination[0]}, ${customDestination[1]})" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
                                 font-weight: 700;">보호소 길찾기</button>
                             </div>

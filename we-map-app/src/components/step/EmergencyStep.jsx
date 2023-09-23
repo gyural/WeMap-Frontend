@@ -193,6 +193,7 @@ function EmergencyStep(props) {
                     fontWeight: 700,
                     color: colors.mainBlue,
                     marginBottom: '2%',
+                    marginRight: '2%',
                 }}
             >재난 알림 설정</div>
             <div
@@ -202,6 +203,7 @@ function EmergencyStep(props) {
                     fontWeight: 700,
                     textAlign: 'right',
                     marginBottom: '3%',
+                    marginRight: '2%',
                 }}
             >위험 등급별 재난 알림 설정을 통해서
             <br />
