@@ -38,15 +38,6 @@ const Topbar = styled.div`
     z-index: 2;
 `;
 
-const BackArrow = styled.button`
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    z-index: 2;
-`;
-
 const Image = styled.img`
     width: 20px;
     height: 20px;
@@ -84,6 +75,7 @@ const StartBtn = styled.div`
     width: 90%;
     height: 30%;
     font-size: 13px;
+    font-weight: 700;
     margin: 2%;
     display: flex;
     align-items: center;
@@ -101,6 +93,7 @@ const ArriveBtn = styled.div`
     width: 90%;
     height: 30%;
     font-size: 13px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     span {
@@ -220,12 +213,9 @@ const FindShelter = (props) => {
                 width: '100%',
                 height: '100%',
             }}></div>
-            {
-							LoadMode && (<Topbar>
-                <BackArrow onClick={moveMap}>
-                    <Image src={backarrow} alt="뒤로가기 버튼"></Image>
-                </BackArrow>
-								<FindBtn>
+            { LoadMode && (
+            <Topbar>
+				<FindBtn>
                     <img src={car} alt='차 이미지'></img>
                     <span>{loadInfo[1]}km 약 {loadInfo[0]}분</span>
                 </FindBtn>

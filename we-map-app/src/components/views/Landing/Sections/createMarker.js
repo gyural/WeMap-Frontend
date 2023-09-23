@@ -184,7 +184,7 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
                             <style>
                                 .manual-content::-webkit-scrollbar {
                                     width: 6px; /* 스크롤바 너비 조정 */
-                                 }
+                                }
 
                                 .manual-content::-webkit-scrollbar-thumb {
                                     background-color: #ccc; /* 스크롤바 색상 지정 */
@@ -206,7 +206,6 @@ const makeMarker = (image, targetmap, location, menual, msg, disasterType, color
                             font-weight: 700;">메뉴얼 보기</button>
                         </div>
                     </div>`
-      
 
 
     const customOverlay = new kakao.maps.CustomOverlay({
