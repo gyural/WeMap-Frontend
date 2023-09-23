@@ -102,7 +102,6 @@ const disasterTypeToImage = {
   
 
 
->>>>>>> feature/movinglocation
     const [map, setMap] = useState(undefined);
     const [polygonList, setPolygonList] = useState([])
     const [markerList, setMarkerList] = useState([])
