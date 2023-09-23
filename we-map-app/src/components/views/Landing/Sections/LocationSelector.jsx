@@ -46,14 +46,14 @@ const ModalOverlay = styled.div`
 
 const ModalContainer = styled.div`
   position: fixed;
-  top: 40%;
+  top: 48%;
   left: 50%;
   display: grid;
   min-height: 2dvh;
   transform: translate(-50%, -50%);
   padding: 50px;
-  width: 20%; 
-  height: 50%; 
+  width: 14%; 
+  height: 40%; 
   border-radius: 12px;
   background-color: #fff;
   border: 1px solid #ddd;
