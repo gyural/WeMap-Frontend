@@ -38,15 +38,6 @@ const Topbar = styled.div`
     z-index: 2;
 `;
 
-const BackArrow = styled.button`
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    z-index: 2;
-`;
-
 const Image = styled.img`
     width: 20px;
     height: 20px;
@@ -128,9 +119,12 @@ const FindShelter = (props) => {
 					setLoadInfo([duration, distance])
 					setLoadMode(true)
 				}
+				const settingName = (name) => {
+					setDestName(name)
+				}
         const insertSherterMarkerList = (shelterList) =>{
             if(map){
-              const markerList = getShelterMarkerList(shelterList, map, drawLoad, setDestName);
+              const markerList = getShelterMarkerList(shelterList, map, drawLoad, settingName);
               if (markerList){
                 markerList.forEach(marker => {
                   marker.setMap(null)
@@ -158,8 +152,8 @@ const FindShelter = (props) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function (position) {
-                    var lat = position.coords.latitude,
-                        lon = position.coords.longitude;
+                    var lat = 36.597279,
+                        lon = 127.299874;
                     setCurrentPosition([lon, lat])
 
                     var locPosition = new kakao.maps.LatLng(lat, lon);
@@ -222,9 +216,7 @@ const FindShelter = (props) => {
             }}></div>
             {
 							LoadMode && (<Topbar>
-                <BackArrow onClick={moveMap}>
-                    <Image src={backarrow} alt="뒤로가기 버튼"></Image>
-                </BackArrow>
+
 								<FindBtn>
                     <img src={car} alt='차 이미지'></img>
                     <span>{loadInfo[1]}km 약 {loadInfo[0]}분</span>

@@ -131,8 +131,8 @@ const MapContainer = (props) => {
       if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
               function (position) {
-                  var lat = position.coords.latitude,
-                      lon = position.coords.longitude;
+                  var lat = 36.597279,
+                      lon = 127.299874;
                   setCurrentPosition([lon, lat])
 
                   var locPosition = new kakao.maps.LatLng(lat, lon);
