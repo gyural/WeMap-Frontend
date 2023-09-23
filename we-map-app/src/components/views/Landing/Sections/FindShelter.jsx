@@ -120,7 +120,7 @@ const FindShelter = (props) => {
 				const [LoadMode, setLoadMode] = useState(false)
         const [markerList, setMarkerList] = useState(undefined)
         const [shelterList, setShelterList] = useState(undefined)
-
+				const [destName, setDestName] = useState(undefined)
 				const drawLoad = async (destination) =>{
 					const LoadInfo = await findPath(map, currentPosition, destination)
 					const distance = (LoadInfo[1] / 1000).toFixed(1)
@@ -130,7 +130,7 @@ const FindShelter = (props) => {
 				}
         const insertSherterMarkerList = (shelterList) =>{
             if(map){
-              const markerList = getShelterMarkerList(shelterList, map, drawLoad);
+              const markerList = getShelterMarkerList(shelterList, map, drawLoad, setDestName);
               if (markerList){
                 markerList.forEach(marker => {
                   marker.setMap(null)
@@ -235,7 +235,7 @@ const FindShelter = (props) => {
                 </StartBtn>
                 <ArriveBtn>
                     <span>도착 :</span>
-                    <span>세종 조치원읍 세종여자고등학교</span>
+                    <span>{destName}</span>
                 </ArriveBtn>
                 </Topbar>)
 						}

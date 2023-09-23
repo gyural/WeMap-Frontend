@@ -72,7 +72,7 @@ const getMarkerList = (disasteList, map, setpopupOpen, setPopupInfo) =>{
  * @param {*} map 
  * @param {*} drawLoad 
  */
-const getShelterMarkerList = (shelterList, map, drawLoad) => {
+const getShelterMarkerList = (shelterList, map, drawLoad, setDestName) => {
     console.log(map)
     const resultList = []
     console.log("ㅈ니징")
@@ -85,7 +85,7 @@ const getShelterMarkerList = (shelterList, map, drawLoad) => {
                 const shleterName = shelter.Name;
                 const Address = shelter.Address;
                 console.log(shelter.Latitude, shelter.Longitude)
-                resultList.push(makeShelterMarker(img.toString(), map, [shelter.Latitude, shelter.Longitude], shleterName, Address, drawLoad))
+                resultList.push(makeShelterMarker(img.toString(), map, [shelter.Latitude, shelter.Longitude], shleterName, Address, drawLoad, setDestName))
             }
         }
     }
@@ -95,9 +95,10 @@ const getShelterMarkerList = (shelterList, map, drawLoad) => {
 };
 
 
-const makeShelterMarker = (image, targetmap, location, shleterName, Address, drawLoad) => {
-    window.handleClick = (x, y) =>{
+const makeShelterMarker = (image, targetmap, location, shleterName, Address, drawLoad, setDestName) => {
+    window.handleClick = (x, y, convertShleterName) =>{
         drawLoad([x,y])
+        setDestName(convertShleterName)
     }
 
     // 마커 객체 생성
@@ -121,7 +122,7 @@ const makeShelterMarker = (image, targetmap, location, shleterName, Address, dra
                             <div class="title" style="width: 150px; margin: 0 auto; color: black; font-weight: 700; font-size: 14px; word-wrap: break-word; white-space: pre-wrap;">보호소 주소 : ${convertAddress}</div>
                             
                             <div class="button-wrapper" style="width: 100%; display: flex; justify-content: center; position: absolute; bottom: 4%; left: 0; box-sizing: border-box; ">
-                                <button onclick="handleClick(${customDestination[0]}, ${customDestination[1]})" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
+                                <button onclick="handleClick(${customDestination[0]}, ${customDestination[1]}, ${convertShleterName})" style="background-color: #0081C9; color: #fff; border: none; border-radius: 12px; padding: 4px; box-sizing: border-box; width: 70%; height: 100%; cursor:pointer;
                                 font-weight: 700;">보호소 길찾기</button>
                             </div>
                         </div>`
