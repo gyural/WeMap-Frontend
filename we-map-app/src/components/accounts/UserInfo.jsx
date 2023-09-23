@@ -107,6 +107,7 @@ export default function UserInfo(props) {
                     fontWeight: 700,
                     color: colors.mainBlue,
                     marginBottom: '2%',
+                    marginRight: '2%',
                 }}
             >개인정보 조회/수정</div>
             <div
@@ -114,7 +115,7 @@ export default function UserInfo(props) {
                     fontSize: '85%',
                     color: colors.subGray,
                     fontWeight: 700,
-
+                    marginRight: '2%',
                 }}
             >개인정보를 수정해보세요.</div>
         </Title>

@@ -54,7 +54,6 @@ const FindBtn = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
     img {
         width: 12%;
         margin-left: 5%;
@@ -62,7 +61,7 @@ const FindBtn = styled.div`
     span {
         width: 60%;
         margin-left: 8%;
-        font-size: 15px;
+        font-size: 16px;
     }
     z-index: 2;
 `;
@@ -74,7 +73,8 @@ const StartBtn = styled.div`
     border-radius: 20px;
     width: 90%;
     height: 30%;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 700;
     margin: 2%;
     display: flex;
     align-items: center;
@@ -91,7 +91,8 @@ const ArriveBtn = styled.div`
     border-radius: 20px;
     width: 90%;
     height: 30%;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     span {
@@ -153,7 +154,7 @@ const FindShelter = (props) => {
             navigator.geolocation.getCurrentPosition(
                 function (position) {
                     var lat = 36.597279,
-                        lon = 127.299874;
+                        lon = 127.299874
                     setCurrentPosition([lon, lat])
 
                     var locPosition = new kakao.maps.LatLng(lat, lon);
@@ -169,7 +170,7 @@ const FindShelter = (props) => {
                 },
                 function (error) { // 위치 정보를 얻어오기 실패했을 때의 처리
                     alert("위치 파악을 실패하였습니다");
-                    var defaultPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+                    var defaultPosition = new kakao.maps.LatLng(36.597279, 127.299874);
                     map.setCenter(defaultPosition); // 지도의 중심을 기본 위치로 설정
                 }
             );
@@ -214,10 +215,9 @@ const FindShelter = (props) => {
                 width: '100%',
                 height: '100%',
             }}></div>
-            {
-							LoadMode && (<Topbar>
-
-								<FindBtn>
+            { LoadMode && (
+            <Topbar>
+							<FindBtn>
                     <img src={car} alt='차 이미지'></img>
                     <span>{loadInfo[1]}km 약 {loadInfo[0]}분</span>
                 </FindBtn>
