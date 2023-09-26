@@ -195,6 +195,7 @@ const updateUserAuth = async (auth) =>{
     )
 }
 /**
+ * 로컬 쿠키에 담겨져있는 토킄을 통해 refresh
  * refresh토큰을 가지고 새로운 access token을 요청 헤더에 달아주기
  * @param {*} refreshToken 
  */
@@ -221,6 +222,7 @@ const refresh = async (refreshToken) => {
     })
 }
 
+// smaple refresh_interceptor
 // const refresh_interceptor = () => {
     
 //     api.interceptors.response.use(
